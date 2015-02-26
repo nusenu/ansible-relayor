@@ -1,0 +1,40 @@
+---
+# setting PKG_PATH is out of scope of this role
+# we assume it is set correctly.
+# We specifically opt for present over latest to improve performance
+# "latest" is covered by auto updates
+- name: Ensure Tor is installed (OpenBSD)
+  sudo: yes
+  openbsd_pkg: name=tor state=present
+
+- name: Gather current system-wide file descriptor limits (OpenBSD)
+  command: "sysctl kern.maxfiles|cut -d= -f2"
+  register: currentlimits
+
+- name: Ensure system-wide runtime file descriptor limits are reasonable (OpenBSD)
+  sudo: yes
+  command: "sysctl kern.maxfiles=20000"
+  when: currentlimits.stdout < "20000"
+
+- name: Ensure system-wide persistent file descriptor limits are reasonable (OpenBSD)
+  sudo: yes
+  lineinfile: dest=/etc/sysctl.conf line="kern.maxfiles=20000" create=yes
+
+# 'tordaemon' is basically an arbitrary string here. We will use it afterwards
+# to assign that login class to the {{ tor_user }}
+- name: Ensure Tor process file descriptor limits are reasonable (OpenBSD)
+  sudo: yes
+  lineinfile: "dest=/etc/login.conf line='tordaemon::openfiles-max=13500::tc=daemon:'"
+  #TODO
+  #notify: restart tor
+
+- name: Gather tor_user's login class (OpenBSD)
+  shell: userinfo "{{ tor_user }}"|grep ^class|cut -f2
+  register: loginclass
+
+- name: Ensure 'tor_user' is in the tordaemon login class (OpenBSD)
+  sudo: yes
+  command: usermod -L tordaemon "{{ tor_user }}"
+  when: loginclass.stdout != 'tordaemon'
+  #TODO 
+  #notify: restart tor

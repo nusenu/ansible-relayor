@@ -1,0 +1,57 @@
+---
+# consider using the playbook example with group_by
+# + group_vars files if you are using OpenBSD/CentOS.
+
+tor_user: debian-tor
+
+# The tor_ports dictionary defines how many instances are created per
+# available IP address and what ports are used.
+tor_ports:
+  - { orport: 9001, dirport: 9002}
+  - { orport: 9003, dirport: 9004}
+
+# Limit the amount of used IP addresses 
+# by default to 10, this limits the amount
+# of generated Tor instances to 20 per host.
+# Specifying tor_ips overwrites this limitation.
+tor_maxips: 10
+
+# we are a non-exit by default
+# setting this to true will enable reduced exit policy
+# and allow custom exit policies via tor_ExitPolicy
+# Logic is implemented in templates/torrc
+tor_ExitRelay: False
+
+# setting tor_alpha to True
+# will install tor alpha repos.
+# This is only supported for Linux based hosts,
+# it has no effect on OpenBSD hosts.
+tor_alpha: False
+
+
+# Attention: we will run chown tor_user on these folders
+tor_LogDir: /var/log/tor
+tor_DataDir: /var/lib/tor
+
+# work around a race condition when tor is being installed and
+# automatically started by installer
+# DO NOT set it to /var/run/tor
+tor_PidDir: /var/run/tor-instances
+
+tor_ConfDir: /etc/tor
+
+tor_distribution_release: "{{ ansible_distribution_release }}"
+tor_ips: "{{ ansible_all_ipv4_addresses[0:tor_maxips] }}"
+
+tor_LogLevel: notice
+tor_RunAsDaemon: 1
+
+# we do not support non-zero SocksPorts
+# setting it to everything but 0 will break things
+tor_SocksPort: 0
+
+tor_shutdownwaitlength: 1
+
+# Default exit policy if the user wants to be an exit but doesn't specify one
+# taken from https://trac.torproject.org/projects/tor/wiki/doc/ReducedExitPolicy
+tor_ExitPolicy: "accept *:20-23,accept *:43,accept *:53,accept *:79-81,accept *:88,accept *:110,accept *:143,accept *:194,accept *:220,accept *:389,accept *:443,accept *:464,accept *:531,accept *:543-544,accept *:554,accept *:563,accept *:636,accept *:706,accept *:749,accept *:873,accept *:902-904,accept *:981,accept *:989-995,accept *:1194,accept *:1220,accept *:1293,accept *:1500,accept *:1533,accept *:1677,accept *:1723,accept *:1755,accept *:1863,accept *:2082,accept *:2083,accept *:2086-2087,accept *:2095-2096,accept *:2102-2104,accept *:3128,accept *:3389,accept *:3690,accept *:4321,accept *:4643,accept *:5050,accept *:5190,accept *:5222-5223,accept *:5228,accept *:5900,accept *:6660-6669,accept *:6679,accept *:6697,accept *:8000,accept *:8008,accept *:8074,accept *:8080,accept *:8082,accept *:8087-8088,accept *:8332-8333,accept *:8443,accept *:8888,accept *:9418,accept *:9999,accept *:10000,accept *:11371,accept *:19294,accept *:19638,accept *:50002,accept *:64738,reject *:12350,reject *:23456,reject *:33033,reject *:*"

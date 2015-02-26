@@ -1,0 +1,21 @@
+---
+
+- name: Add tor rpm key
+  sudo: yes
+  rpm_key: state=present key=https://deb.torproject.org/torproject.org/rpm/RPM-GPG-KEY-torproject.org.asc
+
+- set_fact: tor_rpm_distribution_os="el"
+  when: ansible_distribution == 'CentOS' or ansible_distribution == "Red Hat Enterprise Linux"
+
+- set_fact: tor_rpm_distribution_os="fc"
+  when: ansible_distribution == 'Fedora'
+
+- name: Add torproject.org repository (YUM)
+  sudo: yes
+  template: src=torproject.yum.repo dest=/etc/yum.repos.d/torproject.repo owner=root group=root
+
+# we specifically opt for present over latest to improve performance
+# "latest" is covered by auto updates
+- name: Ensure Tor package is installed (YUM)
+  sudo: yes
+  yum: name=tor state=present

@@ -1,0 +1,30 @@
+---
+
+- name: Ensure torproject gpg key is installed (A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89)
+  sudo: yes
+  apt_key: data="{{ lookup('file', 'deb.torproject.org_A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.pub') }}"
+    id=A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89
+    state=present
+
+- name: Ensure torproject.org repository is present (APT)
+  sudo: yes
+  apt_repository: repo='deb http://deb.torproject.org/torproject.org {{ tor_distribution_release }} main'
+    state=present 
+    update_cache=yes
+
+# waiting for trac ticket #14997
+#- name: Ensure  torproject.org alpha repo is present (if enabled)
+#  apt_repository: >
+#    repo='deb http://deb.torproject.org/torproject.org  main'
+#    state=present 
+#    update_cache=yes
+#  when: tor_alpha is True
+
+# we specifically opt for present over latest to improve performance
+# "latest" is covered by auto updates
+- name: Ensure Tor is installed (APT)
+  sudo: yes
+  apt: pkg="{{ item }}" state=present
+  with_items: 
+    - deb.torproject.org-keyring
+    - tor
