@@ -18,6 +18,9 @@ Note: Proper automatic MyFamily handling depends on the inclusion of all relays 
 
 THIS ANSIBLE ROLE IS CURRENTLY EXPERIMENTAL!
 
+Missing Parts
+---------------
+This role does not take care of startup scripts yet - which usually includes required file descriptor limit changes (see issues).
 
 Tested with
 -----------
@@ -80,7 +83,7 @@ All variables mentioned here are optional.
 
 * `tor_ExitRelay` boolean 
   - You will want to set this to True if you want to run exit relays.
-  - Note: this is not related to the tor config introduced in 0.2.6.3-alphathis feature does not require tor v0.2.6.x
+  - Note: This feature does not depend on tor's 'ExitRelay' option recently introduced with tor v0.2.6.3-alpha. 
   - default: False
 
 * `tor_ExitPolicy`
