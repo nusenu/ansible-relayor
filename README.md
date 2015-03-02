@@ -27,6 +27,7 @@ Tested with
 - Debian 7
 - CentOS 7
 - OpenBSD 5.7 (rcctl support)
+- FreeBSD 10.1
 
 - tor 0.2.5.x / 0.2.6.x
 
@@ -68,6 +69,13 @@ tor_user: _tor
 tor_user: _tor
 tor_PidDir: /var/tor/pids 
 tor_DataDir: /var/tor
+```
+
+```yml
+# file: pkgng
+tor_user: _tor
+tor_DataDir: /var/db/tor
+tor_ConfDir: /usr/local/etc/tor/enabled
 ```
 
 Role Variables

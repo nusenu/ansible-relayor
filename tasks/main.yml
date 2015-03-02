@@ -9,4 +9,7 @@
 - include: openbsd_install.yml
   when: ansible_pkg_mgr == 'openbsd_pkg'
 
+- include: freebsd_install.yml
+  when: ansible_pkg_mgr == 'pkgng'
+
 - include: configure.yml

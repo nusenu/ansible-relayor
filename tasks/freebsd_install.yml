@@ -1,0 +1,13 @@
+---
+
+- name: Ensure Tor is installed (FreeBSD)
+  sudo: yes
+  pkgng: name=tor state=present
+  when: tor_alpha == False
+
+# pkg will take care of removing tor stable
+# if installed
+- name: Ensure Tor alpha is installed (FreeBSD)
+  sudo: yes
+  pkgng: name=tor-devel state=present
+  when: tor_alpha == True
