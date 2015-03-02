@@ -32,11 +32,7 @@ tor_alpha: False
 # Attention: we will run chown tor_user on these folders
 tor_LogDir: /var/log/tor
 tor_DataDir: /var/lib/tor
-
-# work around a race condition when tor is being installed and
-# automatically started by installer
-# DO NOT set it to /var/run/tor
-tor_PidDir: /var/run/tor-instances
+tor_PidDir: /var/run/tor
 
 tor_ConfDir: /etc/tor/enabled
 

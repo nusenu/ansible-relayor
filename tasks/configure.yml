@@ -28,7 +28,7 @@
    - tor_ips
    - tor_ports
 
-- name: Ensure Tor pidDir is owned by tor_user
+- name: Ensure Tor PidDir is owned by tor_user
   sudo: yes
   file: path={{ tor_PidDir }}
     state=directory

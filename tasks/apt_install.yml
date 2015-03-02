@@ -28,3 +28,11 @@
   with_items: 
     - deb.torproject.org-keyring
     - tor
+  register: aptresult
+
+# apt starts a tor client instance by default after installing the package
+# we do not need that
+- name: Stop default Tor config if we just installed the package (APT)
+  sudo: yes
+  service: name=tor state=stopped
+  when: aptresult.changed == True
