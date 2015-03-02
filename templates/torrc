@@ -2,7 +2,7 @@
 RunAsDaemon {{ tor_RunAsDaemon }}
 User {{ tor_user }}
 
-PidFile {{ tor_PidDir }}/{{ item[0] }}_{{ item.1.orport }}.pid
+PidFile {{ tor_PidDir }}/tor-{{ item[0] }}_{{ item.1.orport }}.pid
 Log {{ tor_LogLevel }} file {{ tor_LogDir }}/{{ item[0] }}_{{ item.1.orport }}.log
 DataDirectory {{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}
 
