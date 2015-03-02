@@ -38,7 +38,7 @@ tor_DataDir: /var/lib/tor
 # DO NOT set it to /var/run/tor
 tor_PidDir: /var/run/tor-instances
 
-tor_ConfDir: /etc/tor
+tor_ConfDir: /etc/tor/enabled
 
 tor_distribution_release: "{{ ansible_distribution_release }}"
 tor_ips: "{{ ansible_all_ipv4_addresses[0:tor_maxips] }}"
