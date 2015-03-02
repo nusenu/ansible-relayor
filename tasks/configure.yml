@@ -66,7 +66,7 @@
   sudo: yes
   template: >
     src=torrc
-    dest="{{ tor_ConfDir }}/{{ item[0] }}_{{ item.1.orport }}.torrc"
+    dest="{{ tor_ConfDir }}/tor-{{ item[0] }}_{{ item.1.orport }}.torrc"
     owner=root
     mode=0644
     backup=yes
@@ -79,7 +79,7 @@
 # bug in --verify-config (trac #15015)
 #
 #- name: Ensure torrc files are sane
-#  shell: "tor --verify-config -f {{ tor_ConfDir }}/{{ item[0] }}_{{ item.1.orport }}.torrc"
+#  shell: "tor --verify-config -f {{ tor_ConfDir }}/tor-{{ item[0] }}_{{ item.1.orport }}.torrc"
 #  with_nested:
 #   - tor_ips
 #   - tor_ports
@@ -93,7 +93,7 @@
 
 - name: Ensure Tor instances are running
   sudo: yes
-  shell: "kill -0 `cat {{ tor_PidDir }}/{{ item[0] }}_{{ item.1.orport }}.pid` || tor -f {{ tor_ConfDir }}/{{ item[0] }}_{{ item.1.orport }}.torrc"
+  shell: "kill -0 `cat {{ tor_PidDir }}/{{ item[0] }}_{{ item.1.orport }}.pid` || tor -f {{ tor_ConfDir }}/tor-{{ item[0] }}_{{ item.1.orport }}.torrc"
   with_nested:
    - tor_ips
    - tor_ports
