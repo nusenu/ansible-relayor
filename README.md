@@ -54,7 +54,7 @@ The following default port range is used for listeners:
 - hosts: relays
   gather_facts: False
   roles:
-   - relayor
+   - ansible-relayor
 ```
 
 If you run non-debian based systems make sure to put the following files into
@@ -108,7 +108,7 @@ All variables mentioned here are optional.
 * `tor_alpha` boolean
   * Set to True if you want to run Tor alpha releases.
   * default: False
-  * Has no effect on OpenBSD hosts.
+  * This setting is currently supported on CentOS and FreeBSD only.
 
 * `tor_ips`
   * If you want to use only specific IP addresses for Tor.
@@ -152,7 +152,7 @@ All generated relays will have a nickname that starts with
      - { orport: 22, dirport: 80}
      - { orport: 443, dirport: 8080}
   roles:
-   - relayor
+   - ansible-relayor
 ```
 
 Security Considerations
@@ -179,8 +179,6 @@ Relevant Upstream Bugs
 The following upstream bugs are related to this ansible role:
 - multi instance startup script
     - debs: https://bugs.torproject.org/14995
-    - rpms: https://bugs.torproject.org/14996
-- canonical name for debian alpha repo:  https://bugs.torproject.org/14997
 - bug in --verify-config : https://bugs.torproject.org/15015
 
 Origins
