@@ -6,6 +6,7 @@
     state=directory
     owner={{ tor_user }}
     mode=0700
+    recurse=yes
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
