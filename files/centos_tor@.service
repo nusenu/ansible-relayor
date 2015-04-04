@@ -1,0 +1,37 @@
+[Unit]
+Description = Anonymizing overlay network for TCP
+After = syslog.target network.target nss-lookup.target
+
+[Service]
+Type = simple
+ExecStartPre = /usr/bin/tor -f /etc/tor/enabled/%i.torrc --verify-config
+ExecStart = /usr/bin/tor -f /etc/tor/enabled/%i.torrc --runasdaemon 0
+ExecReload = /bin/kill -HUP ${MAINPID}
+KillSignal = SIGINT
+TimeoutSec = 30
+Restart = on-failure
+WatchdogSec = 1m
+LimitNOFILE = 32768
+
+## Hardening
+PrivateTmp = yes
+ReadOnlyDirectories = /
+ReadWriteDirectories = /var/lib/tor
+ReadWriteDirectories = /var/log/tor
+NoNewPrivileges = yes
+
+##not supported on CentOS7
+#PrivateDevices = yes
+#ProtectHome = yes
+#ProtectSystem = full
+
+# CAP_KILL in the following line is just a workaround for an apparent bug
+# http://lists.freedesktop.org/archives/systemd-devel/2015-March/029609.html
+# The service works also without it but you won't be able to reload it via systemctl.
+CapabilityBoundingSet = CAP_SETUID CAP_SETGID CAP_NET_BIND_SERVICE CAP_KILL
+
+# FIXME
+#SELinuxContext=system_u:system_r:tor_t
+
+[Install]
+WantedBy = multi-user.target

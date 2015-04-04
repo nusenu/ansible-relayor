@@ -18,15 +18,17 @@ Note: Proper automatic MyFamily handling depends on the inclusion of all relays 
 
 THIS ANSIBLE ROLE IS CURRENTLY EXPERIMENTAL!
 
-Missing Parts
----------------
-This role does not take care of startup scripts yet - which usually includes required file descriptor limit changes (see issues).
+Dependencies
+------------
+- systemd on Linux systems
+- rcctl on OpenBSD (available since 5.7)
+- ansible >= 1.9
 
-Tested with
------------
-- Debian 7
+Tested on
+----------
+- Debian Jessie (will not work on wheezy due to systemd requirements)
 - CentOS 7
-- OpenBSD 5.7 (rcctl support)
+- OpenBSD 5.7
 - FreeBSD 10.1
 
 - tor 0.2.5.x / 0.2.6.x

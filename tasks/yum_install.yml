@@ -10,6 +10,7 @@
 - set_fact: tor_rpm_distribution_os="fc"
   when: ansible_distribution == 'Fedora'
 
+# the tor_alpha var is taken into account here (template)
 - name: Add torproject.org repository (YUM)
   sudo: yes
   template: src=torproject.yum.repo dest=/etc/yum.repos.d/torproject.repo owner=root group=root
@@ -19,3 +20,7 @@
 - name: Ensure Tor package is installed (YUM)
   sudo: yes
   yum: name=tor state=present
+
+- name: Ensure the presence of the multi-instance systemd unit file (CentOS)
+  sudo: yes
+  copy: src=centos_tor@.service dest=/lib/systemd/system/tor@.service owner=root mode=0644 backup=yes

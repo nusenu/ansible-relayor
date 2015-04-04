@@ -36,3 +36,7 @@
   sudo: yes
   service: name=tor state=stopped
   when: aptresult.changed == True
+
+- name: Ensure the presence of the multi-instance systemd unit file (debian)
+  sudo: yes
+  copy: src=debian_tor@.service dest=/lib/systemd/system/tor@.service owner=root mode=0644 backup=yes
