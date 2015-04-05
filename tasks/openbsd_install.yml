@@ -38,3 +38,14 @@
   when: loginclass.stdout != 'tordaemon'
   #TODO 
   #notify: restart tor
+
+# OpenBSD does not support multi-instance rc.d
+# so we link as many pseudo rc scripts as we need.
+# OpenBSD does not like dots in rc filenames so
+# we replace them with underscores.
+- name: Create links to the service files
+  sudo: yes
+  file: src=/etc/rc.d/tor state=link path=/etc/rc.d/tor{{ item[0]| replace('.','_') }}_{{ item.1.orport }}
+  with_nested:
+   - tor_ips
+   - tor_ports
