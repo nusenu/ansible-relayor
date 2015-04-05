@@ -100,6 +100,12 @@
 
 # Linux/systemd section (uses service module)
 # ===========================================
+ 
+- name: Ensure Tor instances are reloaded if its torrc changed (Linux/systemd)
+  sudo: yes
+  service: name=tor@{{ item.item[0] }}_{{ item.item.1.orport }}.service state=reloaded
+  with_items: instances.results
+  when: ansible_system == 'Linux' and item.changed == True 
 
 - name: Ensure Tor instances are enabled and started (Linux/systemd)
   sudo: yes
@@ -109,19 +115,18 @@
    - tor_ports
   when: ansible_system == 'Linux'
 
-# FIXME: we reload even when not necessary (in case the previous task just started the instance
-# and the torrc changed)
-- name: Ensure Tor instances are reloaded if its torrc changed (Linux/systemd)
-  sudo: yes
-  service: name=tor@{{ item.item[0] }}_{{ item.item.1.orport }}.service state=reloaded
-  with_items: instances.results
-  when: ansible_system == 'Linux' and item.changed == True 
 
 # OpenBSD section (uses service module)
 # This is basically a copy from the Linux
 # section, but it requires different service
 # names and additional arguments.
 # =====================================
+
+- name: Ensure Tor instances are reloaded if its torrc changed (OpenBSD)
+  sudo: yes
+  service: name=tor{{ item.item[0]|replace('.','_') }}_{{ item.item.1.orport }} state=reloaded
+  with_items: instances.results
+  when: ansible_system == 'OpenBSD' and item.changed == True
 
 - name: Ensure Tor instances are enabled and started (OpenBSD)
   sudo: yes
@@ -132,13 +137,6 @@
    - tor_ports
   when: ansible_system == 'OpenBSD'
 
-# FIXME: we reload even when not necessary (in case the previous task just started the instance
-# # and the torrc changed)
-- name: Ensure Tor instances are reloaded if its torrc changed (OpenBSD)
-  sudo: yes
-  service: name=tor{{ item.item[0]|replace('.','_') }}_{{ item.item.1.orport }} state=reloaded
-  with_items: instances.results
-  when: ansible_system == 'OpenBSD' and item.changed == True
 
 # FreeBSD section
 # ================
