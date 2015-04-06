@@ -30,9 +30,6 @@
   sudo: yes
   copy: src=centos_tor@.service dest=/lib/systemd/system/tor@.service owner=root mode=0644 backup=yes setype=tor_unit_file_t
 
-- name: Ensure SELinux booleans are set appropriately (CentOS)
+- name: Ensure SELinux boolean (tor_can_network_relay) is set appropriately (CentOS)
   sudo: yes
-  seboolean: name={{ item }} state=yes persistent=yes
-  with_items:
-    - tor_bind_all_unreserved_ports
-    - tor_can_network_relay
+  seboolean: name=tor_can_network_relay state=yes persistent=yes
