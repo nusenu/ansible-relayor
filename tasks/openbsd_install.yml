@@ -20,11 +20,9 @@
   sudo: yes
   lineinfile: dest=/etc/sysctl.conf line="kern.maxfiles=20000" create=yes
 
-# 'tordaemon' is basically an arbitrary string here. We will use it afterwards
-# to assign that login class to the {{ tor_user }}
 - name: Ensure Tor process file descriptor limits are reasonable (OpenBSD)
   sudo: yes
-  lineinfile: "dest=/etc/login.conf line='tordaemon::openfiles-max=13500::tc=daemon:'"
+  lineinfile: "dest=/etc/login.conf line='{{ tor_loginclass }}::openfiles-max=13500::tc=daemon:'"
   #TODO
   #notify: restart tor
 
@@ -32,10 +30,10 @@
   shell: userinfo "{{ tor_user }}"|grep ^class|cut -f2
   register: loginclass
 
-- name: Ensure 'tor_user' is in the tordaemon login class (OpenBSD)
+- name: Ensure 'tor_user' is in the appropriate login class (OpenBSD)
   sudo: yes
-  command: usermod -L tordaemon "{{ tor_user }}"
-  when: loginclass.stdout != 'tordaemon'
+  command: usermod -L "{{ tor_loginclass }}" "{{ tor_user }}"
+  when: loginclass.stdout != "{{ tor_loginclass }}"
   #TODO 
   #notify: restart tor
 
