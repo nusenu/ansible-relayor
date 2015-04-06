@@ -10,7 +10,7 @@ ExecReload = /bin/kill -HUP ${MAINPID}
 KillSignal = SIGINT
 TimeoutSec = 30
 Restart = on-failure
-WatchdogSec = 1m
+#WatchdogSec = 1m
 LimitNOFILE = 32768
 
 
@@ -22,6 +22,7 @@ LimitNOFILE = 32768
 #ReadOnlyDirectories = /
 #ReadWriteDirectories = /var/lib/tor
 #ReadWriteDirectories = /var/log/tor
+#ReadWriteDirectories = /var/run/tor
 #NoNewPrivileges = yes
 
 ##not supported on CentOS7
