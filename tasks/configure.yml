@@ -84,19 +84,11 @@
     owner=root
     mode=0644
     backup=yes
+    validate="tor --verify-config -f %s"
   with_nested:
    - tor_ips
    - tor_ports
   register: instances
-
-# systemd unit file takes care of this already..
-# disabled for now (bug in --verify-config (trac #15015))
-#
-#- name: Ensure torrc files are sane
-#  shell: "tor --verify-config -f {{ tor_ConfDir }}/{{ item[0] }}_{{ item.1.orport }}.torrc"
-#  with_nested:
-#   - tor_ips
-#   - tor_ports
 
 # Linux/systemd section (uses service module)
 # ===========================================
