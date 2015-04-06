@@ -13,6 +13,9 @@ DirPort {{ item[0] }}:{{ item.1.dirport }}
 Address {{ item[0] }}
 OutboundBindAddress {{ item[0] }}
 SocksPort {{ tor_SocksPort }}
+{% if tor_enableControlSocket == True %}
+ControlSocket {{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/controlsocket
+{% endif %}
 
 {% if tor_ContactInfo is defined %}
 ContactInfo {{ tor_ContactInfo }}
