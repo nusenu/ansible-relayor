@@ -21,6 +21,18 @@
   sudo: yes
   yum: name=tor state=present
 
+# we need this for the seboolean ansible module to work
+- name: Ensure setsebool (SELinux) dependencies are installed (CentOS)
+  sudo: yes
+  yum: name=libsemanage-python state=present
+
 - name: Ensure the presence of the multi-instance systemd unit file (CentOS)
   sudo: yes
-  copy: src=centos_tor@.service dest=/lib/systemd/system/tor@.service owner=root mode=0644 backup=yes
+  copy: src=centos_tor@.service dest=/lib/systemd/system/tor@.service owner=root mode=0644 backup=yes setype=tor_unit_file_t
+
+- name: Ensure SELinux booleans are set appropriately (CentOS)
+  sudo: yes
+  seboolean: name={{ item }} state=yes persistent=yes
+  with_items:
+    - tor_bind_all_unreserved_ports
+    - tor_can_network_relay
