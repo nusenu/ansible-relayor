@@ -18,10 +18,10 @@ PrivateTmp = yes
 PrivateDevices = yes
 ProtectHome = yes
 ProtectSystem = full
-ReadOnlyDirectories = /
-ReadWriteDirectories = /var/lib/tor
-ReadWriteDirectories = /var/log/tor
-ReadWriteDirectories = /var/run/tor
+#ReadOnlyDirectories = /
+#ReadWriteDirectories = /var/lib/tor
+#ReadWriteDirectories = /var/log/tor
+#ReadWriteDirectories = /var/run/tor
 NoNewPrivileges = yes
 
 # CAP_KILL in the following line is just a workaround for an apparent bug
