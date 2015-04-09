@@ -7,6 +7,7 @@
 - set_fact: tor_rpm_distribution_os="el"
   when: ansible_distribution == 'CentOS' or ansible_distribution == "Red Hat Enterprise Linux"
 
+# we do not actually support Fedora
 - set_fact: tor_rpm_distribution_os="fc"
   when: ansible_distribution == 'Fedora'
 
