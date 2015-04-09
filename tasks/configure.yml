@@ -24,6 +24,7 @@
   sudo: yes
   shell: "test -f {{ tor_LogDir }} && mv {{ tor_LogDir }} {{ tor_LogDir }}.bk-`date '+%Y-%m-%d_%H%M%S'`"
   ignore_errors: yes
+  when: ansible_system == 'FreeBSD'
 
 - name: Ensure Tor log directory exists and has appropriate permissions
   sudo: yes
@@ -31,16 +32,6 @@
     state=directory
     owner={{ tor_user }}
     mode=750
-
-- name: Ensure Tor log file(s) are not world readable
-  sudo: yes
-  file: path="{{ tor_LogDir }}/{{ item[0] }}_{{ item.1.orport }}.log"
-    state=touch
-    owner={{ tor_user }}
-    mode=600
-  with_nested:
-   - tor_ips
-   - tor_ports
 
 - name: Ensure Tor PidDir is owned by tor_user
   sudo: yes
