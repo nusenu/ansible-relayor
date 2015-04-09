@@ -47,39 +47,10 @@ The following default port range is used for listeners:
 
 ```yml
 ---
-- hosts: relays
-
-  tasks:
-
-  - name: create groups based on package manager
-    group_by: key="{{ansible_pkg_mgr}}"
-
 
 - hosts: relays
-  gather_facts: False
   roles:
    - ansible-relayor
-```
-
-If you run non-debian based systems make sure to put the following files into
-your group_vars folder:
-```yml
-# file: yum
-tor_user: _tor
-```
-
-```yml
-# file: openbsd_pkg
-tor_user: _tor
-tor_PidDir: /var/tor/pids 
-tor_DataDir: /var/tor
-```
-
-```yml
-# file: pkgng
-tor_user: _tor
-tor_DataDir: /var/db/tor
-tor_ConfDir: /usr/local/etc/tor/enabled
 ```
 
 Role Variables
@@ -143,16 +114,8 @@ All generated relays will have a nickname that starts with
 
 ```yml
 ---
-- hosts: relays
-
-  tasks:
-
-  - name: create groups based on package manager
-    group_by: key="{{ansible_pkg_mgr}}"
-
 
 - hosts: relays
-  gather_facts: False
   vars:
     tor_alpha: True
     tor_ExitRelay: True

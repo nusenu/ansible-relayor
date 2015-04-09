@@ -1,8 +1,6 @@
 ---
-# consider using the playbook example with group_by
-# + group_vars files if you are using OpenBSD/CentOS.
 
-tor_user: debian-tor
+tor_user: _tor
 
 # The tor_ports dictionary defines how many instances are created per
 # available IP address and what ports are used.

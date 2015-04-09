@@ -1,4 +1,9 @@
 ---
+
+- set_fact: tor_DataDir="/var/tor"
+
+- set_fact: tor_PidDir="/var/tor/pids"
+
 # setting PKG_PATH is out of scope of this role
 # we assume it is set correctly.
 # We specifically opt for present over latest to improve performance

@@ -1,5 +1,7 @@
 ---
 
+- set_fact: tor_user="debian-tor"
+
 - name: Ensure torproject gpg key is installed (A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89)
   sudo: yes
   apt_key: data="{{ lookup('file', 'deb.torproject.org_A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.pub') }}"
