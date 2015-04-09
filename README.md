@@ -22,17 +22,20 @@ THIS ANSIBLE ROLE IS CURRENTLY EXPERIMENTAL!
 
 Dependencies
 ------------
-- systemd on Linux systems
-- rcctl on OpenBSD (available since 5.7)
+- systemd (Linux systems)
 - ansible >= 1.9
 
-Tested on
-----------
-- Debian Jessie (will not work on wheezy due to systemd requirements)
-- CentOS 7
+Supported Operating Systems
+---------------------------
+- Debian 8
+- CentOS 7 (incl. SELinux support)
 - OpenBSD 5.7
 - FreeBSD 10.1
+- Ubuntu 15.04 (incl. AppArmor support)
+(minimal version numbers shown)
 
+Supported Tor Releases
+-----------------------
 - tor 0.2.5.x / 0.2.6.x
 
 Example Tor Relay Playbook (simple)

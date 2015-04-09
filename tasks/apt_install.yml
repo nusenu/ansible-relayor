@@ -9,6 +9,10 @@
     id=A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89
     state=present
 
+# TODO: remove this as soon as there is a tor repo for vivid
+- set_fact: tor_distribution_release="utopic"
+  when: tor_distribution_release == 'vivid'
+
 - name: Ensure torproject.org repository is present (APT)
   sudo: yes
   apt_repository: repo='deb http://deb.torproject.org/torproject.org {{ tor_distribution_release }} main'
@@ -40,6 +44,24 @@
   service: name=tor state=stopped
   when: aptresult.changed == True
 
-- name: Ensure the presence of the multi-instance systemd unit file (debian)
+- name: Ensure the presence of the multi-instance systemd unit file (Debian)
   sudo: yes
   copy: src=debian_tor@.service dest=/lib/systemd/system/tor@.service owner=root mode=0644 backup=yes
+  when: ansible_distribution == 'Debian'
+
+- name: Ensure the presence of the multi-instance systemd unit file (Ubuntu)
+  sudo: yes
+  copy: src=ubuntu_tor@.service dest=/lib/systemd/system/tor@.service owner=root mode=0644 backup=yes
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Ensure AppArmor allows access to necessary files (Ubuntu)
+  sudo: yes
+  lineinfile: dest=/etc/apparmor.d/local/system_tor line={{ item }}
+  with_items:
+    - '/etc/tor/enabled/*\ r,'
+    - '/{,var/}run/tor/*.pid\ w,'
+    - '/var/lib/tor/**\ w,'
+  when: ansible_distribution == 'Ubuntu'
+  notify: restart apparmor
+
+- meta: flush_handlers
