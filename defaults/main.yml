@@ -5,8 +5,8 @@ tor_user: _tor
 # The tor_ports dictionary defines how many instances are created per
 # available IP address and what ports are used.
 tor_ports:
-  - { orport: 9001, dirport: 9002}
-  - { orport: 9003, dirport: 9004}
+  - { orport: 9000, dirport: 9001}
+  - { orport: 9100, dirport: 9101}
 
 # Limit the amount of used IP addresses 
 # by default to 10, this limits the amount

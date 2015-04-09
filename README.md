@@ -44,8 +44,8 @@ Example Tor Relay Playbook (simple)
 This playbook will use defaults and create two non-exit Tor instances for
 every available IP address on the host. 
 If the host has 3 IP addresses you will end up with 6 Tor instances (including DirPorts). 
-The following default port range is used for listeners:
-9001-9004
+The following TCP ports will be used for ORPort and DirPort listeners:
+9000,9001,9100,9101
 (if these ports are already in use, things will fail)
 
 ```yml
@@ -78,7 +78,7 @@ All variables mentioned here are optional.
   - default: reduced exit policy (https://trac.torproject.org/projects/tor/wiki/doc/ReducedExitPolicy)
 
 * `tor_ports` This var allows you to 
-  - change default ports (9001-9004)
+  - change default ports
   - reduce the number of Tor instances created per IP address
   - disable DirPorts by setting them to 0
   - HINT: choose them wisely and *never* change them again ;)
