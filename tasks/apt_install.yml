@@ -37,7 +37,7 @@
     - tor
   # apt starts a tor client instance by default after installing the package
   # we do not need that
-  notify: stop tor
+  notify: stop-and-disable tor
 
 - name: Ensure the presence of the multi-instance systemd unit file (Debian)
   sudo: yes

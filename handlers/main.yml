@@ -2,9 +2,9 @@
 #- name: restart tor
 #  service: name=tor state=restarted
 
-- name: stop tor
+- name: stop-and-disable tor
   sudo: yes
-  service: name=tor state=stopped
+  service: name=tor state=stopped enabled=no
 
 - name: restart apparmor
   sudo: yes
