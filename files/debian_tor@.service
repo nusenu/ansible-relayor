@@ -18,10 +18,14 @@ PrivateTmp = yes
 PrivateDevices = yes
 ProtectHome = yes
 ProtectSystem = full
+
+## disabled due to upstream systemd bug
+## https://github.com/nusenu/ansible-relayor/issues/16
 #ReadOnlyDirectories = /
-#ReadWriteDirectories = /var/lib/tor
+#ReadWriteDirectories = /var/lib/tor/%i
 #ReadWriteDirectories = /var/log/tor
 #ReadWriteDirectories = /var/run/tor
+
 NoNewPrivileges = yes
 
 # CAP_KILL in the following line is just a workaround for an apparent bug
