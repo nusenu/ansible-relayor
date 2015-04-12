@@ -2,6 +2,10 @@
 #- name: restart tor
 #  service: name=tor state=restarted
 
+- name: stop tor
+  sudo: yes
+  service: name=tor state=stopped
+
 - name: restart apparmor
   sudo: yes
   service: name=apparmor state=restarted
