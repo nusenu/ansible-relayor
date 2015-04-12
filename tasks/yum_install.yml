@@ -30,7 +30,10 @@
 - name: Ensure the presence of the multi-instance systemd unit file (CentOS)
   sudo: yes
   copy: src=centos_tor@.service dest=/lib/systemd/system/tor@.service owner=root mode=0644 backup=yes setype=tor_unit_file_t
+  notify: systemctl daemon-reload
 
 - name: Ensure SELinux boolean (tor_can_network_relay) is set appropriately (CentOS)
   sudo: yes
   seboolean: name=tor_can_network_relay state=yes persistent=yes
+
+- meta: flush_handlers
