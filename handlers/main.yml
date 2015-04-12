@@ -2,9 +2,15 @@
 #- name: restart tor
 #  service: name=tor state=restarted
 
-- name: stop-and-disable tor
+- name: stop tor
   sudo: yes
-  service: name=tor state=stopped enabled=no
+  service: name=tor state=stopped
+
+# workaround for #20
+# the proper way would be service: enabled=no
+- name: disable-sysv-debian tor
+  sudo: yes
+  command: update-rc.d tor disable
 
 - name: restart apparmor
   sudo: yes
