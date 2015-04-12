@@ -9,3 +9,7 @@
 - name: restart apparmor
   sudo: yes
   service: name=apparmor state=restarted
+
+- name: systemctl daemon-reload
+  sudo: yes
+  command: systemctl daemon-reload

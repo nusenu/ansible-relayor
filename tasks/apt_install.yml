@@ -39,17 +39,17 @@
   # we do not need that
   notify: stop tor
 
-- meta: flush_handlers
-
 - name: Ensure the presence of the multi-instance systemd unit file (Debian)
   sudo: yes
   copy: src=debian_tor@.service dest=/lib/systemd/system/tor@.service owner=root mode=0644 backup=yes
   when: ansible_distribution == 'Debian'
+  notify: systemctl daemon-reload
 
 - name: Ensure the presence of the multi-instance systemd unit file (Ubuntu)
   sudo: yes
   copy: src=ubuntu_tor@.service dest=/lib/systemd/system/tor@.service owner=root mode=0644 backup=yes
   when: ansible_distribution == 'Ubuntu'
+  notify: systemctl daemon-reload
 
 - name: Ensure AppArmor allows access to necessary files (Ubuntu)
   sudo: yes
