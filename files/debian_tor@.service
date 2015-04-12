@@ -31,12 +31,10 @@ NoNewPrivileges = yes
 # CAP_KILL in the following line is just a workaround for an apparent bug
 # http://lists.freedesktop.org/archives/systemd-devel/2015-March/029609.html
 # The service works also without it but you won't be able to reload it via systemctl.
-CapabilityBoundingSet = CAP_SETUID CAP_SETGID CAP_NET_BIND_SERVICE CAP_KILL
-
-# Currently required for ControlSocket
+# CAP_DAC_OVERRIDE CAP_CHOWN is required for ControlSocket
 # https://bugs.torproject.org/15659
 # https://github.com/nusenu/ansible-relayor/issues/18
-CapabilityBoundingSet = CAP_DAC_OVERRIDE CAP_CHOWN
+CapabilityBoundingSet = CAP_SETUID CAP_SETGID CAP_NET_BIND_SERVICE CAP_KILL CAP_DAC_OVERRIDE CAP_CHOWN
 
 AppArmorProfile=-system_tor
 
