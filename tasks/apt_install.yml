@@ -9,10 +9,6 @@
     id=A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89
     state=present
 
-# TODO: remove this as soon as there is a tor repo for vivid
-- set_fact: tor_distribution_release="utopic"
-  when: tor_distribution_release == 'vivid'
-
 - name: Ensure torproject.org repository is present (APT)
   sudo: yes
   apt_repository: repo='deb http://deb.torproject.org/torproject.org {{ tor_distribution_release }} main'
