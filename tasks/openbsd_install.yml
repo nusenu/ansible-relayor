@@ -31,14 +31,9 @@
   #TODO
   #notify: restart tor
 
-- name: Gather tor_user's login class (OpenBSD)
-  shell: userinfo "{{ tor_user }}"|grep ^class|cut -f2
-  register: loginclass
-
-- name: Ensure 'tor_user' is in the appropriate login class (OpenBSD)
+- name: Ensure 'tor_user' has appropriate login class set (OpenBSD)
   sudo: yes
-  command: usermod -L "{{ tor_loginclass }}" "{{ tor_user }}"
-  when: loginclass.stdout != "{{ tor_loginclass }}"
+  user: name={{ tor_user }} login_class={{ tor_loginclass }}
   #TODO 
   #notify: restart tor
 
