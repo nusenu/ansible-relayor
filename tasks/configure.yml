@@ -1,6 +1,6 @@
 ---
 
-- name: Ensure Tor DataDir(s) exist and is owned by {{ tor_user }}
+- name: Ensure Tor DataDir(s) exist and is owned by tor_user
   sudo: yes
   file: path={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}
     state=directory
@@ -20,20 +20,20 @@
     mode=755
 
 # on FreeBSD /var/log/tor is a file, let's rename it
-- name: If {{ tor_LogDir }} is a file, rename it
+- name: If LogDir is a file, rename it
   sudo: yes
   shell: "test -f {{ tor_LogDir }} && mv {{ tor_LogDir }} {{ tor_LogDir }}.bk-`date '+%Y-%m-%d_%H%M%S'`"
   ignore_errors: yes
   when: ansible_system == 'FreeBSD'
 
-- name: Ensure Tor log directory exists and has appropriate permissions
+- name: Ensure LogDir exists and has appropriate permissions
   sudo: yes
   file: path={{ tor_LogDir }}
     state=directory
     owner={{ tor_user }}
     mode=750
 
-- name: Ensure Tor PidDir is owned by tor_user
+- name: Ensure PidDir is owned by tor_user
   sudo: yes
   file: path={{ tor_PidDir }}
     state=directory
@@ -41,7 +41,7 @@
     group={{ tor_user }}
     mode=2750
 
-- name: Generating TEMPORARY (without MyFamily) torrc file(s)...
+- name: Generating temporary (without MyFamily) torrc file(s)...
   sudo: yes
   template: src=torrc
     dest="{{ tor_ConfDir }}/{{ item[0] }}_{{ item.1.orport }}.torrc-tmp"
@@ -51,7 +51,7 @@
    - tor_ips
    - tor_ports
 
-- name: Generate keys (if not in place yet) and gather relay fingerprints (for MyFamily)
+- name: Collect relay fingerprints (for MyFamily)
   sudo: yes
   shell: "tor --hush -f {{ tor_ConfDir }}/{{ item[0] }}_{{ item.1.orport }}.torrc-tmp --list-fingerprint |cut -d' ' -f2-|sed -e 's, ,,g'"
   with_nested:
@@ -59,7 +59,7 @@
    - tor_ports
   register: tor_fingerprints
 
-- name: Remove temporary files
+- name: Remove temporary torrc files
   sudo: yes
   file: path="{{ tor_ConfDir }}/{{ item[0] }}_{{ item.1.orport }}.torrc-tmp"
     state=absent
@@ -67,7 +67,7 @@
    - tor_ips
    - tor_ports
 
-- name: Generating torrc file(s) - this time with MyFamily...
+- name: Generating final torrc file(s) (with MyFamily)
   sudo: yes
   template: >
     src=torrc

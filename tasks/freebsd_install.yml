@@ -1,6 +1,7 @@
 ---
 
-- set_fact:
+- name: Setup FreeBSD specific variables (set_fact)
+  set_fact:
     tor_DataDir: /var/db/tor
     tor_ConfDir: /usr/local/etc/tor/enabled
 
