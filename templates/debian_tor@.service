@@ -31,7 +31,11 @@ NoNewPrivileges = yes
 # CAP_DAC_OVERRIDE CAP_CHOWN is required for ControlSocket
 # https://bugs.torproject.org/15659
 # https://github.com/nusenu/ansible-relayor/issues/18
+{% if tor_enableControlSocket == True %}
 CapabilityBoundingSet = CAP_SETUID CAP_SETGID CAP_NET_BIND_SERVICE CAP_DAC_OVERRIDE CAP_CHOWN
+{% else %}
+CapabilityBoundingSet = CAP_SETUID CAP_SETGID CAP_NET_BIND_SERVICE
+{% endif %}
 PermissionsStartOnly=yes
 
 AppArmorProfile=-system_tor

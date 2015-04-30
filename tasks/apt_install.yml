@@ -39,7 +39,7 @@
 
 - name: Ensure the presence of the multi-instance systemd unit file (Debian)
   sudo: yes
-  copy: src=debian_tor@.service dest=/lib/systemd/system/tor@.service owner=root mode=0644 backup=yes
+  template: src=debian_tor@.service dest=/lib/systemd/system/tor@.service owner=root mode=0644 backup=yes
   when: ansible_distribution == 'Debian'
   notify: systemctl daemon-reload
 
