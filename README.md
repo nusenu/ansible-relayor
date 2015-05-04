@@ -24,6 +24,7 @@ Dependencies
 ------------
 - systemd (Linux systems)
 - ansible >= 1.9
+- ports must be present on OpenBSD
 
 Supported Operating Systems
 ---------------------------
@@ -32,7 +33,6 @@ Supported Operating Systems
 - OpenBSD 5.7
 - FreeBSD 10.1
 - Ubuntu 15.04 (incl. AppArmor support)
-(minimal version numbers shown)
 
 Supported Tor Releases
 -----------------------
@@ -148,13 +148,6 @@ Reporting Security Bugs
 
 Feel free to submit them in the public issue tracker,
 or if you like via GPG encrypted email.
-
-Relevant Upstream Bugs
------------------------
-The following upstream bugs are related to this ansible role:
-- multi instance startup script
-    - debs: https://bugs.torproject.org/14995
-- bug in --verify-config : https://bugs.torproject.org/15015
 
 Origins
 -------

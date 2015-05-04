@@ -5,13 +5,17 @@
     tor_DataDir: /var/tor
     tor_PidDir: /var/tor/pids
 
-# setting PKG_PATH is out of scope of this role
-# we assume it is set correctly.
-# We specifically opt for present over latest to improve performance
-# "latest" is covered by auto updates
-- name: Ensure Tor is installed (OpenBSD)
+- name: Gather current tor install state (OpenBSD)
+  command: "pkg_info -qe tor-*"
+  ignore_errors: yes
+  register: torpkg
+
+# the following task fails HARD on purpose (if ports are not there)
+# TODO: add an opt-in var that takes care of installing ports
+- name: Install tor from ports (OpenBSD)
   sudo: yes
-  openbsd_pkg: name=tor state=present
+  shell: "cd /usr/ports/net/tor && make install"
+  when: torpkg.rc == 1
 
 - name: Gather current system-wide file descriptor limits (OpenBSD)
   shell: "sysctl kern.maxfiles|cut -d= -f2"
