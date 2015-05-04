@@ -14,7 +14,7 @@
   openbsd_pkg: name=tor state=present
 
 - name: Gather current system-wide file descriptor limits (OpenBSD)
-  command: "sysctl kern.maxfiles|cut -d= -f2"
+  shell: "sysctl kern.maxfiles|cut -d= -f2"
   register: currentlimits
 
 - name: Ensure system-wide runtime file descriptor limits are reasonable (OpenBSD)
