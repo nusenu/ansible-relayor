@@ -4,6 +4,7 @@
   set_fact:
     tor_DataDir: /var/tor
     tor_PidDir: /var/tor/pids
+  tags: configure
 
 - name: Gather current tor install state (OpenBSD)
   command: "pkg_info -qe tor-*"

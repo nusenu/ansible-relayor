@@ -17,4 +17,3 @@
   tags: freebsd
 
 - include: configure.yml
-  tags: configure
