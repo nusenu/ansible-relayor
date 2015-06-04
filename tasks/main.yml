@@ -17,4 +17,4 @@
   tags: freebsd
 
 - include: configure.yml
-  tags: debian,centos,openbsd,freebsd,configure
+  tags: configure

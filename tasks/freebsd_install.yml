@@ -25,7 +25,7 @@
    - tor_ips
    - tor_ports
 
-- name: If LogDir is a file, rename it
+- name: If LogDir is a file, rename it (FreeBSD)
   sudo: yes
   shell: "test -f {{ tor_LogDir }} && mv {{ tor_LogDir }} {{ tor_LogDir }}.bk-`date '+%Y-%m-%d_%H%M%S'`"
   ignore_errors: yes
