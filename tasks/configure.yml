@@ -19,13 +19,6 @@
     group={{ tor_user }}
     mode=755
 
-# on FreeBSD /var/log/tor is a file, let's rename it
-- name: If LogDir is a file, rename it
-  sudo: yes
-  shell: "test -f {{ tor_LogDir }} && mv {{ tor_LogDir }} {{ tor_LogDir }}.bk-`date '+%Y-%m-%d_%H%M%S'`"
-  ignore_errors: yes
-  when: ansible_system == 'FreeBSD'
-
 - name: Ensure LogDir exists and has appropriate permissions
   sudo: yes
   file: path={{ tor_LogDir }}
