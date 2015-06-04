@@ -2,14 +2,19 @@
 
 - include: apt_install.yml
   when: ansible_pkg_mgr == 'apt'
+  tags: debian
 
 - include: yum_install.yml
   when: ansible_pkg_mgr == 'yum'
+  tags: centos
 
 - include: openbsd_install.yml
   when: ansible_pkg_mgr == 'openbsd_pkg'
+  tags: openbsd
 
 - include: freebsd_install.yml
   when: ansible_pkg_mgr == 'pkgng'
+  tags: freebsd
 
 - include: configure.yml
+  tags: debian,centos,openbsd,freebsd,configure
