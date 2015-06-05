@@ -108,6 +108,29 @@ section of tor's manual. Set them via 'tor_<name>'.
 Have a look at templates/torrc if you want to have list of supported
 options.
 
+Available Role Tags
+--------------------
+
+Using ansible tags is optional but allows you to speed up playbook runs if
+you are managing many servers.
+
+There are OS specific tags:
+* debian (includes ubuntu)
+* centos
+* freebsd
+* openbsd
+
+So if you have a big family and you are about to add an OpenBSD host you typically
+make two steps
+
+1. install the new server by running only against the new server (-l) and only the os specific tag (openbsd)
+`ansible-playbook tor.yml -l newserver --tags openbsd`
+
+2. then reconfigure all servers (MyFamily) by running the 'configure' tag against all servers.
+Running the 'configure' tag without a full or os specific run before that will fail because tor won't be installed.
+`ansible-playbook tor.yml --tags configure`
+
+
 Playbook Example II: alpha exit relays with custom ports and nicknames
 -------------------------------------------------------------
 Lets run exit relays (using the restricted exit policy)
