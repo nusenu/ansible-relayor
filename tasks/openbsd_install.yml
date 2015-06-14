@@ -25,12 +25,12 @@
 - name: Ensure system-wide runtime file descriptor limits are reasonable (OpenBSD)
   sudo: yes
   command: "sysctl kern.maxfiles=20000"
-  when: currentlimits.stdout < "20000"
+  when: currentlimits.stdout|int < 20000
 
 - name: Ensure system-wide persistent file descriptor limits are reasonable (OpenBSD)
   sudo: yes
   lineinfile: dest=/etc/sysctl.conf regexp=^kern.maxfiles line="kern.maxfiles=20000" create=yes
-  when: currentlimits.stdout < "20000"
+  when: currentlimits.stdout|int < 20000
 
 - name: Ensure Tor process file descriptor limits are reasonable (OpenBSD)
   sudo: yes
