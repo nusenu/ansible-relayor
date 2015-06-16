@@ -32,14 +32,13 @@
   lineinfile: dest=/etc/sysctl.conf regexp=^kern.maxfiles line="kern.maxfiles=20000" create=yes
   when: currentlimits.stdout|int < 20000
 
+# We rise openfiles limits for every tor instance separately.
+# An instance is identified by its rc.d file name.
 - name: Ensure Tor process file descriptor limits are reasonable (OpenBSD)
   sudo: yes
-  lineinfile: "dest=/etc/login.conf line='{{ tor_loginclass }}::openfiles-max=13500::tc=daemon:'"
+  lineinfile: "dest=/etc/login.conf line='tor{{ item[0]| replace('.','_') }}_{{ item.1.orport }}::openfiles-max=13500::tc=daemon:'"
+  with_nested:
+   - tor_ips
+   - tor_ports
   #TODO
-  #notify: restart tor
-
-- name: Ensure 'tor_user' has appropriate login class set (OpenBSD)
-  sudo: yes
-  user: name={{ tor_user }} login_class={{ tor_loginclass }}
-  #TODO 
   #notify: restart tor

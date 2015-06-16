@@ -45,7 +45,6 @@ tor_RunAsDaemon: 1
 tor_SocksPort: 0
 
 tor_enableControlSocket: False
-tor_loginclass: tordaemon
 
 tor_shutdownwaitlength: 1
 
