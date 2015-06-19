@@ -15,6 +15,7 @@
    - centos
    - freebsd
    - openbsd
+   - createdir
 
 - name: Ensure Tor config directory exists and has appropriate permissions
   sudo: yes

@@ -4,7 +4,9 @@
   set_fact:
     tor_DataDir: /var/db/tor
     tor_ConfDir: /usr/local/etc/tor/enabled
-  tags: configure
+  tags:
+   - configure
+   - createdir
 
 - name: Ensure Tor is installed (FreeBSD)
   sudo: yes

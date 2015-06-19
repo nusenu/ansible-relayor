@@ -120,6 +120,11 @@ There are OS specific tags:
 * freebsd
 * openbsd
 
+Non OS specific tags:
+* install - installs tor but does not start or enable it
+* createdir - creates (empty) datadirs only, usefull for migration (requires tor to be installed)
+* configure - regenerated torrc files and reloads tor (requires tor to be installed)
+
 So if you have a big family and you are about to add an OpenBSD host you typically
 make two steps
 
