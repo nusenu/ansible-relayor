@@ -148,15 +148,6 @@
   tags:
    - openbsd
 
-- name: Ensure Tor instances are reloaded if its torrc changed (OpenBSD)
-  sudo: yes
-  service: name=tor{{ item.item[0]|replace('.','_') }}_{{ item.item.1.orport }} state=reloaded
-  with_items: instances.results
-  when: ansible_system == 'OpenBSD' and item.changed == True
-  tags:
-   - openbsd
-   - configure
-
 - name: Ensure Tor instances are enabled and started (OpenBSD)
   sudo: yes
   service: name=tor{{ item[0]|replace('.','_') }}_{{ item.1.orport }}
@@ -167,6 +158,15 @@
   when: ansible_system == 'OpenBSD'
   tags:
    - openbsd
+
+- name: Ensure Tor instances are reloaded if its torrc changed (OpenBSD)
+  sudo: yes
+  service: name=tor{{ item.item[0]|replace('.','_') }}_{{ item.item.1.orport }} state=reloaded
+  with_items: instances.results
+  when: ansible_system == 'OpenBSD' and item.changed == True
+  tags:
+   - openbsd
+   - configure
 
 
 # FreeBSD section
