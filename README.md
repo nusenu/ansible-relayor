@@ -85,7 +85,7 @@ All variables mentioned here are optional.
 * `tor_alpha` boolean
   * Set to True if you want to run Tor alpha releases.
   * default: False
-  * This setting is currently supported on CentOS and FreeBSD only.
+  * This setting is supported on CentOS only.
 
 * `tor_ips`
   * If you want to use only specific IP addresses for Tor.
