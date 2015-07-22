@@ -21,17 +21,11 @@ ControlSocket {{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/controlsocket
 ContactInfo {{ tor_ContactInfo }}
 {% endif %}
 
+{% if tor_nickname is defined %}
+Nickname {{tor_nickname}}
+{% endif %}
+
 {% if tor_fingerprints is defined %}
-
-{# if the user provided us with tor_nicknameprefix, find the current tor fingerprint and construct nickname #}
-{% if tor_nicknameprefix is defined %}
-{% for fingerprint in tor_fingerprints.results -%}
-{% if fingerprint.item.0 == item.0 and fingerprint.item[1].orport == item.1.orport %}
-Nickname {{tor_nicknameprefix}}{{fingerprint.stdout[0:4]}}
-{% endif %}
-{%- endfor %}
-{% endif %}
-
 {# perform match() on potentially malicious input #}
 MyFamily {% for host in play_hosts %}{% for fingerprint in hostvars[host]['tor_fingerprints']['results'] -%}{% if fingerprint.stdout|match("^[A-F0-9]{40}$") %}${{ fingerprint.stdout }},{% endif %}{%- endfor %}{% endfor %}
 {% endif %}

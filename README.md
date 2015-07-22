@@ -12,9 +12,8 @@ no further manual configuration should be required.
 The main benefits for a relay operator are:
 - automatic instance generation (two per available IP address)
 - automatic MyFamily management
-- automatic Nickname generation (based on a user supplied prefix)
 - easily choose between exit relay/non-exit relay mode using a single boolean
-- boolean for stable vs. alpha Tor releases
+- boolean for stable vs. alpha Tor releases (CentOS only)
 
 Note: Proper automatic MyFamily handling depends on the inclusion of all relays in the playbook.
 
@@ -62,9 +61,9 @@ All variables mentioned here are optional.
 * `tor_ContactInfo`
     Sets the relay's ContactInfo field.
 
-* `tor_nicknameprefix` 
-  - up to 15 chars long, must contain only the characters [a-zA-Z0-9]
-  - Will be the first part of your relay's nickname (concatenated with first four chars of the Tor fingerprint)
+* `tor_nickname
+  - up to 19 chars long, must contain only the characters [a-zA-Z0-9]
+  - all tor instances on a host will get the same nickname
 
 * `tor_ExitRelay` boolean 
   - You will want to set this to True if you want to run exit relays.
