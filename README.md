@@ -24,7 +24,6 @@ Dependencies
 ------------
 - systemd (Linux systems)
 - ansible >= 1.9
-- ports must be present on OpenBSD
 
 Supported Operating Systems
 ---------------------------

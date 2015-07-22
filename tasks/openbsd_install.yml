@@ -8,17 +8,9 @@
    - configure
    - createdir
 
-- name: Gather current tor install state (OpenBSD)
-  command: "pkg_info -qe tor-*"
-  ignore_errors: yes
-  register: torpkg
-
-# the following task fails HARD on purpose (if ports are not there)
-# TODO: add an opt-in var that takes care of installing ports
-- name: Install tor from ports (OpenBSD)
+- name: Ensure Tor is installed (OpenBSD)
   sudo: yes
-  shell: "cd /usr/ports/net/tor && make install"
-  when: torpkg.rc == 1
+  openbsd_pkg: name=tor state=present
 
 - name: Gather current system-wide file descriptor limits (OpenBSD)
   shell: "sysctl kern.maxfiles|cut -d= -f2"
