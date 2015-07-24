@@ -26,6 +26,7 @@
 - name: Ensure setsebool (SELinux) dependencies are installed (CentOS)
   sudo: yes
   yum: name=libsemanage-python state=present
+  when: ansible_selinux.status == 'enabled'
 
 - name: Ensure the presence of the multi-instance systemd unit file (CentOS)
   sudo: yes
@@ -35,5 +36,6 @@
 - name: Ensure SELinux boolean (tor_can_network_relay) is set appropriately (CentOS)
   sudo: yes
   seboolean: name=tor_can_network_relay state=yes persistent=yes
+  when: ansible_selinux.status == 'enabled'
 
 - meta: flush_handlers
