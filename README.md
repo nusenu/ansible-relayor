@@ -22,7 +22,7 @@ THIS ANSIBLE ROLE IS CURRENTLY EXPERIMENTAL!
 Dependencies
 ------------
 - systemd (Linux systems)
-- ansible >= 1.9
+- ansible >= 1.9.3
 
 Supported Operating Systems
 ---------------------------
@@ -34,7 +34,9 @@ Supported Operating Systems
 
 Supported Tor Releases
 -----------------------
-- tor 0.2.5.x / 0.2.6.x
+- 0.2.5.x
+- 0.2.6.x
+- 0.2.7.x-alpha (CentOS only)
 
 Example Tor Relay Playbook (simple)
 ------------------------------------
@@ -67,7 +69,6 @@ All variables mentioned here are optional.
 
 * `tor_ExitRelay` boolean 
   - You will want to set this to True if you want to run exit relays.
-  - Note: This feature does not depend on tor's 'ExitRelay' option recently introduced with tor v0.2.6.3-alpha. 
   - default: False
 
 * `tor_ExitPolicy`
@@ -121,7 +122,7 @@ There are OS specific tags:
 Non OS specific tags:
 * install - installs tor but does not start or enable it
 * createdir - creates (empty) datadirs only, usefull for migration (requires tor to be installed)
-* configure - regenerated torrc files and reloads tor (requires tor to be installed)
+* configure - regenerated torrc files and reloads tor (requires previously configured tor instances)
 
 So if you have a big family and you are about to add an OpenBSD host you typically
 make two steps
