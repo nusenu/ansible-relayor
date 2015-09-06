@@ -63,7 +63,7 @@ All variables mentioned here are optional.
 * `tor_ContactInfo`
     Sets the relay's ContactInfo field.
 
-* `tor_nickname
+* `tor_nickname`
   - up to 19 chars long, must contain only the characters [a-zA-Z0-9]
   - all tor instances on a host will get the same nickname
 
@@ -135,12 +135,10 @@ Running the 'configure' tag without a full or os specific run before that will f
 `ansible-playbook tor.yml --tags configure`
 
 
-Playbook Example II: alpha exit relays with custom ports and nicknames
+Playbook Example II: alpha exit relays with custom ports
 -------------------------------------------------------------
 Lets run exit relays (using the restricted exit policy)
 on the alpha branch with custom well known ports.
-All generated relays will have a nickname that starts with
-'foo' followed by the first four characters of their fingerprint.
 
 ```yml
 ---
@@ -149,7 +147,6 @@ All generated relays will have a nickname that starts with
   vars:
     tor_alpha: True
     tor_ExitRelay: True
-    tor_nicknameprefix: foo
     tor_ports:
      - { orport: 22, dirport: 80}
      - { orport: 443, dirport: 8080}
