@@ -82,7 +82,7 @@
    - centos
    - freebsd
    - openbsd
-   - configure
+   - reconfigure
 
 - name: Generating final torrc file(s) (with MyFamily)
   sudo: yes
@@ -102,7 +102,7 @@
    - centos
    - freebsd
    - openbsd
-   - configure
+   - reconfigure
 
 # Linux/systemd section (uses service module)
 # ===========================================
@@ -115,7 +115,7 @@
   tags:
    - debian
    - centos
-   - configure
+   - reconfigure
 
 - name: Ensure Tor instances are enabled and started (Linux/systemd)
   sudo: yes
@@ -166,7 +166,7 @@
   when: ansible_system == 'OpenBSD' and item.changed == True
   tags:
    - openbsd
-   - configure
+   - reconfigure
 
 
 # FreeBSD section
@@ -180,7 +180,7 @@
   when: item.changed == True and ansible_system == 'FreeBSD'
   tags:
    - freebsd
-   - configure
+   - reconfigure
 
 - name: Ensure Tor instances are running (FreeBSD)
   sudo: yes

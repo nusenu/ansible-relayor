@@ -4,7 +4,7 @@
   set_fact:
     tor_user: debian-tor
   tags:
-   - configure
+   - reconfigure
    - createdir
 
 - name: Ensure torproject gpg key is installed (A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89)

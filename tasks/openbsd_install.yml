@@ -5,7 +5,7 @@
     tor_DataDir: /var/tor
     tor_PidDir: /var/tor/pids
   tags:
-   - configure
+   - reconfigure
    - createdir
 
 - name: Ensure Tor is installed (OpenBSD)

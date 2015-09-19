@@ -122,7 +122,7 @@ There are OS specific tags:
 Non OS specific tags:
 * install - installs tor but does not start or enable it
 * createdir - creates (empty) datadirs only, usefull for migration (requires tor to be installed)
-* configure - regenerated torrc files and reloads tor (requires previously configured tor instances)
+* reconfigure - regenerates torrc files and reloads tor (requires previously configured tor instances)
 
 So if you have a big family and you are about to add an OpenBSD host you typically
 make two steps
@@ -130,9 +130,9 @@ make two steps
 1. install the new server by running only against the new server (-l) and only the os specific tag (openbsd)
 `ansible-playbook tor.yml -l newserver --tags openbsd`
 
-2. then reconfigure all servers (MyFamily) by running the 'configure' tag against all servers.
-Running the 'configure' tag without a full or os specific run before that will fail because tor won't be installed.
-`ansible-playbook tor.yml --tags configure`
+2. then reconfigure all servers (MyFamily) by running the 'reconfigure' tag against all servers.
+Running the 'reconfigure' tag without a full or os specific run before that, will fail because 'reconfigure' requires old torrc files to be present.
+`ansible-playbook tor.yml --tags reconfigure`
 
 
 Playbook Example II: alpha exit relays with custom ports
