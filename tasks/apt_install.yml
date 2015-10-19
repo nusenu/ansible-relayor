@@ -8,13 +8,13 @@
    - createdir
 
 - name: Ensure torproject gpg key is installed (A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89)
-  sudo: yes
+  sudo: "{{ needs_sudo }}"
   apt_key: data="{{ lookup('file', 'deb.torproject.org_A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.pub') }}"
     id=A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89
     state=present
 
 - name: Ensure torproject.org repository is present (APT)
-  sudo: yes
+  sudo: "{{ needs_sudo }}"
   apt_repository: repo='deb http://deb.torproject.org/torproject.org {{ tor_distribution_release }} main'
     state=present 
     update_cache=yes
@@ -30,7 +30,7 @@
 # we specifically opt for present over latest to improve performance
 # "latest" is covered by auto updates
 - name: Ensure Tor is installed (APT)
-  sudo: yes
+  sudo: "{{ needs_sudo }}"
   apt: pkg="{{ item }}" state=present
   with_items: 
     - deb.torproject.org-keyring
@@ -42,19 +42,19 @@
     - disable-sysv-debian tor
 
 - name: Ensure the presence of the multi-instance systemd unit file (Debian)
-  sudo: yes
+  sudo: "{{ needs_sudo }}"
   template: src=debian_tor@.service dest=/lib/systemd/system/tor@.service owner=root mode=0644 backup=yes
   when: ansible_distribution == 'Debian'
   notify: systemctl daemon-reload
 
 - name: Ensure the presence of the multi-instance systemd unit file (Ubuntu)
-  sudo: yes
+  sudo: "{{ needs_sudo }}"
   copy: src=ubuntu_tor@.service dest=/lib/systemd/system/tor@.service owner=root mode=0644 backup=yes
   when: ansible_distribution == 'Ubuntu'
   notify: systemctl daemon-reload
 
 - name: Ensure AppArmor allows access to necessary files (Ubuntu)
-  sudo: yes
+  sudo: "{{ needs_sudo }}"
   lineinfile: dest=/etc/apparmor.d/local/system_tor line={{ item }}
   with_items:
     - '/etc/tor/enabled/*\ r,'

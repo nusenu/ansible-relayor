@@ -3,19 +3,19 @@
 #  service: name=tor state=restarted
 
 - name: stop tor
-  sudo: yes
+  sudo: "{{ needs_sudo }}"
   service: name=tor state=stopped
 
 # workaround for #20
 # the proper way would be service: enabled=no
 - name: disable-sysv-debian tor
-  sudo: yes
+  sudo: "{{ needs_sudo }}"
   command: update-rc.d tor disable
 
 - name: restart apparmor
-  sudo: yes
+  sudo: "{{ needs_sudo }}"
   service: name=apparmor state=restarted
 
 - name: systemctl daemon-reload
-  sudo: yes
+  sudo: "{{ needs_sudo }}"
   command: systemctl daemon-reload
