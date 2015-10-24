@@ -9,18 +9,18 @@
    - createdir
 
 - name: Ensure Tor is installed (FreeBSD)
-  sudo: yes
+  become: yes
   pkgng: name=tor state=present
 
 # temporary solution until rc.d supports multiple instances
 - name: Ensure Tor starts at boot (FreeBSD)
-  sudo: yes
+  become: yes
   lineinfile: dest=/etc/rc.local line="/usr/local/bin/tor -f {{ tor_ConfDir }}/{{ item[0] }}_{{ item.1.orport }}.torrc" create=yes
   with_nested:
    - tor_ips
    - tor_ports
 
 - name: If LogDir is a file, rename it (FreeBSD)
-  sudo: yes
+  become: yes
   shell: "test -f {{ tor_LogDir }} && mv {{ tor_LogDir }} {{ tor_LogDir }}.bk-`date '+%Y-%m-%d_%H%M%S'`"
   ignore_errors: yes

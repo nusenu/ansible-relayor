@@ -1,7 +1,7 @@
 ---
 
 - name: Ensure Tor DataDir(s) exist and is owned by tor_user
-  sudo: yes
+  become: yes
   file: path={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}
     state=directory
     owner={{ tor_user }}
@@ -18,7 +18,7 @@
    - createdir
 
 - name: Ensure Tor config directory exists and has appropriate permissions
-  sudo: yes
+  become: yes
   file: path={{ tor_ConfDir }}
     state=directory
     owner=root
@@ -31,7 +31,7 @@
    - openbsd
 
 - name: Ensure LogDir exists and has appropriate permissions
-  sudo: yes
+  become: yes
   file: path={{ tor_LogDir }}
     state=directory
     owner={{ tor_user }}
@@ -43,7 +43,7 @@
    - openbsd
 
 - name: Ensure PidDir is owned by tor_user
-  sudo: yes
+  become: yes
   file: path={{ tor_PidDir }}
     state=directory
     owner={{ tor_user }}
@@ -56,7 +56,7 @@
    - openbsd
 
 - name: Generating temporary (without MyFamily) torrc file(s)...
-  sudo: yes
+  become: yes
   template: src=torrc
     dest="{{ tor_ConfDir }}/{{ item[0] }}_{{ item.1.orport }}.torrc-tmp"
     owner=root
@@ -71,7 +71,7 @@
    - openbsd
 
 - name: Collect relay fingerprints (for MyFamily)
-  sudo: yes
+  become: yes
   shell: "tor --hush -f {{ tor_ConfDir }}/{{ item[0] }}_{{ item.1.orport }}.torrc-tmp --list-fingerprint |cut -d' ' -f2-|sed -e 's, ,,g'"
   with_nested:
    - tor_ips
@@ -85,7 +85,7 @@
    - reconfigure
 
 - name: Generating final torrc file(s) (with MyFamily)
-  sudo: yes
+  become: yes
   template: >
     src=torrc
     dest="{{ tor_ConfDir }}/{{ item[0] }}_{{ item.1.orport }}.torrc"
@@ -108,7 +108,7 @@
 # ===========================================
  
 - name: Ensure Tor instances are reloaded if its torrc changed (Linux/systemd)
-  sudo: yes
+  become: yes
   service: name=tor@{{ item.item[0] }}_{{ item.item.1.orport }}.service state=reloaded
   with_items: instances.results
   when: ansible_system == 'Linux' and item.changed == True 
@@ -118,7 +118,7 @@
    - reconfigure
 
 - name: Ensure Tor instances are enabled and started (Linux/systemd)
-  sudo: yes
+  become: yes
   service: name=tor@{{ item[0] }}_{{ item.1.orport }}.service enabled=yes state=started
   with_nested:
    - tor_ips
@@ -139,7 +139,7 @@
 # # OpenBSD does not like dots in rc filenames so
 # # we replace them with underscores.
 - name: Create links to the service files (OpenBSD)
-  sudo: yes
+  become: yes
   file: src=/etc/rc.d/tor state=link path=/etc/rc.d/tor{{ item[0]| replace('.','_') }}_{{ item.1.orport }}
   with_nested:
    - tor_ips
@@ -149,7 +149,7 @@
    - openbsd
 
 - name: Ensure Tor instances are enabled and started (OpenBSD)
-  sudo: yes
+  become: yes
   service: name=tor{{ item[0]|replace('.','_') }}_{{ item.1.orport }}
    arguments="-f {{ tor_ConfDir }}/{{ item[0] }}_{{ item.1.orport }}.torrc" enabled=yes state=started
   with_nested:
@@ -160,7 +160,7 @@
    - openbsd
 
 - name: Ensure Tor instances are reloaded if its torrc changed (OpenBSD)
-  sudo: yes
+  become: yes
   service: name=tor{{ item.item[0]|replace('.','_') }}_{{ item.item.1.orport }} state=reloaded
   with_items: instances.results
   when: ansible_system == 'OpenBSD' and item.changed == True
@@ -173,7 +173,7 @@
 # ================
 
 - name: Ensure Tor instances are reloaded if its torrc changed (FreeBSD)
-  sudo: yes
+  become: yes
   shell: "kill -HUP `cat {{ tor_PidDir }}/{{ item.item[0] }}_{{ item.item.1.orport }}.pid`"
   ignore_errors: yes
   with_items: instances.results
@@ -183,7 +183,7 @@
    - reconfigure
 
 - name: Ensure Tor instances are running (FreeBSD)
-  sudo: yes
+  become: yes
   shell: "kill -0 `cat {{ tor_PidDir }}/{{ item[0] }}_{{ item.1.orport }}.pid` || tor -f {{ tor_ConfDir }}/{{ item[0] }}_{{ item.1.orport }}.torrc"
   with_nested:
    - tor_ips
