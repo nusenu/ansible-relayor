@@ -28,13 +28,12 @@ Supported Operating Systems
 ---------------------------
 - Debian 8
 - CentOS 7 (incl. SELinux support)
-- OpenBSD 5.7
+- OpenBSD 5.8
 - FreeBSD 10.1, 10.2
 - Ubuntu 15.04 (incl. AppArmor support)
 
 Supported Tor Releases
 -----------------------
-- 0.2.5.x
 - 0.2.6.x
 - 0.2.7.x-alpha (CentOS only)
 
