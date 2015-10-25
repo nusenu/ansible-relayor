@@ -19,10 +19,12 @@ Note: Proper automatic MyFamily handling depends on the inclusion of all relays 
 
 THIS ANSIBLE ROLE IS CURRENTLY EXPERIMENTAL!
 
-Dependencies
+Requirements
 ------------
 - systemd (Linux systems)
 - ansible >= 1.9.3
+- a non-root user with passwordless sudo on the target systems for ansible
+- the usual ansible requirements (python on the target system under /usr/bin/python)
 
 Supported Operating Systems
 ---------------------------
