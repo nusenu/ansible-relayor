@@ -26,6 +26,8 @@ tor_ExitRelay: False
 # it has no effect on OpenBSD hosts.
 tor_alpha: False
 
+# minimal kern.ipc.somaxconn value
+freebsd_somaxconn: 1024
 
 # Attention: we will run chown tor_user on these folders
 tor_LogDir: /var/log/tor

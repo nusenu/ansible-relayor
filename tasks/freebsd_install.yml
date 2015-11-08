@@ -24,3 +24,17 @@
   become: yes
   shell: "test -f {{ tor_LogDir }} && mv {{ tor_LogDir }} {{ tor_LogDir }}.bk-`date '+%Y-%m-%d_%H%M%S'`"
   ignore_errors: yes
+
+- name: Gather current kern.ipc.somaxconn setting (FreeBSD)
+  shell: "sysctl kern.ipc.somaxconn|cut -d' '  -f2"
+  register: currentsomaxconn
+
+- name: Ensure somaxconn setting is reasonable (FreeBSD)
+  become: yes
+  command: "sysctl kern.ipc.somaxconn={{ freebsd_somaxconn }}"
+  when: currentsomaxconn.stdout|int < {{ freebsd_somaxconn }}
+
+- name: Ensure somaxconn setting in sysctl.conf is reasonable (FreeBSD)
+  become: yes
+  lineinfile: dest=/etc/sysctl.conf regexp=^kern.ipc.somaxconn line="kern.ipc.somaxconn={{ freebsd_somaxconn }}" create=yes
+  when: currentsomaxconn.stdout|int < {{ freebsd_somaxconn }}

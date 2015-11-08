@@ -103,6 +103,11 @@ All variables mentioned here are optional.
   - authentication relies on filesystem permissions
   - default: False
 
+* `freebsd_somaxconn`
+  - configure kern.ipc.somaxconn on FreeBSD
+  - by default we increase this value to at least 1024
+  - if the value is higher than that we do not touch it
+
 This role supports most torrc options documented in the 'SERVER OPTIONS'
 section of tor's manual. Set them via 'tor_<name>'.
 Have a look at templates/torrc if you want to have list of supported
