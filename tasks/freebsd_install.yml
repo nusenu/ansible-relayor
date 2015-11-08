@@ -38,3 +38,17 @@
   become: yes
   lineinfile: dest=/etc/sysctl.conf regexp=^kern.ipc.somaxconn line="kern.ipc.somaxconn={{ freebsd_somaxconn }}" create=yes
   when: currentsomaxconn.stdout|int < {{ freebsd_somaxconn }}
+
+- name: Gather current kern.ipc.nmbclusters setting (FreeBSD)
+  shell: "sysctl kern.ipc.nmbclusters|cut -d' '  -f2"
+  register: currentnmbc
+
+- name: Ensure nmbclusters setting is reasonable (FreeBSD)
+  become: yes
+  command: "sysctl kern.ipc.nmbclusters={{ freebsd_nmbclusters }}"
+  when: currentnmbc.stdout|int < {{ freebsd_nmbclusters }}
+
+- name: Ensure nmbclusters setting in sysctl.conf is reasonable (FreeBSD)
+  become: yes
+  lineinfile: dest=/etc/sysctl.conf regexp=^kern.ipc.nmbclusters line="kern.ipc.nmbclusters={{ freebsd_nmbclusters }}" create=yes
+  when: currentnmbc.stdout|int < {{ freebsd_nmbclusters }}
