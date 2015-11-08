@@ -22,7 +22,7 @@ THIS ANSIBLE ROLE IS CURRENTLY EXPERIMENTAL!
 Requirements
 ------------
 - systemd (Linux systems)
-- ansible >= 1.9.3
+- ansible >= 1.9.4
 - a non-root user with passwordless sudo on the target systems for ansible
 - the usual ansible requirements (python on the target system under /usr/bin/python)
 
@@ -33,6 +33,7 @@ Supported Operating Systems
 - OpenBSD 5.8
 - FreeBSD 10.1, 10.2
 - Ubuntu 15.10 (incl. AppArmor support)
+- Fedora 23
 
 Supported Tor Releases
 -----------------------
@@ -127,6 +128,7 @@ you are managing many servers.
 There are OS specific tags:
 * debian (includes ubuntu)
 * centos
+* fedora
 * freebsd
 * openbsd
 

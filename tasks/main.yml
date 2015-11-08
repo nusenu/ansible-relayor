@@ -24,4 +24,10 @@
    - freebsd
    - install
 
+- include: dnf_install.yml
+  when: ansible_pkg_mgr == 'dnf'
+  tags:
+   - fedora
+   - install
+
 - include: configure.yml
