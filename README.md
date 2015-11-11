@@ -137,6 +137,9 @@ Non OS specific tags:
 * createdir - creates (empty) datadirs only, usefull for migration (requires tor to be installed)
 * reconfigure - regenerates torrc files and reloads tor (requires previously configured tor instances)
 
+Misc tags:
+* freebsdkern - takes care of setting kern.ipc.somaxconn and kern.ipc.nmbclusters
+
 So if you have a big family and you are about to add an OpenBSD host you typically
 make two steps
 
