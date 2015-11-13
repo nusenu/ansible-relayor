@@ -38,7 +38,7 @@ Supported Operating Systems
 Supported Tor Releases
 -----------------------
 - 0.2.6.x
-- 0.2.7.x-alpha (CentOS only)
+- 0.2.7.x (CentOS and Fedora only)
 
 Example Tor Relay Playbook (simple)
 ------------------------------------
