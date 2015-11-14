@@ -13,22 +13,15 @@ Restart = on-failure
 #WatchdogSec = 1m
 LimitNOFILE = 32768
 
-
-### systemd hardening does not
-### work well with SELinux enforcement
-### Disabled in favor of SELinux for now
 ## Hardening
-#PrivateTmp = yes
-#ReadOnlyDirectories = /
-#ReadWriteDirectories = /var/lib/tor
-#ReadWriteDirectories = /var/log/tor
-#ReadWriteDirectories = /var/run/tor
-#NoNewPrivileges = yes
-
-##not supported on CentOS7
-#PrivateDevices = yes
-#ProtectHome = yes
-#ProtectSystem = full
+PrivateTmp = yes
+DeviceAllow=/dev/null rw
+DeviceAllow=/dev/urandom r
+ReadOnlyDirectories = /
+ReadWriteDirectories = /var/lib/tor
+ReadWriteDirectories = /var/log/tor
+ReadWriteDirectories = /var/run/tor
+NoNewPrivileges = yes
 
 # CAP_KILL in the following line is just a workaround for an apparent bug
 # http://lists.freedesktop.org/archives/systemd-devel/2015-March/029609.html
