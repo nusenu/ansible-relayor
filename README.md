@@ -62,6 +62,9 @@ Role Variables
 --------------
 All variables mentioned here are optional.
 
+* `tor_syslog` boolean
+   - Set to True to enable logging to syslog. False by default.
+
 * `tor_ContactInfo`
     Sets the relay's ContactInfo field.
 

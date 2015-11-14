@@ -32,16 +32,19 @@ freebsd_somaxconn: 1024
 freebsd_nmbclusters: 30000
 
 # Attention: we will run chown tor_user on these folders
-tor_LogDir: /var/log/tor
 tor_DataDir: /var/lib/tor
 tor_PidDir: /var/run/tor
+tor_LogDir: /var/log/tor
+tor_LogLevel: notice
+# if tor_syslog is set to True we do not log to a file
+# but to syslog
+tor_syslog: False
 
 tor_ConfDir: /etc/tor/enabled
 
 tor_distribution_release: "{{ ansible_distribution_release }}"
 tor_ips: "{{ ansible_all_ipv4_addresses[0:tor_maxips] }}"
 
-tor_LogLevel: notice
 tor_RunAsDaemon: 1
 
 # we do not support non-zero SocksPorts
