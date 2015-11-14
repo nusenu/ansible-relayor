@@ -13,7 +13,7 @@ The main benefits for a relay operator are:
 - automatic instance generation (two per available IP address)
 - automatic MyFamily management
 - easily choose between exit relay/non-exit relay mode using a single boolean
-- boolean for stable vs. alpha Tor releases (CentOS only)
+- boolean for stable vs. alpha Tor releases (Fedora and CentOS only)
 
 Note: Proper automatic MyFamily handling depends on the inclusion of all relays in the playbook.
 
