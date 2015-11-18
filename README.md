@@ -10,17 +10,18 @@ Adding a new Tor server should be as easy as adding a new host to the inventory,
 no further manual configuration should be required.
 
 The main benefits for a relay operator are:
+- ed25519 master keys are generated on the ansible host and are never exposed to the relay (OfflineMasterKey=1)
 - automatic instance generation (two per available IP address)
 - automatic MyFamily management
 - easily choose between exit relay/non-exit relay mode using a single boolean
 - boolean for stable vs. alpha Tor releases (Fedora and CentOS only)
-
-Note: Proper automatic MyFamily handling depends on the inclusion of all relays in the playbook.
+- easy relay restore from key backups (generated and stored on the ansible host out of the box)
 
 THIS ANSIBLE ROLE IS CURRENTLY EXPERIMENTAL!
 
 Requirements
 ------------
+- tor 0.2.7.x on the ansible host
 - systemd (Linux systems)
 - ansible >= 1.9.4
 - a non-root user with passwordless sudo on the target systems for ansible
@@ -37,8 +38,7 @@ Supported Operating Systems
 
 Supported Tor Releases
 -----------------------
-- 0.2.6.x
-- 0.2.7.x (CentOS and Fedora only)
+- 0.2.7.x
 
 Example Tor Relay Playbook (simple)
 ------------------------------------

@@ -1,5 +1,43 @@
 ---
 
+- name: ensure local key folders exist (LOCAL)
+  file: path={{ offline_masterkey_dir }}/{{ item[0] }}_{{ item.1.orport }}
+    state=directory
+  delegate_to: 127.0.0.1
+  with_nested:
+   - "{{ tor_ips }}"
+   - "{{ tor_ports }}"
+  tags:
+   - debian
+   - centos
+   - fedora
+   - freebsd
+   - openbsd
+
+- name: Ensure all relay keys exist (LOCAL)
+  local_action: command tor --orport 1234 --list-fingerprint --datadirectory {{ offline_masterkey_dir }}/{{ item[0] }}_{{ item.1.orport }}
+  with_nested:
+   - "{{ tor_ips }}"
+   - "{{ tor_ports }}"
+  tags:
+   - debian
+   - centos
+   - fedora
+   - freebsd
+   - openbsd
+
+# FIXME: this should not be a delegate_to task (as it should not run N-times but once), race condition?
+- name: collect all fingerprints (LOCAL)
+  shell: cat {{ offline_masterkey_dir }}/*/fingerprint|sed -e 's,Unnamed ,,g'|xargs|sed -e 's/ /,/g'
+  delegate_to: 127.0.0.1
+  register: family
+  tags:
+   - debian
+   - centos
+   - fedora
+   - freebsd
+   - openbsd
+
 - name: Ensure Tor DataDir(s) exist and is owned by tor_user
   become: yes
   file: path={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}
@@ -17,6 +55,33 @@
    - freebsd
    - openbsd
    - createdir
+
+- name: Ensure Tor "keys" directory exists and is owned by tor_user
+  become: yes
+  file: path={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/keys
+    state=directory
+    owner={{ tor_user }}
+    mode=0700
+    recurse=yes
+  with_nested:
+   - "{{ tor_ips }}"
+   - "{{ tor_ports }}"
+  tags:
+   - debian
+   - centos
+   - fedora
+   - freebsd
+   - openbsd
+   - createdir
+
+- name: Ensure *online* keys are in place
+  become: yes
+  copy: src={{ offline_masterkey_dir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }}
+   dest={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }} owner={{ tor_user }} mode=700
+  with_nested:
+   - "{{ tor_ips }}"
+   - "{{ tor_ports }}"
+   - [ 'ed25519_master_id_public_key', 'ed25519_signing_cert', 'ed25519_signing_secret_key', 'secret_id_key', 'secret_onion_key', 'secret_onion_key_ntor']
 
 - name: Ensure Tor config directory exists and has appropriate permissions
   become: yes
@@ -59,38 +124,7 @@
    - freebsd
    - openbsd
 
-- name: Generating temporary (without MyFamily) torrc file(s)...
-  become: yes
-  template: src=torrc
-    dest="{{ tor_ConfDir }}/{{ item[0] }}_{{ item.1.orport }}.torrc-tmp"
-    owner=root
-    mode=0644
-  with_nested:
-   - tor_ips
-   - tor_ports
-  tags:
-   - debian
-   - centos
-   - fedora
-   - freebsd
-   - openbsd
-
-- name: Collect relay fingerprints (for MyFamily)
-  become: yes
-  shell: "tor --hush -f {{ tor_ConfDir }}/{{ item[0] }}_{{ item.1.orport }}.torrc-tmp --list-fingerprint |cut -d' ' -f2-|sed -e 's, ,,g'"
-  with_nested:
-   - tor_ips
-   - tor_ports
-  register: tor_fingerprints
-  tags:
-   - debian
-   - centos
-   - fedora
-   - freebsd
-   - openbsd
-   - reconfigure
-
-- name: Generating final torrc file(s) (with MyFamily)
+- name: Generating torrc file(s)
   become: yes
   template: >
     src=torrc

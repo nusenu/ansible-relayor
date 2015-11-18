@@ -17,6 +17,7 @@ DirPort {{ item[0] }}:{{ item.1.dirport }}
 Address {{ item[0] }}
 OutboundBindAddress {{ item[0] }}
 SocksPort {{ tor_SocksPort }}
+OfflineMasterKey 1
 {% if tor_enableControlSocket == True %}
 ControlSocket {{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/controlsocket
 {% endif %}
@@ -29,10 +30,7 @@ ContactInfo {{ tor_ContactInfo }}
 Nickname {{tor_nickname}}
 {% endif %}
 
-{% if tor_fingerprints is defined %}
-{# perform match() on potentially malicious input #}
-MyFamily {% for host in play_hosts %}{% for fingerprint in hostvars[host]['tor_fingerprints']['results'] -%}{% if fingerprint.stdout|match("^[A-F0-9]{40}$") %}${{ fingerprint.stdout }},{% endif %}{%- endfor %}{% endfor %}
-{% endif %}
+MyFamily {{ family.stdout }}
 
 
 {% if tor_ExitRelay == True %}
