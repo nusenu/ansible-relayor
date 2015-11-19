@@ -16,7 +16,7 @@
    - createdir
 
 - name: Ensure all relay keys exist (LOCAL)
-  local_action: command tor --orport 1234 --list-fingerprint --datadirectory {{ offline_masterkey_dir }}/{{ item[0] }}_{{ item.1.orport }}
+  local_action: shell tor --PublishServerDescriptor 0 --orport 1234 --list-fingerprint --datadirectory {{ offline_masterkey_dir }}/{{ item[0] }}_{{ item.1.orport }} --Log "err stdout" > /dev/null
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
