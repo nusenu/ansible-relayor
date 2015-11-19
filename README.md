@@ -185,13 +185,6 @@ This role explicitly specifies sudo for every task that requires it
 (most of them). There is no need to run the entire role or playbook with
 --sudo/-s. 
 
-This role takes input from every server it is run against
-and incorporates that into every torrc it generates.
-This opens an attack vector for an adversary that took over
-a single tor server in your group of servers. To limit the abilities
-of an attacker in such a position we try to validate the input (fingerprints)
-before including them in torrc files. 
-
 Reporting Security Bugs
 -----------------------
 
