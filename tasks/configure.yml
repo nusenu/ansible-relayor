@@ -14,6 +14,17 @@
    - freebsd
    - openbsd
 
+# this won't fail on missing files (which is what we want)
+- name: Bootstrap our local key folders with already existing relay keys
+  become: yes
+  fetch: src={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }} owner={{ tor_user }} mode=700 backup=yes
+   dest={{ offline_masterkey_dir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }}
+   flat=yes
+  with_nested:
+   - "{{ tor_ips }}"
+   - "{{ tor_ports }}"
+   - [ 'ed25519_master_id_secret_key', 'ed25519_master_id_public_key', 'ed25519_signing_cert', 'ed25519_signing_secret_key', 'secret_id_key', 'secret_onion_key', 'secret_onion_key_ntor']
+
 - name: Ensure all relay keys exist (LOCAL)
   local_action: command tor --orport 1234 --list-fingerprint --datadirectory {{ offline_masterkey_dir }}/{{ item[0] }}_{{ item.1.orport }}
   with_nested:
@@ -74,17 +85,14 @@
    - openbsd
    - createdir
 
-# The following task would potentially OVERRIDE a relay's keys
-# if we generated new local keys for a relay that had keys remotely already.
-# disable this task for now
-#- name: Ensure *online* keys are in place
-#  become: yes
-#  copy: src={{ offline_masterkey_dir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }}
-#   dest={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }} owner={{ tor_user }} mode=700 backup=yes
-#  with_nested:
-#   - "{{ tor_ips }}"
-#   - "{{ tor_ports }}"
-#   - [ 'ed25519_master_id_public_key', 'ed25519_signing_cert', 'ed25519_signing_secret_key', 'secret_id_key', 'secret_onion_key', 'secret_onion_key_ntor']
+- name: Ensure *online* keys are in place
+  become: yes
+  copy: src={{ offline_masterkey_dir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }}
+   dest={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }} owner={{ tor_user }} mode=700 backup=yes
+  with_nested:
+   - "{{ tor_ips }}"
+   - "{{ tor_ports }}"
+   - [ 'ed25519_master_id_public_key', 'ed25519_signing_cert', 'ed25519_signing_secret_key', 'secret_id_key', 'secret_onion_key', 'secret_onion_key_ntor']
 
 - name: Ensure Tor config directory exists and has appropriate permissions
   become: yes
