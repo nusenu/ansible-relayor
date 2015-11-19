@@ -17,7 +17,7 @@ The main benefits for a relay operator are:
 - boolean for stable vs. alpha Tor releases (Fedora and CentOS only)
 - easy relay restore from key backups (generated and stored on the ansible host out of the box)
 
-THIS ANSIBLE ROLE IS CURRENTLY EXPERIMENTAL!
+DO NOT USE THIS BRANCH on anything real yet.
 
 Requirements
 ------------
