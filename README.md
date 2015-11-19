@@ -65,7 +65,7 @@ All variables mentioned here are optional.
 * `offline_masterkey_dir`
    - default: ~/.tor/offlinemasterkeys
    - Defines the location where on the ansible host relay keys (ed25519 and RSA) are stored.
-   - Within that folder there will be a subfolder for every tor instance named <IP>_<orport>
+   - Within that folder there will be a subfolder for every tor instance named IP_orport
    - This implies that every relay instance can be uniquely identified with IP_port across all your servers.
 
 * `tor_syslog` boolean
@@ -124,7 +124,7 @@ All variables mentioned here are optional.
   - if the value is higher than that we do not touch it
 
 This role supports most torrc options documented in the 'SERVER OPTIONS'
-section of tor's manual. Set them via 'tor_<name>'.
+section of tor's manual. Set them via 'tor_torrcOptionName'.
 Have a look at templates/torrc if you want to have list of supported
 options.
 
