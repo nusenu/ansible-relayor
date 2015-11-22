@@ -27,9 +27,8 @@
    - freebsd
    - openbsd
 
-# FIXME: this should not be a delegate_to task (as it should not run N-times but once), race condition?
-- name: collect all fingerprints (LOCAL)
-  shell: cat {{ offline_masterkey_dir }}/*/fingerprint|sed -e 's,Unnamed ,,g'|xargs|sed -e 's/ /,/g'
+- name: collect fingerprints for MyFamily (LOCAL)
+  shell: cut {{ offline_masterkey_dir }}/*/fingerprint -d" " -f2|xargs|sed -e 's/ /,/g'
   delegate_to: 127.0.0.1
   register: family
   tags:
