@@ -27,6 +27,15 @@
    - freebsd
    - openbsd
 
+- name: detect duplicate identities (LOCAL)
+  shell: cut {{ offline_masterkey_dir }}/*/fingerprint -d' ' -f2|sort|uniq -d|wc -l
+  delegate_to: 127.0.0.1
+  register: dupcount
+
+- name: abort on duplicate relay keys
+  fail: msg="Duplicate relay key detected! Aborting."
+  when: dupcount.stdout != "0"
+
 - name: collect fingerprints for MyFamily (LOCAL)
   shell: cut {{ offline_masterkey_dir }}/*/fingerprint -d" " -f2|xargs|sed -e 's/ /,/g'
   delegate_to: 127.0.0.1
