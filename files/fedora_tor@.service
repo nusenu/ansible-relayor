@@ -26,11 +26,7 @@ ReadOnlyDirectories=/
 ReadWriteDirectories=/var/lib/tor
 ReadWriteDirectories=/var/log/tor
 ReadWriteDirectories=/var/run/tor
-CapabilityBoundingSet=CAP_SETUID CAP_SETGID CAP_NET_BIND_SERVICE
-# CAP_KILL in the following line is just a workaround for an apparent bug
-# http://lists.freedesktop.org/archives/systemd-devel/2015-March/029609.html
-# The service works also without it but you won't be able to reload it via systemctl.
-#CapabilityBoundingSet = CAP_SETUID CAP_SETGID CAP_NET_BIND_SERVICE CAP_KILL
+CapabilityBoundingSet=CAP_SETUID CAP_SETGID CAP_NET_BIND_SERVICE CAP_KILL
 
 [Install]
 WantedBy = multi-user.target
