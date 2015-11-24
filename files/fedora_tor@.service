@@ -1,6 +1,8 @@
 [Unit]
 Description = Anonymizing overlay network for TCP
 After = syslog.target network.target nss-lookup.target
+PartOf=tor.service
+ReloadPropagatedFrom=tor.service
 
 [Service]
 Type=simple
