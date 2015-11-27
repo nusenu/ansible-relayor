@@ -27,8 +27,8 @@
    - freebsd
    - openbsd
 
-- name: detect duplicate identities (LOCAL)
-  shell: cut {{ offline_masterkey_dir }}/*/fingerprint -d' ' -f2|sort|uniq -d|wc -l
+- name: detect duplicate relay keys across relays (LOCAL)
+  shell: sha1sum {{ offline_masterkey_dir }}/*/keys/secret_id_key {{ offline_masterkey_dir }}/*/keys/ed25519_master_id_secret_key|cut -d/ -f1|sort|uniq -d|wc -l
   delegate_to: 127.0.0.1
   register: dupcount
   tags:
@@ -120,7 +120,7 @@
    - "{{ tor_ports }}"
    - [ 'secret_id_key' ]
 
-- name: compair local and remote RSA key
+- name: compare local vs. remote RSA key (secret_id_key)
   local_action: shell sha1sum {{ offline_masterkey_dir }}/{{ item[0] }}_{{ item.1.orport }}/keys/secret_id_key*|cut -d/ -f1|uniq -d|wc -l
   with_nested:
    - "{{ tor_ips }}"
