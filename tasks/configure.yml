@@ -27,6 +27,19 @@
    - freebsd
    - openbsd
 
+- name: Generate new Ed25519 signing keys
+  local_action: shell tor --keygen --SigningKeyLifetime {{ tor_signingkeylifetime_days}}\ days --datadirectory {{ offline_masterkey_dir }}/{{ item[0] }}_{{ item.1.orport }} --Log "err stdout" > /dev/null
+  with_nested:
+   - "{{ tor_ips }}"
+   - "{{ tor_ports }}"
+  tags:
+   - debian
+   - centos
+   - fedora
+   - freebsd
+   - openbsd
+   - renewkey
+
 - name: detect duplicate relay keys across relays (LOCAL)
   shell: sha1sum {{ offline_masterkey_dir }}/*/keys/secret_id_key {{ offline_masterkey_dir }}/*/keys/ed25519_master_id_secret_key|cut -d/ -f1|sort|uniq -d|wc -l
   delegate_to: 127.0.0.1
@@ -146,7 +159,7 @@
   with_items: rsakey.results
 
 # this task is separated from the task named "Ensure RSA key is in place" because it is not run with 'force=no'
-- name: Ensure (online) ed25519 keys are in place
+- name: Ensure Ed25519 signing keys are in place
   become: yes
   copy: src={{ offline_masterkey_dir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }}
    dest={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }} owner={{ tor_user }} mode=700
@@ -160,6 +173,7 @@
    - fedora
    - freebsd
    - openbsd
+   - renewkey
 
 - name: Ensure Tor config directory exists and has appropriate permissions
   become: yes

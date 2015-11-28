@@ -42,6 +42,7 @@ tor_syslog: False
 
 tor_ConfDir: /etc/tor/enabled
 offline_masterkey_dir: ~/.tor/offlinemasterkeys
+tor_signingkeylifetime_days: 30
 
 tor_distribution_release: "{{ ansible_distribution_release }}"
 tor_ips: "{{ ansible_all_ipv4_addresses[0:tor_maxips] }}"

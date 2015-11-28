@@ -10,9 +10,10 @@ Adding a new Tor server should be as easy as adding a new host to the inventory,
 no further manual configuration should be required.
 
 The main benefits for a relay operator are:
-- offline ed25519 master keys are generated on the ansible host and are never exposed to the relay (OfflineMasterKey)
-- automatic tor instance generation (two per available IP address by default - configurable)
+- security: offline Ed25519 master keys are generated on the ansible host and are never exposed to the relay (OfflineMasterKey)
+- automatic Ed25519 signing key renewal (valid for 30 days by default - configurable)
 - automatic MyFamily management
+- automatic tor instance generation (two per available IP address by default - configurable)
 - easily choose between exit relay/non-exit relay mode using a single boolean
 - boolean for stable vs. alpha Tor releases (Fedora and CentOS only)
 - easy relay restore from key backups (generated and stored on the ansible host out of the box)
@@ -69,6 +70,10 @@ All variables mentioned here are optional.
    - Defines the location where on the ansible host relay keys (ed25519 and RSA) are stored.
    - Within that folder there will be a subfolder for every tor instance named IP_orport
    - This implies that every relay instance can be uniquely identified with IP_port across all your servers.
+
+* `tor_signingkeylifetime_days` integer
+   - defines the lifetime of Ed25519 signing keys in days
+   - default: 30
 
 * `tor_syslog` boolean
    - Set to True to enable logging to syslog. False by default.
@@ -147,6 +152,7 @@ Non OS specific tags:
 * install - installs tor but does not start or enable it
 * createdir - creates (empty) datadirs only, usefull for migration (requires tor to be installed)
 * reconfigure - regenerates torrc files and reloads tor (requires previously configured tor instances)
+* renewkey - takes care of renewing online Ed25519 keys only (assumes that all preconditions are met - offline master keys are available)
 
 Misc tags:
 * freebsdkern - takes care of setting kern.ipc.somaxconn and kern.ipc.nmbclusters
