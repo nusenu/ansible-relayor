@@ -145,7 +145,7 @@
   when: item.stdout != "1"
   with_items: rsakey.results
 
-# this task is separated from the previous task because it is not run with 'force=no'
+# this task is separated from the task named "Ensure RSA key is in place" because it is not run with 'force=no'
 - name: Ensure (online) ed25519 keys are in place
   become: yes
   copy: src={{ offline_masterkey_dir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }}

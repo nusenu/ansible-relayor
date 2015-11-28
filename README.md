@@ -10,8 +10,8 @@ Adding a new Tor server should be as easy as adding a new host to the inventory,
 no further manual configuration should be required.
 
 The main benefits for a relay operator are:
-- ed25519 master keys are generated on the ansible host and are never exposed to the relay (OfflineMasterKey=1)
-- automatic instance generation (two per available IP address)
+- offline ed25519 master keys are generated on the ansible host and are never exposed to the relay (OfflineMasterKey)
+- automatic tor instance generation (two per available IP address by default - configurable)
 - automatic MyFamily management
 - easily choose between exit relay/non-exit relay mode using a single boolean
 - boolean for stable vs. alpha Tor releases (Fedora and CentOS only)
@@ -21,11 +21,13 @@ DO NOT USE THIS BRANCH on anything real yet.
 
 Requirements
 ------------
-- tor 0.2.7.x on the ansible host
-- systemd (Linux systems)
+ansible host:
+- tor >= 0.2.7.5
 - ansible >= 1.9.4
-- a non-root user with passwordless sudo on the target systems for ansible
-- the usual ansible requirements (python on the target system under /usr/bin/python)
+
+target hosts:
+- a non-root user with passwordless sudo
+- python 2 under /usr/bin/python
 
 Supported Operating Systems
 ---------------------------
@@ -184,6 +186,8 @@ Security Considerations
 This role explicitly specifies sudo for every task that requires it
 (most of them). There is no need to run the entire role or playbook with
 --sudo/-s. 
+
+Be aware that the host running ansible stores ALL your relay keys.
 
 Reporting Security Bugs
 -----------------------
