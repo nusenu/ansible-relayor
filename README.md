@@ -45,24 +45,6 @@ Supported Tor Releases
 
 (older releases are NOT supported, OfflineMasterKey functionality has been introduced in 0.2.7.3-rc but 0.2.7.5 is the first 'stable' release)
 
-Example Tor Relay Playbook (simple)
-------------------------------------
-
-This playbook will use defaults and create two non-exit Tor instances for
-every available IP address on the host. 
-If the host has 3 IP addresses you will end up with 6 Tor instances (including DirPorts). 
-The following TCP ports will be used for ORPort and DirPort listeners:
-9000,9001,9100,9101
-(if these ports are already in use, things will fail)
-
-```yml
----
-
-- hosts: relays
-  roles:
-   - ansible-relayor
-```
-
 Role Variables
 --------------
 All variables mentioned here are optional.
@@ -75,6 +57,8 @@ All variables mentioned here are optional.
 
 * `tor_signingkeylifetime_days` integer
    - defines the lifetime of Ed25519 signing keys in days
+   - indirectly defines **how often you have to run your ansible playbook to ensure keys do not expire**
+   - lower values (eg. 7) are better from a security point of view but require more frequent playbook runs
    - default: 30
 
 * `tor_syslog` boolean
@@ -96,11 +80,15 @@ All variables mentioned here are optional.
   - is only relevant if tor_ExitRelay is True
   - default: reduced exit policy (https://trac.torproject.org/projects/tor/wiki/doc/ReducedExitPolicy)
 
-* `tor_ports` This var allows you to 
-  - change default ports
-  - reduce the number of Tor instances created per IP address
+* `tor_ports`
+  - This var allows you to
+    - select tor's ORPort and DirPort
+    - reduce the number of Tor instances created per IP address
   - disable DirPorts by setting them to 0
   - HINT: choose them wisely and *never* change them again ;)
+  - default:
+    - instance 1: ORPort 9000, DirPort 9001
+    - instance 2: ORPort 9100, DirPort 9101
 
 * `tor_ips`
   * If you want to use only specific IP addresses for Tor.
@@ -164,33 +152,17 @@ make two steps
 Running the 'reconfigure' tag without a full or os specific run before that, will fail because 'reconfigure' requires old torrc files to be present.
 `ansible-playbook tor.yml --tags reconfigure`
 
-
-Playbook Example II: alpha exit relays with custom ports
--------------------------------------------------------------
-Lets run exit relays (using the restricted exit policy)
-on the alpha branch with custom well known ports.
-
-```yml
----
-
-- hosts: relays
-  vars:
-    tor_alpha: True
-    tor_ExitRelay: True
-    tor_ports:
-     - { orport: 22, dirport: 80}
-     - { orport: 443, dirport: 8080}
-  roles:
-   - ansible-relayor
-```
-
 Security Considerations
 ------------------------
-This role explicitly specifies sudo for every task that requires it
-(most of them). There is no need to run the entire role or playbook with
---sudo/-s. 
+This ansible role makes use of tor's OfflineMasterKey feature without requiring any manual configuration.
 
-Be aware that the host running ansible stores ALL your relay keys.
+The offline master key feature exposes only a temporary signing key to the relay (valid for 30 days by default).
+This allows to recover from a complete server compromize without loosing a relay's reputation (no need to bootstrap a new permanent master key from scratch).
+
+Be aware that the host running ansible stores ALL your relay keys - apply security measures accordingly.
+
+This role explicitly specifies sudo for every task that requires it
+(most of them). There is no need to run the entire role with --sudo/-s.
 
 Reporting Security Bugs
 -----------------------
