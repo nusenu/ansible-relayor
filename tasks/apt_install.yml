@@ -19,14 +19,6 @@
     state=present 
     update_cache=yes
 
-# waiting for trac ticket #14997
-#- name: Ensure  torproject.org alpha repo is present (if enabled)
-#  apt_repository: >
-#    repo='deb http://deb.torproject.org/torproject.org  main'
-#    state=present 
-#    update_cache=yes
-#  when: tor_alpha is True
-
 # we specifically opt for present over latest to improve performance
 # "latest" is covered by auto updates
 - name: Ensure Tor is installed (APT)

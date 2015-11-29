@@ -15,7 +15,6 @@ The main benefits for a relay operator are:
 - automatic MyFamily management
 - automatic tor instance generation (two per available IP address by default - configurable)
 - easily choose between exit relay/non-exit relay mode using a single boolean
-- boolean for stable vs. alpha Tor releases (Fedora and CentOS only)
 - easy relay restore from key backups (generated and stored on the ansible host out of the box)
 
 THIS ANSIBLE ROLE IS CURRENTLY EXPERIMENTAL!
@@ -102,11 +101,6 @@ All variables mentioned here are optional.
   - reduce the number of Tor instances created per IP address
   - disable DirPorts by setting them to 0
   - HINT: choose them wisely and *never* change them again ;)
-
-* `tor_alpha` boolean
-  * Set to True if you want to run Tor alpha releases.
-  * default: False
-  * This setting is supported on CentOS and Fedora only.
 
 * `tor_ips`
   * If you want to use only specific IP addresses for Tor.
