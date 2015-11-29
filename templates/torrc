@@ -35,13 +35,21 @@ MyFamily {{ family.stdout }}
 
 {% if tor_ExitRelay == True %}
 # we are an exit relay!
+ExitRelay 1
 ExitPolicy {{ tor_ExitPolicy }}
 {% else %}
+ExitRelay 0
 ExitPolicy reject *:*
 {% endif %}
 
 ShutdownWaitLength {{ tor_shutdownwaitlength }}
 
+{% if tor_PublishServerDescriptor is defined %}
+PublishServerDescriptor {{ tor_PublishServerDescriptor }}
+{% endif %}
+{% if tor_HeartbeatPeriod is defined %}
+HeartbeatPeriod {{ tor_HeartbeatPeriod }}
+{% endif %}
 {% if tor_SafeLogging is defined %}
 SafeLogging {{ tor_SafeLogging }}
 {% endif %}
@@ -77,6 +85,9 @@ PortForwarding {{ tor_PortForwarding }}
 {% endif %}
 {% if tor_AccountingMax is defined %}
 AccountingMax {{ tor_AccountingMax }}
+{% endif %}
+{% if tor_AccountingRule is defined %}
+AccountingRule {{ tor_AccountingRule }}
 {% endif %}
 {% if tor_AccountingStart is defined %}
 AccountingStart {{ tor_AccountingStart }}

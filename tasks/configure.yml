@@ -122,7 +122,7 @@
    - freebsd
    - openbsd
 
-- name: fetch RSA key for comparision
+- name: Fetch RSA key for comparision
   become: yes
   fetch: src={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }}
     dest={{ offline_masterkey_dir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }}.untrustedremotekey
@@ -132,14 +132,14 @@
    - "{{ tor_ports }}"
    - [ 'secret_id_key' ]
 
-- name: compare local vs. remote RSA key (secret_id_key)
+- name: Compare local vs. remote RSA key (secret_id_key)
   local_action: shell sha1sum {{ offline_masterkey_dir }}/{{ item[0] }}_{{ item.1.orport }}/keys/secret_id_key*|cut -d/ -f1|uniq -d|wc -l
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
   register: rsakey
 
-- name: abort if local and remote RSA keys do not match
+- name: Abort if local and remote RSA keys do not match
   fail: 'msg="
 
 
@@ -158,7 +158,7 @@
   with_items: rsakey.results
 
 # this task is separated from the task named "Ensure RSA key is in place" because it is not run with 'force=no'
-- name: Ensure Ed25519 signing keys are in place
+- name: Renew Ed25519 signing keys
   become: yes
   copy: src={{ offline_masterkey_dir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }}
    dest={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }} owner={{ tor_user }} mode=700
