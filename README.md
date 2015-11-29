@@ -18,7 +18,7 @@ The main benefits for a relay operator are:
 - boolean for stable vs. alpha Tor releases (Fedora and CentOS only)
 - easy relay restore from key backups (generated and stored on the ansible host out of the box)
 
-DO NOT USE THIS BRANCH on anything real yet.
+THIS ANSIBLE ROLE IS CURRENTLY EXPERIMENTAL!
 
 Requirements
 ------------
@@ -29,19 +29,22 @@ ansible host:
 target hosts:
 - a non-root user with passwordless sudo
 - python 2 under /usr/bin/python
+- FreeBSD: manual installation of tor 0.2.7.x
 
 Supported Operating Systems
 ---------------------------
 - Debian 8
 - CentOS 7 (incl. SELinux support)
-- OpenBSD 5.8
-- FreeBSD 10.1, 10.2
+- OpenBSD >= 5.8 with tor >= 0.2.7.5 (available via snapshots since 2015-11-28)
+- FreeBSD 10.1, 10.2 with tor >= 0.2.7.5
 - Ubuntu 15.10 (incl. AppArmor support)
 - Fedora 23
 
 Supported Tor Releases
 -----------------------
-- 0.2.7.x
+- tor >= 0.2.7.5
+
+(older releases are NOT supported, OfflineMasterKey functionality has been introduced in 0.2.7.3-rc but 0.2.7.5 is the first 'stable' release)
 
 Example Tor Relay Playbook (simple)
 ------------------------------------
@@ -150,7 +153,7 @@ There are OS specific tags:
 
 Non OS specific tags:
 * install - installs tor but does not start or enable it
-* createdir - creates (empty) datadirs only, usefull for migration (requires tor to be installed)
+* createdir - creates (empty) directories (default location: ~/.tor/offlinemasterkeys) on the ansible host only (does not touch the remote host's configuration), usefull for migration
 * reconfigure - regenerates torrc files and reloads tor (requires previously configured tor instances)
 * renewkey - takes care of renewing online Ed25519 keys only (assumes that all preconditions are met - offline master keys are available)
 

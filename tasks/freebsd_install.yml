@@ -6,7 +6,6 @@
     tor_ConfDir: /usr/local/etc/tor/enabled
   tags:
    - reconfigure
-   - createdir
    - renewkey
 
 - name: Ensure Tor is installed (FreeBSD)

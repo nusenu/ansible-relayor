@@ -6,7 +6,6 @@
     tor_PidDir: /var/tor/pids
   tags:
    - reconfigure
-   - createdir
    - renewkey
 
 - name: Ensure Tor is installed (OpenBSD)
