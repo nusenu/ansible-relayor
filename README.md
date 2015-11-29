@@ -1,23 +1,21 @@
 ansible-relayor
 ----------------
 This is an ansible role for tor relay operators.
+THIS ANSIBLE ROLE IS CURRENTLY EXPERIMENTAL!
 
-The main focus of this role is to automate as many steps as possible for a Tor relay
-operator when deploying Tor servers.
+The main focus of this role is to automate as many steps as possible for a tor relay
+operator including key management (OfflineMasterKey).
+Deploying a new tor server is as easy as adding a new host to the inventory,
+no further manual configuration is required.
 
-Goal:
-Adding a new Tor server should be as easy as adding a new host to the inventory,
-no further manual configuration should be required.
-
-The main benefits for a relay operator are:
-- security: offline Ed25519 master keys are generated on the ansible host and are never exposed to the relay (OfflineMasterKey)
-- automatic Ed25519 signing key renewal (valid for 30 days by default - configurable)
-- automatic MyFamily management
+Main benefits for a tor relay operator
+--------------------------------------
+- security: **offline Ed25519 master keys** are generated on the ansible host and are never exposed to the relay (OfflineMasterKey)
+- **automatic Ed25519 signing key renewal** (valid for 30 days by default - configurable)
+- **automatic MyFamily management**
 - automatic tor instance generation (two per available IP address by default - configurable)
 - easily choose between exit relay/non-exit relay mode using a single boolean
-- easy relay restore from key backups (generated and stored on the ansible host out of the box)
-
-THIS ANSIBLE ROLE IS CURRENTLY EXPERIMENTAL!
+- easily restore a relay setup (the ansible host becomes a backup location for all keys out of the box)
 
 Requirements
 ------------
@@ -146,10 +144,11 @@ So if you have a big family and you are about to add an OpenBSD host you typical
 make two steps
 
 1. install the new server by running only against the new server (-l) and only the os specific tag (openbsd)
+
 `ansible-playbook tor.yml -l newserver --tags openbsd`
 
 2. then reconfigure all servers (MyFamily) by running the 'reconfigure' tag against all servers.
-Running the 'reconfigure' tag without a full or os specific run before that, will fail because 'reconfigure' requires old torrc files to be present.
+
 `ansible-playbook tor.yml --tags reconfigure`
 
 Security Considerations
