@@ -8,11 +8,6 @@
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
   tags:
-   - debian
-   - centos
-   - fedora
-   - freebsd
-   - openbsd
    - createdir
 
 - name: Ensure all relay keys exist (LOCAL)
@@ -20,12 +15,6 @@
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
-  tags:
-   - debian
-   - centos
-   - fedora
-   - freebsd
-   - openbsd
 
 - name: Generate new Ed25519 signing keys
   local_action: shell tor --keygen --SigningKeyLifetime {{ tor_signingkeylifetime_days}}\ days --datadirectory {{ offline_masterkey_dir }}/{{ item[0] }}_{{ item.1.orport }} --Log "err stdout" > /dev/null
@@ -33,44 +22,22 @@
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
   tags:
-   - debian
-   - centos
-   - fedora
-   - freebsd
-   - openbsd
    - renewkey
 
 - name: Detect duplicate relay keys across relays (LOCAL)
   shell: sha1sum {{ offline_masterkey_dir }}/*/keys/secret_id_key {{ offline_masterkey_dir }}/*/keys/ed25519_master_id_secret_key|cut -d/ -f1|sort|uniq -d|wc -l
   delegate_to: 127.0.0.1
   register: dupcount
-  tags:
-   - debian
-   - centos
-   - fedora
-   - freebsd
-   - openbsd
 
 - name: Abort on duplicate relay keys
   fail: msg="Duplicate relay key detected! Aborting."
   when: dupcount.stdout != "0"
-  tags:
-   - debian
-   - centos
-   - fedora
-   - freebsd
-   - openbsd
 
 - name: Collect fingerprints for MyFamily (LOCAL)
   shell: cut {{ offline_masterkey_dir }}/*/fingerprint -d" " -f2|xargs|sed -e 's/ /,/g'
   delegate_to: 127.0.0.1
   register: family
   tags:
-   - debian
-   - centos
-   - fedora
-   - freebsd
-   - openbsd
    - reconfigure
 
 - name: Ensure Tor DataDir(s) exist and is owned by tor_user
@@ -83,12 +50,6 @@
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
-  tags:
-   - debian
-   - centos
-   - fedora
-   - freebsd
-   - openbsd
 
 - name: Ensure Tor "keys" directory exists and is owned by tor_user
   become: yes
@@ -100,12 +61,6 @@
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
-  tags:
-   - debian
-   - centos
-   - fedora
-   - freebsd
-   - openbsd
 
 - name: Ensure RSA key is in place (without overriding existing keys)
   become: yes
@@ -115,12 +70,6 @@
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
    - [ 'secret_id_key' ]
-  tags:
-   - debian
-   - centos
-   - fedora
-   - freebsd
-   - openbsd
 
 - name: Fetch RSA key for comparision
   become: yes
@@ -181,12 +130,6 @@
     owner=root
     group={{ tor_user }}
     mode=755
-  tags:
-   - debian
-   - centos
-   - fedora
-   - freebsd
-   - openbsd
 
 - name: Ensure LogDir exists and has appropriate permissions
   become: yes
@@ -194,12 +137,6 @@
     state=directory
     owner={{ tor_user }}
     mode=750
-  tags:
-   - debian
-   - centos
-   - fedora
-   - freebsd
-   - openbsd
 
 - name: Ensure PidDir is owned by tor_user
   become: yes
@@ -208,12 +145,6 @@
     owner={{ tor_user }}
     group={{ tor_user }}
     mode=2750
-  tags:
-   - debian
-   - centos
-   - fedora
-   - freebsd
-   - openbsd
 
 - name: Generating torrc file(s)
   become: yes
@@ -229,99 +160,4 @@
    - tor_ports
   register: instances
   tags:
-   - debian
-   - centos
-   - fedora
-   - freebsd
-   - openbsd
    - reconfigure
-
-# Linux/systemd section (uses service module)
-# ===========================================
- 
-- name: Ensure Tor instances are reloaded if its torrc changed (Linux/systemd)
-  become: yes
-  service: name=tor@{{ item.item[0] }}_{{ item.item.1.orport }}.service state=reloaded
-  with_items: instances.results
-  when: ansible_system == 'Linux' and item.changed == True 
-  tags:
-   - debian
-   - centos
-   - fedora
-   - reconfigure
-
-- name: Ensure Tor instances are enabled and started (Linux/systemd)
-  become: yes
-  service: name=tor@{{ item[0] }}_{{ item.1.orport }}.service enabled=yes state=started
-  with_nested:
-   - tor_ips
-   - tor_ports
-  when: ansible_system == 'Linux'
-  tags:
-   - debian
-   - centos
-   - fedora
-
-# OpenBSD section (uses service module)
-# This is basically a copy from the Linux
-# section, but it requires different service
-# names and additional arguments.
-# =====================================
-
-# OpenBSD does not support multi-instance rc.d
-# # so we link as many pseudo rc scripts as we need.
-# # OpenBSD does not like dots in rc filenames so
-# # we replace them with underscores.
-- name: Create links to the service files (OpenBSD)
-  become: yes
-  file: src=/etc/rc.d/tor state=link path=/etc/rc.d/tor{{ item[0]| replace('.','_') }}_{{ item.1.orport }}
-  with_nested:
-   - tor_ips
-   - tor_ports
-  when: ansible_system == 'OpenBSD'
-  tags:
-   - openbsd
-
-- name: Ensure Tor instances are enabled and started (OpenBSD)
-  become: yes
-  service: name=tor{{ item[0]|replace('.','_') }}_{{ item.1.orport }}
-   arguments="-f {{ tor_ConfDir }}/{{ item[0] }}_{{ item.1.orport }}.torrc" enabled=yes state=started
-  with_nested:
-   - tor_ips
-   - tor_ports
-  when: ansible_system == 'OpenBSD'
-  tags:
-   - openbsd
-
-- name: Ensure Tor instances are reloaded if its torrc changed (OpenBSD)
-  become: yes
-  service: name=tor{{ item.item[0]|replace('.','_') }}_{{ item.item.1.orport }} state=reloaded
-  with_items: instances.results
-  when: ansible_system == 'OpenBSD' and item.changed == True
-  tags:
-   - openbsd
-   - reconfigure
-
-
-# FreeBSD section
-# ================
-
-- name: Ensure Tor instances are reloaded if its torrc changed (FreeBSD)
-  become: yes
-  shell: "kill -HUP `cat {{ tor_PidDir }}/{{ item.item[0] }}_{{ item.item.1.orport }}.pid`"
-  ignore_errors: yes
-  with_items: instances.results
-  when: item.changed == True and ansible_system == 'FreeBSD'
-  tags:
-   - freebsd
-   - reconfigure
-
-- name: Ensure Tor instances are running (FreeBSD)
-  become: yes
-  shell: "kill -0 `cat {{ tor_PidDir }}/{{ item[0] }}_{{ item.1.orport }}.pid` || tor -f {{ tor_ConfDir }}/{{ item[0] }}_{{ item.1.orport }}.torrc"
-  with_nested:
-   - tor_ips
-   - tor_ports
-  when: ansible_system == 'FreeBSD'
-  tags:
-   - freebsd

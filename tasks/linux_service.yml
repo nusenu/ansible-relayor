@@ -1,0 +1,27 @@
+---
+
+# Linux/systemd section (uses service module)
+# ===========================================
+ 
+- name: Ensure Tor instances are reloaded if its torrc changed (Linux/systemd)
+  become: yes
+  service: name=tor@{{ item.item[0] }}_{{ item.item.1.orport }}.service state=reloaded
+  with_items: instances.results
+  when: ansible_system == 'Linux' and item.changed == True 
+  tags:
+   - debian
+   - centos
+   - fedora
+   - reconfigure
+
+- name: Ensure Tor instances are enabled and started (Linux/systemd)
+  become: yes
+  service: name=tor@{{ item[0] }}_{{ item.1.orport }}.service enabled=yes state=started
+  with_nested:
+   - tor_ips
+   - tor_ports
+  when: ansible_system == 'Linux'
+  tags:
+   - debian
+   - centos
+   - fedora

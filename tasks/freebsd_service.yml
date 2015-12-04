@@ -1,0 +1,17 @@
+---
+
+- name: Ensure Tor instances are reloaded if its torrc changed (FreeBSD)
+  become: yes
+  shell: "kill -HUP `cat {{ tor_PidDir }}/{{ item.item[0] }}_{{ item.item.1.orport }}.pid`"
+  ignore_errors: yes
+  with_items: instances.results
+  when: item.changed == True
+  tags:
+   - reconfigure
+
+- name: Ensure Tor instances are running (FreeBSD)
+  become: yes
+  shell: "kill -0 `cat {{ tor_PidDir }}/{{ item[0] }}_{{ item.1.orport }}.pid` || tor -f {{ tor_ConfDir }}/{{ item[0] }}_{{ item.1.orport }}.torrc"
+  with_nested:
+   - tor_ips
+   - tor_ports

@@ -1,0 +1,35 @@
+---
+
+
+# OpenBSD section (uses service module)
+# This is basically a copy from the Linux
+# section, but it requires different service
+# names and additional arguments.
+# =====================================
+
+# OpenBSD does not support multi-instance rc.d
+# # so we link as many pseudo rc scripts as we need.
+# # OpenBSD does not like dots in rc filenames so
+# # we replace them with underscores.
+- name: Create links to the service files (OpenBSD)
+  become: yes
+  file: src=/etc/rc.d/tor state=link path=/etc/rc.d/tor{{ item[0]| replace('.','_') }}_{{ item.1.orport }}
+  with_nested:
+   - tor_ips
+   - tor_ports
+
+- name: Ensure Tor instances are enabled and started (OpenBSD)
+  become: yes
+  service: name=tor{{ item[0]|replace('.','_') }}_{{ item.1.orport }}
+   arguments="-f {{ tor_ConfDir }}/{{ item[0] }}_{{ item.1.orport }}.torrc" enabled=yes state=started
+  with_nested:
+   - tor_ips
+   - tor_ports
+
+- name: Ensure Tor instances are reloaded if its torrc changed (OpenBSD)
+  become: yes
+  service: name=tor{{ item.item[0]|replace('.','_') }}_{{ item.item.1.orport }} state=reloaded
+  with_items: instances.results
+  when: item.changed == True
+  tags:
+   - reconfigure

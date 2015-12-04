@@ -31,3 +31,26 @@
    - install
 
 - include: configure.yml
+  tags:
+   - debian
+   - centos
+   - fedora
+   - openbsd
+   - freebsd
+
+- include: linux_service.yml
+  when: ansible_system == 'Linux'
+  tags:
+   - debian
+   - centos
+   - fedora
+
+- include: openbsd_service.yml
+  when: ansible_system == 'OpenBSD'
+  tags:
+   - openbsd
+
+- include: freebsd_service.yml
+  when: ansible_system == 'FreeBSD'
+  tags:
+   - freebsd
