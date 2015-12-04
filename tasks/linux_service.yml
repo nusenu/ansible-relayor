@@ -7,7 +7,7 @@
   become: yes
   service: name=tor@{{ item.item[0] }}_{{ item.item.1.orport }}.service state=reloaded
   with_items: instances.results
-  when: ansible_system == 'Linux' and item.changed == True 
+  when: item.changed == True
   tags:
    - debian
    - centos
@@ -20,7 +20,6 @@
   with_nested:
    - tor_ips
    - tor_ports
-  when: ansible_system == 'Linux'
   tags:
    - debian
    - centos
