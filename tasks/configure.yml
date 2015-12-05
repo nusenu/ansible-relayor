@@ -33,6 +33,21 @@
   fail: msg="Duplicate relay key detected! Aborting."
   when: dupcount.stdout != "0"
 
+- name: Detect if Ed25519 master keys are on the relay
+  stat: path={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/keys/ed25519_master_id_secret_key
+  become: yes
+  register: masterkeycheck
+  with_nested:
+   - "{{ tor_ips }}"
+   - "{{ tor_ports }}"
+
+- name: Abort if Ed25519 master keys are on the relay
+  fail: msg="
+
+            Ed25519 MASTER KEY detected on the relay - it is NOT supposed to be there! Aborting."
+  when: item.stat.exists == True
+  with_items: masterkeycheck.results
+
 - name: Collect fingerprints for MyFamily (LOCAL)
   shell: cut {{ offline_masterkey_dir }}/*/fingerprint -d" " -f2|xargs|sed -e 's/ /,/g'
   delegate_to: 127.0.0.1
@@ -116,11 +131,6 @@
    - "{{ tor_ports }}"
    - [ 'ed25519_master_id_public_key', 'ed25519_signing_cert', 'ed25519_signing_secret_key' ]
   tags:
-   - debian
-   - centos
-   - fedora
-   - freebsd
-   - openbsd
    - renewkey
 
 - name: Ensure Tor config directory exists and has appropriate permissions
