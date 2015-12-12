@@ -4,6 +4,9 @@
   set_fact:
     tor_user: toranon
     tor_ConfDir: /etc/tor
+  tags:
+   - reconfigure
+   - renewkey
 
 - name: Ensure tor package is installed (dnf)
   become: yes
