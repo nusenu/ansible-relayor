@@ -19,3 +19,6 @@
 - name: systemctl daemon-reload
   sudo: yes
   command: systemctl daemon-reload
+
+- name: re-gather facts
+  setup:
