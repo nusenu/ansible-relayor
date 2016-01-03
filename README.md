@@ -24,16 +24,15 @@ ansible host:
 - ansible >= 1.9.4
 
 target hosts:
-- a non-root user with passwordless sudo
+- a non-root user with sudo
 - python 2 under /usr/bin/python
-- FreeBSD: manual installation of tor 0.2.7.x
 
 Supported Operating Systems
 ---------------------------
 - Debian 8
 - CentOS 7 (incl. SELinux support)
 - OpenBSD >= 5.8 with tor >= 0.2.7.5 (available via snapshots since 2015-11-28)
-- FreeBSD 10.1, 10.2 with tor >= 0.2.7.5
+- FreeBSD 10.1, 10.2
 - Ubuntu 15.10 (incl. AppArmor support)
 - Fedora 23
 
