@@ -1,8 +1,0 @@
-[tor]
-name=Tor repo
-enabled=1
-baseurl=https://deb.torproject.org/torproject.org/rpm/{{ tor_rpm_distribution_os }}/{{ ansible_distribution_major_version }}/$basearch/
-gpgcheck=1
-repo_gpgcheck=1
-gpgkey=https://deb.torproject.org/torproject.org/rpm/RPM-GPG-KEY-torproject.org.asc
-
