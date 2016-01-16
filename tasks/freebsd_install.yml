@@ -10,7 +10,7 @@
 
 - name: Ensure Tor is installed (FreeBSD)
   become: yes
-  pkgng: name=tor-devel state=present
+  pkgng: name=tor state=present
 
 # temporary solution until rc.d supports multiple instances
 - name: Ensure Tor starts at boot (FreeBSD)
