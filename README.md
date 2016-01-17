@@ -11,7 +11,7 @@ no further manual configuration is required.
 Main benefits for a tor relay operator
 --------------------------------------
 - security: **offline Ed25519 master keys** are generated on the ansible host and are never exposed to the relay (OfflineMasterKey)
-- **automatic Ed25519 signing key renewal** (valid for 30 days by default - configurable)
+- **easy Ed25519 signing key renewal** (valid for 30 days by default - configurable)
 - **automatic MyFamily management**
 - automatic tor instance generation (two per available IP address by default - configurable)
 - easily choose between exit relay/non-exit relay mode using a single boolean
