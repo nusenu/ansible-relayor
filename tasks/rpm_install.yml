@@ -4,6 +4,7 @@
   set_fact:
     tor_user: toranon
     tor_ConfDir: /etc/tor
+    tor_RunAsDaemon: 0
   tags:
    - reconfigure
    - renewkey
