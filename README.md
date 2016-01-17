@@ -62,6 +62,10 @@ All variables mentioned here are optional.
    - Set to True to enable logging to syslog. False by default.
    - On Debian systems logs go always to syslog (hardcoded).
 
+* `tor_LogLevel`
+   - specify tor's loglevel
+   - default: notice
+
 * `tor_ContactInfo`
     Sets the relay's ContactInfo field.
 
