@@ -3,6 +3,9 @@
 - name: Setup Debian specific variables (set_fact)
   set_fact:
     tor_user: debian-tor
+    tor_DataDir: /var/lib/tor-instances
+    tor_ConfDir: /etc/tor/instances
+    tor_RunAsDaemon: 0
   tags:
    - reconfigure
    - renewkey
@@ -33,17 +36,6 @@
     - stop tor
     - disable-sysv-debian tor
 
-- name: Ensure the presence of the multi-instance systemd unit file (Debian)
-  become: yes
-  template: src=debian_tor@.service dest=/lib/systemd/system/tor@.service owner=root mode=0644 backup=yes
-  when: ansible_distribution == 'Debian'
-  notify: systemctl daemon-reload
-
-- name: Ensure the presence of the multi-instance systemd unit file (Ubuntu)
-  become: yes
-  copy: src=ubuntu_tor@.service dest=/lib/systemd/system/tor@.service owner=root mode=0644 backup=yes
-  when: ansible_distribution == 'Ubuntu'
-  notify: systemctl daemon-reload
 
 - name: Ensure AppArmor allows access to necessary files (Ubuntu)
   become: yes

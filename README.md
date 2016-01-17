@@ -60,6 +60,7 @@ All variables mentioned here are optional.
 
 * `tor_syslog` boolean
    - Set to True to enable logging to syslog. False by default.
+   - On Debian systems logs go always to syslog (hardcoded).
 
 * `tor_ContactInfo`
     Sets the relay's ContactInfo field.
@@ -156,6 +157,8 @@ This ansible role makes use of tor's OfflineMasterKey feature without requiring 
 
 The offline master key feature exposes only a temporary signing key to the relay (valid for 30 days by default).
 This allows to recover from a complete server compromize without loosing a relay's reputation (no need to bootstrap a new permanent master key from scratch).
+
+On Debian/Ubuntu every tor instance is run with a distinct system user.
 
 Be aware that the host running ansible stores ALL your relay keys - apply security measures accordingly.
 

@@ -55,23 +55,40 @@
   tags:
    - reconfigure
 
-- name: Ensure Tor DataDir(s) exist and is owned by tor_user
+- name: Ensure Tor DataDir exists
   become: yes
-  file: path={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}
+  file: path={{ tor_DataDir }}
     state=directory
-    owner={{ tor_user }}
-    mode=0700
-    recurse=yes
+    owner=root
+    mode=0755
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
+
+- name: Ensure per-instance accounts exist (Debian)
+  become: yes
+  user: name=_tor-{{ item[0] }}_{{ item.1.orport }} system=yes shell=/bin/false createhome=no home={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}
+  with_nested:
+   - "{{ tor_ips }}"
+   - "{{ tor_ports }}"
+  when: ansible_pkg_mgr == 'apt'
+
+- name: Ensure instance config folders exist (Debian)
+  become: yes
+  file: path={{ tor_ConfDir }}/{{ item[0] }}_{{ item.1.orport }} state=directory mode=755
+  with_nested:
+   - tor_ips
+   - tor_ports
+  when: ansible_pkg_mgr == 'apt'
+
 
 - name: Ensure Tor "keys" directory exists and is owned by tor_user
   become: yes
   file: path={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/keys
     state=directory
-    owner={{ tor_user }}
-    mode=0700
+    owner="{{ (ansible_pkg_mgr != 'apt')| ternary(tor_user, '_tor-' ~ item[0] ~ '_' ~ item.1.orport) }}"
+    group="{{ (ansible_pkg_mgr != 'apt')| ternary(tor_user, '_tor-' ~ item[0] ~ '_' ~ item.1.orport) }}"
+    mode=2700
     recurse=yes
   with_nested:
    - "{{ tor_ips }}"
@@ -80,7 +97,9 @@
 - name: Ensure RSA key is in place (without overriding existing keys)
   become: yes
   copy: src={{ offline_masterkey_dir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }}
-   dest={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }} owner={{ tor_user }} mode=700 force=no
+   dest={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }}
+   owner="{{ (ansible_pkg_mgr != 'apt')| ternary(tor_user, '_tor-' ~ item[0] ~ '_' ~ item.1.orport) }}"
+   mode=700 force=no
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
@@ -125,7 +144,9 @@
 - name: Renew Ed25519 signing keys
   become: yes
   copy: src={{ offline_masterkey_dir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }}
-   dest={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }} owner={{ tor_user }} mode=700
+   dest={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }}
+   owner="{{ (ansible_pkg_mgr != 'apt')| ternary(tor_user, '_tor-' ~ item[0] ~ '_' ~ item.1.orport) }}"
+   mode=700
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
@@ -160,7 +181,7 @@
   become: yes
   template: >
     src=torrc
-    dest="{{ tor_ConfDir }}/{{ item[0] }}_{{ item.1.orport }}.torrc"
+    dest="{{ (ansible_pkg_mgr != 'apt')| ternary(tor_ConfDir ~ '/' ~ item[0] ~ '_' ~ item.1.orport ~ '.torrc', tor_ConfDir ~ '/' ~ item[0] ~ '_' ~ item.1.orport ~ '/torrc') }}"
     owner=root
     mode=0644
     backup=yes

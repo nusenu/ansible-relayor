@@ -1,13 +1,17 @@
 # ansible generated torrc
 RunAsDaemon {{ tor_RunAsDaemon }}
+{% if ansible_pkg_mgr != 'apt' %}
 User {{ tor_user }}
-
 PidFile {{ tor_PidDir }}/{{ item[0] }}_{{ item.1.orport }}.pid
 {% if tor_syslog == True %}
 Log {{ tor_LogLevel }} syslog
 {% else %}
 Log {{ tor_LogLevel }} file {{ tor_LogDir }}/{{ item[0] }}_{{ item.1.orport }}.log
 {% endif %}
+{% else %}
+User _tor-{{ item[0] }}_{{ item.1.orport }}
+{% endif %}
+
 DataDirectory {{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}
 
 ORPort {{ item[0] }}:{{ item.1.orport }}
