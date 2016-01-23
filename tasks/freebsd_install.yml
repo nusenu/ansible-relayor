@@ -25,6 +25,12 @@
   shell: "test -f {{ tor_LogDir }} && mv {{ tor_LogDir }} {{ tor_LogDir }}.bk-`date '+%Y-%m-%d_%H%M%S'`"
   ignore_errors: yes
 
+- name: Ensure sequential IP IDs are avoided (net.inet.ip.random_id)
+  become: yes
+  sysctl: name=net.inet.ip.random_id value=1 reload=no sysctl_set=yes
+  tags:
+    - freebsdkern
+
 - name: Gather current kern.ipc.somaxconn setting (FreeBSD)
   shell: "sysctl kern.ipc.somaxconn|cut -d' '  -f2"
   register: currentsomaxconn
