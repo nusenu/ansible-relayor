@@ -11,13 +11,13 @@
    - createdir
 
 - name: Ensure all relay keys exist (LOCAL)
-  local_action: shell tor --PublishServerDescriptor 0 --orport 1234 --list-fingerprint --datadirectory {{ offline_masterkey_dir }}/{{ item[0] }}_{{ item.1.orport }} --Log "err stdout" > /dev/null
+  local_action: command tor --PublishServerDescriptor 0 --orport 1234 --list-fingerprint --datadirectory "{{ offline_masterkey_dir }}/{{ item[0] }}_{{ item.1.orport }}" --Log "err stdout"
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
 
 - name: Generate new Ed25519 signing keys
-  local_action: shell tor --keygen --SigningKeyLifetime {{ tor_signingkeylifetime_days}}\ days --datadirectory {{ offline_masterkey_dir }}/{{ item[0] }}_{{ item.1.orport }} --Log "err stdout" > /dev/null
+  local_action: command tor --keygen --SigningKeyLifetime {{ tor_signingkeylifetime_days}}\ days --datadirectory "{{ offline_masterkey_dir }}/{{ item[0] }}_{{ item.1.orport }}" --Log "err stdout"
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
@@ -111,7 +111,7 @@
    - [ 'secret_id_key' ]
 
 - name: Compare local vs. remote RSA key (secret_id_key)
-  local_action: shell sha1sum {{ offline_masterkey_dir }}/{{ item[0] }}_{{ item.1.orport }}/keys/secret_id_key*|cut -d/ -f1|uniq -d|wc -l
+  local_action: shell sha1sum {{ offline_masterkey_dir }}/"{{ item[0] }}_{{ item.1.orport }}"/keys/secret_id_key*|cut -d/ -f1|uniq -d|wc -l
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
