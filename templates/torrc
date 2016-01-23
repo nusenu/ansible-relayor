@@ -1,16 +1,15 @@
 # ansible generated torrc
 RunAsDaemon {{ tor_RunAsDaemon }}
-{% if ansible_pkg_mgr != 'apt' %}
-User {{ tor_user }}
-PidFile {{ tor_PidDir }}/{{ item[0] }}_{{ item.1.orport }}.pid
-{% if tor_syslog == True %}
+{% if ansible_os_family == 'FreeBSD' %}
+PidFile {{ tor_PidDir }}/{{ item[0] }}_{{ item.1.orport }}/pid
+{% endif %}
+{% if ansible_pkg_mgr == 'apt' %}
 Log {{ tor_LogLevel }} syslog
 {% else %}
-Log {{ tor_LogLevel }} file {{ tor_LogDir }}/{{ item[0] }}_{{ item.1.orport }}.log
+Log {{ tor_LogLevel }} file {{ tor_LogDir }}/{{ item[0] }}_{{ item.1.orport }}/log
 {% endif %}
-{% else %}
+
 User _tor-{{ item[0] }}_{{ item.1.orport }}
-{% endif %}
 
 DataDirectory {{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}
 
@@ -24,6 +23,9 @@ SocksPort {{ tor_SocksPort }}
 OfflineMasterKey 1
 {% if tor_enableControlSocket == True %}
 ControlSocket {{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/controlsocket
+{% else %}
+ControlSocket 0
+CookieAuthentication 0
 {% endif %}
 
 {% if tor_ContactInfo is defined %}

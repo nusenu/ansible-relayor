@@ -61,19 +61,15 @@
     state=directory
     owner=root
     mode=0755
-  with_nested:
-   - "{{ tor_ips }}"
-   - "{{ tor_ports }}"
 
-- name: Ensure per-instance accounts exist (Debian)
+- name: Ensure per-instance system user exist
   become: yes
   user: name=_tor-{{ item[0] }}_{{ item.1.orport }} system=yes shell=/bin/false createhome=no home={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
-  when: ansible_pkg_mgr == 'apt'
 
-- name: Ensure instance config folders exist (Debian)
+- name: Ensure instance config folders exist (Debian only)
   become: yes
   file: path={{ tor_ConfDir }}/{{ item[0] }}_{{ item.1.orport }} state=directory mode=755
   with_nested:
@@ -82,13 +78,12 @@
   when: ansible_pkg_mgr == 'apt'
 
 
-- name: Ensure Tor "keys" directory exists and is owned by tor_user
+- name: Ensure Tor "keys" directory exists and is owned by per-instance user
   become: yes
   file: path={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/keys
     state=directory
-    owner="{{ (ansible_pkg_mgr != 'apt')| ternary(tor_user, '_tor-' ~ item[0] ~ '_' ~ item.1.orport) }}"
-    group="{{ (ansible_pkg_mgr != 'apt')| ternary(tor_user, '_tor-' ~ item[0] ~ '_' ~ item.1.orport) }}"
-    mode=2700
+    owner="_tor-{{ item[0] }}_{{ item.1.orport }}"
+    mode=0700
     recurse=yes
   with_nested:
    - "{{ tor_ips }}"
@@ -98,7 +93,7 @@
   become: yes
   copy: src={{ offline_masterkey_dir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }}
    dest={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }}
-   owner="{{ (ansible_pkg_mgr != 'apt')| ternary(tor_user, '_tor-' ~ item[0] ~ '_' ~ item.1.orport) }}"
+   owner="_tor-{{ item[0] }}_{{ item.1.orport }}"
    mode=700 force=no
   with_nested:
    - "{{ tor_ips }}"
@@ -145,7 +140,7 @@
   become: yes
   copy: src={{ offline_masterkey_dir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }}
    dest={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }}
-   owner="{{ (ansible_pkg_mgr != 'apt')| ternary(tor_user, '_tor-' ~ item[0] ~ '_' ~ item.1.orport) }}"
+   owner="_tor-{{ item[0] }}_{{ item.1.orport }}"
    mode=700
   with_nested:
    - "{{ tor_ips }}"
@@ -166,16 +161,28 @@
   become: yes
   file: path={{ tor_LogDir }}
     state=directory
-    owner={{ tor_user }}
-    mode=750
+    owner=root
+    mode=755
+  when: ansible_pkg_mgr != 'apt'
 
-- name: Ensure PidDir is owned by tor_user
+# we only use distinct logfiles on systems that have no SyslogIdentityTag support yet (all non-Debian plaforms)
+# otherwise we log to syslog with SyslogIdentityTag to avoid the filesystem permissions troubles with logrotate.
+# We aim to log to syslog+SyslogIdentityTag for all platforms eventually.
+# This is a medium-term workaround until all platform get SyslogIdentityTag support
+# without this workaround tor will fail to start after logrotate created new logfiles because
+# logrotate is not not aware that every tor instance runs under a distinct user.
+# This effectively disables logrotate.
+- name: Ensure per-instance log folders exist with appropriate permissions
   become: yes
-  file: path={{ tor_PidDir }}
+  file: path={{ tor_LogDir }}/{{ item[0] }}_{{ item.1.orport }}
     state=directory
-    owner={{ tor_user }}
-    group={{ tor_user }}
-    mode=2750
+    owner=_tor-{{ item[0] }}_{{ item.1.orport }}
+    group=_tor-{{ item[0] }}_{{ item.1.orport }}
+    mode=700
+  with_nested:
+   - tor_ips
+   - tor_ports
+  when: ansible_pkg_mgr != 'apt'
 
 - name: Generating torrc file(s)
   become: yes

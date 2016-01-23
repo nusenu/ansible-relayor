@@ -3,7 +3,6 @@
 - name: Setup OpenBSD specific variables (set_fact)
   set_fact:
     tor_DataDir: /var/tor
-    tor_PidDir: /var/tor/pids
   tags:
    - reconfigure
    - renewkey

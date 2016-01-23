@@ -12,6 +12,7 @@ Main benefits for a tor relay operator
 --------------------------------------
 - security: **offline Ed25519 master keys** are generated on the ansible host and are never exposed to the relay (OfflineMasterKey)
 - **easy Ed25519 signing key renewal** (valid for 30 days by default - configurable)
+- security: compartmentalization: every tor instance is run with a distinct user
 - **automatic MyFamily management**
 - automatic tor instance generation (two per available IP address by default - configurable)
 - easily choose between exit relay/non-exit relay mode using a single boolean
@@ -162,9 +163,9 @@ This ansible role makes use of tor's OfflineMasterKey feature without requiring 
 The offline master key feature exposes only a temporary signing key to the relay (valid for 30 days by default).
 This allows to recover from a complete server compromize without loosing a relay's reputation (no need to bootstrap a new permanent master key from scratch).
 
-On Debian/Ubuntu every tor instance is run with a distinct system user.
+Every tor instance is run with a distinct system user. A per-instance user has only access to his own (temporary) keys, but not to those of other instances.
 
-Be aware that the host running ansible stores ALL your relay keys - apply security measures accordingly.
+Be aware that the host running ansible stores ALL your relay keys (RSA and Ed25519) - apply security measures accordingly.
 
 This role explicitly specifies sudo for every task that requires it
 (most of them). There is no need to run the entire role with --sudo/-s.
