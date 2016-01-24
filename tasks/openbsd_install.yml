@@ -3,9 +3,11 @@
 - name: Setup OpenBSD specific variables (set_fact)
   set_fact:
     tor_DataDir: /var/tor
+    tor_ConfDir: /etc/tor/enabled
   tags:
    - reconfigure
    - renewkey
+   - createdir
 
 - name: Ensure Tor is installed (OpenBSD)
   become: yes

@@ -71,6 +71,8 @@
    - tor_ips
    - tor_ports
   when: ansible_pkg_mgr == 'apt'
+  tags:
+   - createdir
 
 - name: Ensure DataDir exists
   become: yes

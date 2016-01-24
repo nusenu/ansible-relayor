@@ -34,7 +34,6 @@ tor_LogLevel: notice
 # but to syslog
 tor_syslog: False
 
-tor_ConfDir: /etc/tor/enabled
 offline_masterkey_dir: ~/.tor/offlinemasterkeys
 tor_signingkeylifetime_days: 30
 

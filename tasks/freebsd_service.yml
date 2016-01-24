@@ -1,6 +1,6 @@
 ---
 
-- name: Ensure PidDir exists
+- name: Ensure PidDir exists (FreeBSD)
   become: yes
   file: path={{ tor_PidDir }}
     state=directory
