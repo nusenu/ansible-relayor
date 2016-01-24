@@ -83,6 +83,7 @@
   file: path={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/keys
     state=directory
     owner="_tor-{{ item[0] }}_{{ item.1.orport }}"
+    group="_tor-{{ item[0] }}_{{ item.1.orport }}"
     mode=0700
     recurse=yes
   with_nested:
