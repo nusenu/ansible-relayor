@@ -55,21 +55,16 @@
   tags:
    - reconfigure
 
-- name: Ensure Tor DataDir exists
-  become: yes
-  file: path={{ tor_DataDir }}
-    state=directory
-    owner=root
-    mode=0755
-
-- name: Ensure per-instance system user exist
+- name: Ensure per-instance tor users exist
   become: yes
   user: name=_tor-{{ item[0] }}_{{ item.1.orport }} system=yes shell=/bin/false createhome=no home={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
+  tags:
+   - createdir
 
-- name: Ensure instance config folders exist (Debian only)
+- name: Ensure per-instance config folders exist (Debian only)
   become: yes
   file: path={{ tor_ConfDir }}/{{ item[0] }}_{{ item.1.orport }} state=directory mode=755
   with_nested:
@@ -77,8 +72,30 @@
    - tor_ports
   when: ansible_pkg_mgr == 'apt'
 
+- name: Ensure DataDir exists
+  become: yes
+  file: path={{ tor_DataDir }}
+    state=directory
+    owner=root
+    mode=0755
+  tags:
+   - createdir
 
-- name: Ensure Tor "keys" directory exists and is owned by per-instance user
+- name: Ensure per-instance DataDir exists
+  become: yes
+  file: path={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}
+    state=directory
+    owner="_tor-{{ item[0] }}_{{ item.1.orport }}"
+    group="_tor-{{ item[0] }}_{{ item.1.orport }}"
+    mode=0700
+    recurse=yes
+  with_nested:
+   - "{{ tor_ips }}"
+   - "{{ tor_ports }}"
+  tags:
+   - createdir
+
+- name: Ensure "keys" subfolder exists
   become: yes
   file: path={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/keys
     state=directory
@@ -150,7 +167,7 @@
   tags:
    - renewkey
 
-- name: Ensure Tor config directory exists and has appropriate permissions
+- name: Ensure Tor config directory exists
   become: yes
   file: path={{ tor_ConfDir }}
     state=directory
@@ -158,7 +175,7 @@
     group={{ tor_user }}
     mode=755
 
-- name: Ensure LogDir exists and has appropriate permissions
+- name: Ensure LogDir exists
   become: yes
   file: path={{ tor_LogDir }}
     state=directory
@@ -173,7 +190,7 @@
 # without this workaround tor will fail to start after logrotate created new logfiles because
 # logrotate is not not aware that every tor instance runs under a distinct user.
 # This effectively disables logrotate.
-- name: Ensure per-instance log folders exist with appropriate permissions
+- name: Ensure per-instance LogDir exists
   become: yes
   file: path={{ tor_LogDir }}/{{ item[0] }}_{{ item.1.orport }}
     state=directory

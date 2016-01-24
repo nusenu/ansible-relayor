@@ -138,7 +138,7 @@ There are OS specific tags:
 
 Non OS specific tags:
 * install - installs tor but does not start or enable it
-* createdir - creates (empty) directories (default location: ~/.tor/offlinemasterkeys) on the ansible host only (does not touch the remote host's configuration), usefull for migration
+* createdir - creates (empty) directories (locally and remote) and the tor users required to setup fs permissions, usefull for migration
 * reconfigure - regenerates torrc files and reloads tor (requires previously configured tor instances)
 * renewkey - takes care of renewing online Ed25519 keys only (assumes that all preconditions are met - offline master keys are available)
 
