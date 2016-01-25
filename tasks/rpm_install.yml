@@ -5,9 +5,11 @@
     tor_user: toranon
     tor_ConfDir: /etc/tor
     tor_RunAsDaemon: 0
+    tor_DataDir: /var/lib/tor-instances
   tags:
    - reconfigure
    - renewkey
+   - createdir
 
 - name: Ensure tor package is installed (dnf)
   become: yes
@@ -34,3 +36,22 @@
   seboolean: name=tor_can_network_relay state=yes persistent=yes
   when: ansible_selinux.status == 'enabled'
 
+- name: Ensure systemd drop-in folder is present
+  become: yes
+  file: path=/etc/systemd/system/tor@.service.d
+    state=directory
+    owner=root
+    mode=0755
+
+# this is needed for a small service file modification (allow it to write to /var/lib/tor-instances)
+# without replacing the maintainer's file, for details see
+# http://www.freedesktop.org/software/systemd/man/systemd.unit.html#id-1.11.3
+- name: Ensure service file drop-in is present
+  become: yes
+  copy: src=local.conf
+   dest=/etc/systemd/system/tor@.service.d/local.conf
+   owner=root
+   mode=640
+  notify: systemctl daemon-reload
+
+- meta: flush_handlers

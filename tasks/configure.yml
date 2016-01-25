@@ -83,20 +83,6 @@
   tags:
    - createdir
 
-- name: Ensure per-instance DataDir exists
-  become: yes
-  file: path={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}
-    state=directory
-    owner="_tor-{{ item[0] }}_{{ item.1.orport }}"
-    group="_tor-{{ item[0] }}_{{ item.1.orport }}"
-    mode=0700
-    recurse=yes
-  with_nested:
-   - "{{ tor_ips }}"
-   - "{{ tor_ports }}"
-  tags:
-   - createdir
-
 - name: Ensure "keys" subfolder exists
   become: yes
   file: path={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/keys
@@ -162,12 +148,29 @@
    dest={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }}
    owner="_tor-{{ item[0] }}_{{ item.1.orport }}"
    mode=700
+   setype=tor_var_lib_t
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
    - [ 'ed25519_master_id_public_key', 'ed25519_signing_cert', 'ed25519_signing_secret_key' ]
   tags:
    - renewkey
+
+# This needs to be at the end to fix SELinux contexts recursively
+- name: Ensure per-instance DataDir exists
+  become: yes
+  file: path={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}
+    state=directory
+    owner="_tor-{{ item[0] }}_{{ item.1.orport }}"
+    group="_tor-{{ item[0] }}_{{ item.1.orport }}"
+    mode=0700
+    recurse=yes
+    setype=tor_var_lib_t
+  with_nested:
+   - "{{ tor_ips }}"
+   - "{{ tor_ports }}"
+  tags:
+   - createdir
 
 - name: Ensure Tor config directory exists
   become: yes
@@ -183,7 +186,7 @@
     state=directory
     owner=root
     mode=755
-  when: ansible_pkg_mgr != 'apt'
+  when: ansible_system != 'Linux'
 
 # we only use distinct logfiles on systems that have no SyslogIdentityTag support yet (all non-Debian plaforms)
 # otherwise we log to syslog with SyslogIdentityTag to avoid the filesystem permissions troubles with logrotate.
@@ -202,7 +205,7 @@
   with_nested:
    - tor_ips
    - tor_ports
-  when: ansible_pkg_mgr != 'apt'
+  when: ansible_system != 'Linux'
 
 - name: Generating torrc file(s)
   become: yes

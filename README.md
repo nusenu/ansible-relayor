@@ -61,7 +61,7 @@ All variables mentioned here are optional.
 
 * `tor_syslog` boolean
    - Set to True to enable logging to syslog. False by default.
-   - On Debian systems logs go always to syslog (hardcoded).
+   - On Linux systems logs go always to syslog (hardcoded).
 
 * `tor_LogLevel`
    - specify tor's loglevel
