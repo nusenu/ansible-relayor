@@ -180,33 +180,6 @@
     group={{ tor_user }}
     mode=755
 
-- name: Ensure LogDir exists
-  become: yes
-  file: path={{ tor_LogDir }}
-    state=directory
-    owner=root
-    mode=755
-  when: ansible_system != 'Linux'
-
-# we only use distinct logfiles on systems that have no SyslogIdentityTag support yet (all non-Debian plaforms)
-# otherwise we log to syslog with SyslogIdentityTag to avoid the filesystem permissions troubles with logrotate.
-# We aim to log to syslog+SyslogIdentityTag for all platforms eventually.
-# This is a medium-term workaround until all platform get SyslogIdentityTag support
-# without this workaround tor will fail to start after logrotate created new logfiles because
-# logrotate is not not aware that every tor instance runs under a distinct user.
-# This effectively disables logrotate.
-- name: Ensure per-instance LogDir exists
-  become: yes
-  file: path={{ tor_LogDir }}/{{ item[0] }}_{{ item.1.orport }}
-    state=directory
-    owner=_tor-{{ item[0] }}_{{ item.1.orport }}
-    group=_tor-{{ item[0] }}_{{ item.1.orport }}
-    mode=700
-  with_nested:
-   - tor_ips
-   - tor_ports
-  when: ansible_system != 'Linux'
-
 - name: Generating torrc file(s)
   become: yes
   template: >

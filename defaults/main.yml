@@ -28,11 +28,7 @@ freebsd_nmbclusters: 30000
 # Attention: we will run chown tor_user on these folders
 tor_DataDir: /var/lib/tor
 tor_PidDir: /var/run/tor
-tor_LogDir: /var/log/tor
 tor_LogLevel: notice
-# if tor_syslog is set to True we do not log to a file
-# but to syslog
-tor_syslog: False
 
 offline_masterkey_dir: ~/.tor/offlinemasterkeys
 tor_signingkeylifetime_days: 30

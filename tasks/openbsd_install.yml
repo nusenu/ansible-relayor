@@ -2,7 +2,7 @@
 
 - name: Setup OpenBSD specific variables (set_fact)
   set_fact:
-    tor_DataDir: /var/tor
+    tor_DataDir: /var/tor-instances
     tor_ConfDir: /etc/tor/enabled
   tags:
    - reconfigure

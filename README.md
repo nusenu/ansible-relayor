@@ -59,12 +59,9 @@ All variables mentioned here are optional.
    - lower values (eg. 7) are better from a security point of view but require more frequent playbook runs
    - default: 30
 
-* `tor_syslog` boolean
-   - Set to True to enable logging to syslog. False by default.
-   - On Linux systems logs go always to syslog (hardcoded).
-
 * `tor_LogLevel`
-   - specify tor's loglevel
+   - specify tor's loglevel (minSeverity)
+   - possible values: debug, info, notice, warn and err
    - default: notice
 
 * `tor_ContactInfo`

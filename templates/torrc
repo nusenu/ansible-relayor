@@ -3,11 +3,7 @@ RunAsDaemon {{ tor_RunAsDaemon }}
 {% if ansible_os_family == 'FreeBSD' %}
 PidFile {{ tor_PidDir }}/{{ item[0] }}_{{ item.1.orport }}/pid
 {% endif %}
-{% if ansible_system == 'Linux' or tor_syslog == True %}
 Log {{ tor_LogLevel }} syslog
-{% else %}
-Log {{ tor_LogLevel }} file {{ tor_LogDir }}/{{ item[0] }}_{{ item.1.orport }}/log
-{% endif %}
 
 User _tor-{{ item[0] }}_{{ item.1.orport }}
 
