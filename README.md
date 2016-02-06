@@ -35,7 +35,7 @@ Supported Operating Systems
 - CentOS 7 (incl. SELinux support)
 - OpenBSD >= 5.8 with tor >= 0.2.7.5 (available via snapshots since 2015-11-28)
 - FreeBSD 10.1, 10.2
-- Ubuntu 15.10 (incl. AppArmor support)
+- Ubuntu 15.10
 - Fedora 23
 
 Supported Tor Releases

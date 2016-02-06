@@ -37,14 +37,14 @@
     - stop-and-disable default tor
 
 
-- name: Ensure AppArmor allows access to necessary files (Ubuntu)
-  become: yes
-  lineinfile: dest=/etc/apparmor.d/local/system_tor line={{ item }}
-  with_items:
-    - '/etc/tor/enabled/*\ r,'
-    - '/{,var/}run/tor/*.pid\ w,'
-    - '/var/lib/tor/**\ w,'
-  when: ansible_distribution == 'Ubuntu'
-  notify: restart apparmor
+#- name: Ensure AppArmor allows access to necessary files (Ubuntu)
+#  become: yes
+#  lineinfile: dest=/etc/apparmor.d/local/system_tor line={{ item }}
+#  with_items:
+#    - '/etc/tor/enabled/*\ r,'
+#    - '/{,var/}run/tor/*.pid\ w,'
+#    - '/var/lib/tor/**\ w,'
+#  when: ansible_distribution == 'Ubuntu'
+#  notify: restart apparmor
 
 - meta: flush_handlers
