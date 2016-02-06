@@ -21,8 +21,9 @@ Main benefits for a tor relay operator
 Requirements
 ------------
 ansible host:
-- tor >= 0.2.7.5
-- ansible >= 1.9.4
+- tor >= 0.2.7
+- ansible >= 1.9.4 < 2.0
+- python-netaddr
 
 target hosts:
 - a non-root user with sudo
