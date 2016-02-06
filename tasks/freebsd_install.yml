@@ -35,14 +35,7 @@
 
 - name: Ensure somaxconn setting is reasonable (FreeBSD)
   become: yes
-  command: "sysctl kern.ipc.somaxconn={{ freebsd_somaxconn }}"
-  when: currentsomaxconn.stdout|int < {{ freebsd_somaxconn }}
-  tags:
-   - freebsdkern
-
-- name: Ensure somaxconn setting in sysctl.conf is reasonable (FreeBSD)
-  become: yes
-  lineinfile: dest=/etc/sysctl.conf regexp=^kern.ipc.somaxconn line="kern.ipc.somaxconn={{ freebsd_somaxconn }}" create=yes
+  sysctl: name=kern.ipc.somaxconn value={{ freebsd_somaxconn }} reload=no sysctl_set=yes
   when: currentsomaxconn.stdout|int < {{ freebsd_somaxconn }}
   tags:
    - freebsdkern
@@ -55,14 +48,7 @@
 
 - name: Ensure nmbclusters setting is reasonable (FreeBSD)
   become: yes
-  command: "sysctl kern.ipc.nmbclusters={{ freebsd_nmbclusters }}"
-  when: currentnmbc.stdout|int < {{ freebsd_nmbclusters }}
-  tags:
-   - freebsdkern
-
-- name: Ensure nmbclusters setting in sysctl.conf is reasonable (FreeBSD)
-  become: yes
-  lineinfile: dest=/etc/sysctl.conf regexp=^kern.ipc.nmbclusters line="kern.ipc.nmbclusters={{ freebsd_nmbclusters }}" create=yes
+  sysctl: name=kern.ipc.nmbclusters value={{ freebsd_nmbclusters }} reload=no sysctl_set=yes
   when: currentnmbc.stdout|int < {{ freebsd_nmbclusters }}
   tags:
    - freebsdkern
