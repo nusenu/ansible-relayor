@@ -1,7 +1,4 @@
 ---
-#- name: restart tor
-#  service: name=tor state=restarted
-
 - name: stop-and-disable default tor
   become: yes
   service: name=tor state=stopped enabled=no

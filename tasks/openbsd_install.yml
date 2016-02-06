@@ -35,5 +35,3 @@
   with_nested:
    - tor_ips
    - tor_ports
-  #TODO
-  #notify: restart tor
