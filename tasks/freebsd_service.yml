@@ -1,5 +1,12 @@
 ---
 
+- name: Ensure Tor starts at boot (FreeBSD)
+  become: yes
+  lineinfile: dest=/etc/rc.local line="/usr/local/bin/tor -f {{ tor_ConfDir }}/{{ item[0] }}_{{ item.1.orport }}.torrc" create=yes
+  with_nested:
+   - tor_ips
+   - tor_ports
+
 - name: Ensure PidDir exists (FreeBSD)
   become: yes
   file: path={{ tor_PidDir }}

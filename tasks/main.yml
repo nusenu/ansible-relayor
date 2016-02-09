@@ -23,7 +23,6 @@
   when: ansible_pkg_mgr == 'pkgng'
   tags:
    - freebsd
-   - install
 
 - include: configure.yml
   tags:
