@@ -17,7 +17,6 @@
   when: ansible_pkg_mgr == 'openbsd_pkg'
   tags:
    - openbsd
-   - install
 
 - include: freebsd_install.yml
   when: ansible_pkg_mgr == 'pkgng'
