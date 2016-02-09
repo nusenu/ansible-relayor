@@ -42,7 +42,6 @@ Supported Tor Releases
 -----------------------
 - tor >= 0.2.7.5
 
-(older releases are NOT supported, OfflineMasterKey functionality has been introduced in 0.2.7.3-rc but 0.2.7.5 is the first 'stable' release)
 
 Role Variables
 --------------
@@ -51,8 +50,7 @@ All variables mentioned here are optional.
 * `offline_masterkey_dir`
    - default: ~/.tor/offlinemasterkeys
    - Defines the location where on the ansible host relay keys (ed25519 and RSA) are stored.
-   - Within that folder there will be a subfolder for every tor instance named IP_orport
-   - This implies that every relay instance can be uniquely identified with IP_port across all your servers.
+   - Within that folder ansible will create a subfolder for every tor instance.
 
 * `tor_signingkeylifetime_days` integer
    - defines the lifetime of Ed25519 signing keys in days
@@ -63,6 +61,7 @@ All variables mentioned here are optional.
 * `tor_LogLevel`
    - specify tor's loglevel (minSeverity)
    - possible values: debug, info, notice, warn and err
+   - logs will go to syslog only (distinct files are not supported)
    - default: notice
 
 * `tor_ContactInfo`
@@ -117,7 +116,7 @@ All variables mentioned here are optional.
   - if the value is higher than that we do not touch it
 
 This role supports most torrc options documented in the 'SERVER OPTIONS'
-section of tor's manual. Set them via 'tor_torrcOptionName'.
+section of tor's manual. Set them via 'tor_OptionName'.
 Have a look at templates/torrc if you want to have list of supported
 options.
 
@@ -135,10 +134,10 @@ There are OS specific tags:
 * openbsd
 
 Non OS specific tags:
+* **renewkey** - takes care of renewing online Ed25519 keys only (assumes that tor instances are fully configured and running already)
 * install - installs tor but does not start or enable it
 * createdir - creates (empty) directories (locally and remote) and the tor users required to setup fs permissions, usefull for migration
 * reconfigure - regenerates torrc files and reloads tor (requires previously configured tor instances)
-* renewkey - takes care of renewing online Ed25519 keys only (assumes that all preconditions are met - offline master keys are available)
 
 Misc tags:
 * freebsdkern - takes care of setting kern.ipc.somaxconn and kern.ipc.nmbclusters
@@ -162,11 +161,10 @@ The offline master key feature exposes only a temporary signing key to the relay
 This allows to recover from a complete server compromize without loosing a relay's reputation (no need to bootstrap a new permanent master key from scratch).
 
 Every tor instance is run with a distinct system user. A per-instance user has only access to his own (temporary) keys, but not to those of other instances.
+We do not ultimately trust every tor relay we operate (we try to perform input validation when we use relay provided data on the ansible host or another relay).
 
-Be aware that the host running ansible stores ALL your relay keys (RSA and Ed25519) - apply security measures accordingly.
+**Be aware that the host running ansible stores ALL your relay keys (RSA and Ed25519) - apply security measures accordingly.**
 
-This role explicitly specifies sudo for every task that requires it
-(most of them). There is no need to run the entire role with --sudo/-s.
 
 Reporting Security Bugs
 -----------------------
