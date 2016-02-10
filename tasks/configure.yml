@@ -71,8 +71,6 @@
    - tor_ips
    - tor_ports
   when: ansible_pkg_mgr == 'apt'
-  tags:
-   - createdir
 
 - name: Ensure DataDir exists
   become: yes
@@ -80,8 +78,6 @@
     state=directory
     owner=root
     mode=0755
-  tags:
-   - createdir
 
 - name: Ensure "keys" subfolder exists
   become: yes
@@ -157,7 +153,7 @@
    - renewkey
 
 # This needs to be at the end to fix SELinux contexts recursively
-- name: Ensure per-instance DataDir exists
+- name: Ensure per-instance DataDir have proper permissions
   become: yes
   file: path={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}
     state=directory
