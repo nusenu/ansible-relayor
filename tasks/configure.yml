@@ -142,7 +142,7 @@
   with_items: rsakey.results
 
 # this task is separated from the task named "Ensure RSA key is in place" because it is not run with 'force=no'
-- name: Renew Ed25519 signing keys
+- name: Transmit new Ed25519 signing keys
   become: yes
   copy: src={{ offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }}
    dest={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }}
