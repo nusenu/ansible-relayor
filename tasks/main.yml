@@ -7,7 +7,7 @@
    - install
 
 - include: rpm_install.yml
-  when: ansible_pkg_mgr == 'yum' or ansible_pkg_mgr == 'dnf'
+  when: ansible_os_family == 'RedHat'
   tags:
    - centos
    - fedora

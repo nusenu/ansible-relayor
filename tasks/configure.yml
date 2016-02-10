@@ -16,7 +16,7 @@
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
 
-- name: Generate new Ed25519 signing keys
+- name: Generate new Ed25519 signing keys (LOCAL)
   local_action: command tor --keygen --SigningKeyLifetime {{ tor_signingkeylifetime_days}}\ days --datadirectory "{{ offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item[0] }}_{{ item.1.orport }}" --Log "err stdout"
   with_nested:
    - "{{ tor_ips }}"

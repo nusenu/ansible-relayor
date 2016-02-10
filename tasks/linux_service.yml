@@ -2,6 +2,20 @@
 
 # Linux/systemd section (uses service module)
 # ===========================================
+
+# this is needed for a small service file modification (allow it to write to /var/lib/tor-instances)
+# # without replacing the maintainer's file, for details see
+# # http://www.freedesktop.org/software/systemd/man/systemd.unit.html#id-1.11.3
+- name: Ensure service file drop-in is present
+  become: yes
+  copy: src=local.conf
+   dest=/etc/systemd/system/tor@.service.d/local.conf
+   owner=root
+   mode=640
+  when: ansible_os_family == 'RedHat'
+  notify: systemctl daemon-reload
+
+- meta: flush_handlers
  
 - name: Ensure Tor instances are reloaded if its torrc changed (Linux/systemd)
   become: yes
@@ -9,9 +23,6 @@
   with_items: instances.results
   when: item.changed == True
   tags:
-   - debian
-   - centos
-   - fedora
    - reconfigure
 
 - name: Ensure Tor instances are enabled and started (Linux/systemd)
@@ -20,7 +31,3 @@
   with_nested:
    - tor_ips
    - tor_ports
-  tags:
-   - debian
-   - centos
-   - fedora
