@@ -4,6 +4,7 @@
   set_fact:
     tor_DataDir: /var/db/tor-instances
     tor_ConfDir: /usr/local/etc/tor/enabled
+    tor_PidDir: /var/run/tor-instances
   tags:
    - reconfigure
    - renewkey
