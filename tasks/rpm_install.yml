@@ -35,12 +35,3 @@
   become: yes
   seboolean: name=tor_can_network_relay state=yes persistent=yes
   when: ansible_selinux.status == 'enabled'
-
-- name: Ensure systemd drop-in folder is present
-  become: yes
-  file: path=/etc/systemd/system/tor@.service.d
-    state=directory
-    owner=root
-    mode=0755
-
-- meta: flush_handlers
