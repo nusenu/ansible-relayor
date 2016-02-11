@@ -61,8 +61,6 @@
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
-  tags:
-   - createdir
 
 - name: Ensure per-instance config folders exist (Debian only)
   become: yes
@@ -165,8 +163,6 @@
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
-  tags:
-   - createdir
 
 - name: Ensure Tor config directory exists
   become: yes
