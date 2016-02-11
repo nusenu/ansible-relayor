@@ -9,10 +9,10 @@ tor_ports:
   - { orport: 9100, dirport: 9101}
 
 # Limit the amount of used IP addresses 
-# by default to 10, this limits the amount
-# of generated Tor instances to 20 per host.
+# by default to 3, this limits the amount
+# of generated Tor instances to 6 per host.
 # Specifying tor_ips overwrites this limitation.
-tor_maxips: 10
+tor_maxips: 3
 
 # we are a non-exit by default
 # setting this to true will enable reduced exit policy

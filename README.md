@@ -1,6 +1,7 @@
 ansible-relayor
 ----------------
 This is an ansible role for tor relay operators.
+
 THIS ANSIBLE ROLE IS CURRENTLY EXPERIMENTAL!
 
 The main focus of this role is to automate as many steps as possible for a tor relay
@@ -101,7 +102,7 @@ All variables mentioned here are optional.
     - Limits the amount of IPs we will use to generate instances on a single host.
     - Indirectly limits the amount of instances we generate per host.
     - If tor_ips is set, tor_maxips has no effect.
-    - default: 10
+    - default: 3
 
 * `tor_enableControlSocket`
     - will create a ControlSocket file named 'controlsocket' in every instance's datadir
