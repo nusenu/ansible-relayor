@@ -14,6 +14,7 @@ Main benefits for a tor relay operator
 - security: **offline Ed25519 master keys** are generated on the ansible host and are never exposed to the relay (OfflineMasterKey)
 - **easy Ed25519 signing key renewal** (valid for 30 days by default - configurable)
 - security: compartmentalization: every tor instance is run with a distinct user
+- automatically make use of IPv6 IPs (if available)
 - **automatic MyFamily management**
 - automatic tor instance generation (two per available IP address by default - configurable)
 - easily choose between exit relay/non-exit relay mode using a single boolean
@@ -94,8 +95,8 @@ All variables mentioned here are optional.
         - instance 1: ORPort 9000, DirPort 9001
         - instance 2: ORPort 9100, DirPort 9101
 
-* `tor_ips`
-    - If you want to use only specific IP addresses for Tor.
+* `tor_v4ips`
+    - If you want to use only specific IPv4 addresses for Tor.
     - Makes only sense in host_vars context.
 
 * `tor_maxips`

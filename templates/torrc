@@ -1,24 +1,30 @@
 # ansible generated torrc
 RunAsDaemon {{ tor_RunAsDaemon }}
 {% if ansible_os_family == 'FreeBSD' %}
-PidFile {{ tor_PidDir }}/{{ item[0] }}_{{ item.1.orport }}/pid
+PidFile {{ tor_PidDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/pid
 {% endif %}
 Log {{ tor_LogLevel }} syslog
 
-User _tor-{{ item[0] }}_{{ item.1.orport }}
+User _tor-{{ item.0.ipv4 }}_{{ item.1.orport }}
 
-DataDirectory {{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}
+DataDirectory {{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}
 
-ORPort {{ item[0] }}:{{ item.1.orport }}
-{% if item.1.dirport != 0 %}
-DirPort {{ item[0] }}:{{ item.1.dirport }}
+ORPort {{ item.0.ipv4 }}:{{ item.1.orport }}
+{% if item.0.ipv6 != "" and item.0.ipv6 != "False" %}
+# IPv6 detected and enabled
+ORPort [{{item.0.ipv6}}]:{{item.1.orport}}
+{% else %}
+# no ipv6 detected
 {% endif %}
-Address {{ item[0] }}
-OutboundBindAddress {{ item[0] }}
+{% if item.1.dirport != 0 %}
+DirPort {{ item.0.ipv4 }}:{{ item.1.dirport }}
+{% endif %}
+Address {{ item.0.ipv4 }}
+OutboundBindAddress {{ item.0.ipv4 }}
 SocksPort {{ tor_SocksPort }}
 OfflineMasterKey 1
 {% if tor_enableControlSocket == True %}
-ControlSocket {{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/controlsocket
+ControlSocket {{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/controlsocket
 {% else %}
 ControlSocket 0
 CookieAuthentication 0
@@ -38,6 +44,9 @@ MyFamily {{ family.stdout }}
 {% if tor_ExitRelay == True %}
 # we are an exit relay!
 ExitRelay 1
+{% if item.0.ipv6 != "" and item.0.ipv6 != "False" %}
+IPv6Exit 1
+{% endif %}
 ExitPolicy {{ tor_ExitPolicy }}
 {% else %}
 ExitRelay 0

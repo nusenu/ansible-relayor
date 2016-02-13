@@ -1,0 +1,14 @@
+---
+
+- name: setup IP list (1/2)
+  set_fact:
+    ips:
+        ipv4: "{{ item.0 }}"
+        ipv6: "{{ item.1 }}"
+  with_together:
+        - "{{ tor_v4ips }}"
+        - "{{ tor_v6ips }}"
+  register: ipsinterm
+
+- name: setup IP list (2/2)
+  set_fact: tor_ips="{{ ipsinterm.results | map(attribute='ansible_facts.ips')|list}}"

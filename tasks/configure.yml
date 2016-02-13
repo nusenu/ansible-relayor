@@ -1,7 +1,7 @@
 ---
 
 - name: Ensure local DataDir folders exist (LOCAL)
-  file: path={{ offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item[0] }}_{{ item.1.orport }}
+  file: path={{ offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}
     state=directory mode=700
   delegate_to: 127.0.0.1
   with_nested:
@@ -11,13 +11,13 @@
    - createdir
 
 - name: Ensure all relay keys exist (LOCAL)
-  local_action: command tor --PublishServerDescriptor 0 --orport 1234 --list-fingerprint --datadirectory "{{ offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item[0] }}_{{ item.1.orport }}" --Log "err stdout"
+  local_action: command tor --PublishServerDescriptor 0 --orport 1234 --list-fingerprint --datadirectory "{{ offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}" --Log "err stdout"
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
 
 - name: Generate new Ed25519 signing keys (LOCAL)
-  local_action: command tor --keygen --SigningKeyLifetime {{ tor_signingkeylifetime_days}}\ days --datadirectory "{{ offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item[0] }}_{{ item.1.orport }}" --Log "err stdout"
+  local_action: command tor --keygen --SigningKeyLifetime {{ tor_signingkeylifetime_days}}\ days --datadirectory "{{ offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}" --Log "err stdout"
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
@@ -34,7 +34,7 @@
   when: dupcount.stdout != "0"
 
 - name: Detect if Ed25519 master keys are on the relay
-  stat: path={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/keys/ed25519_master_id_secret_key
+  stat: path={{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/ed25519_master_id_secret_key
   become: yes
   register: masterkeycheck
   with_nested:
@@ -57,14 +57,14 @@
 
 - name: Ensure per-instance tor users exist
   become: yes
-  user: name=_tor-{{ item[0] }}_{{ item.1.orport }} system=yes shell=/bin/false createhome=no home={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}
+  user: name=_tor-{{ item.0.ipv4 }}_{{ item.1.orport }} system=yes shell=/bin/false createhome=no home={{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
 
 - name: Ensure per-instance config folders exist (Debian only)
   become: yes
-  file: path={{ tor_ConfDir }}/{{ item[0] }}_{{ item.1.orport }} state=directory mode=755
+  file: path={{ tor_ConfDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }} state=directory mode=755
   with_nested:
    - tor_ips
    - tor_ports
@@ -79,10 +79,10 @@
 
 - name: Ensure "keys" subfolder exists
   become: yes
-  file: path={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/keys
+  file: path={{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/keys
     state=directory
-    owner="_tor-{{ item[0] }}_{{ item.1.orport }}"
-    group="_tor-{{ item[0] }}_{{ item.1.orport }}"
+    owner="_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
+    group="_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
     mode=0700
     recurse=yes
   with_nested:
@@ -91,9 +91,9 @@
 
 - name: Ensure RSA key is in place (without overriding existing keys)
   become: yes
-  copy: src={{ offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }}
-   dest={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }}
-   owner="_tor-{{ item[0] }}_{{ item.1.orport }}"
+  copy: src={{ offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}
+   dest={{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}
+   owner="_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
    mode=700 force=no
   with_nested:
    - "{{ tor_ips }}"
@@ -102,8 +102,8 @@
 
 - name: Fetch RSA key for comparision
   become: yes
-  fetch: src={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }}
-    dest={{ offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }}.untrustedremotekey
+  fetch: src={{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}
+    dest={{ offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}.untrustedremotekey
     flat=yes
   with_nested:
    - "{{ tor_ips }}"
@@ -111,7 +111,7 @@
    - [ 'secret_id_key' ]
 
 - name: Compare local vs. remote RSA key (secret_id_key)
-  local_action: shell sha1sum {{ offline_masterkey_dir }}/{{ inventory_hostname }}-"{{ item[0] }}_{{ item.1.orport }}"/keys/secret_id_key*|cut -d/ -f1|uniq -d|wc -l
+  local_action: shell sha1sum {{ offline_masterkey_dir }}/{{ inventory_hostname }}-"{{ item.0.ipv4 }}_{{ item.1.orport }}"/keys/secret_id_key*|cut -d/ -f1|uniq -d|wc -l
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
@@ -138,9 +138,9 @@
 # this task is separated from the task named "Ensure RSA key is in place" because it is not run with 'force=no'
 - name: Transmit new Ed25519 signing keys
   become: yes
-  copy: src={{ offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }}
-   dest={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}/keys/{{ item[2] }}
-   owner="_tor-{{ item[0] }}_{{ item.1.orport }}"
+  copy: src={{ offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}
+   dest={{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}
+   owner="_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
    mode=700
    setype=tor_var_lib_t
   with_nested:
@@ -153,10 +153,10 @@
 # This needs to be at the end to fix SELinux contexts recursively
 - name: Ensure per-instance DataDir have proper permissions
   become: yes
-  file: path={{ tor_DataDir }}/{{ item[0] }}_{{ item.1.orport }}
+  file: path={{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}
     state=directory
-    owner="_tor-{{ item[0] }}_{{ item.1.orport }}"
-    group="_tor-{{ item[0] }}_{{ item.1.orport }}"
+    owner="_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
+    group="_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
     mode=0700
     recurse=yes
     setype=tor_var_lib_t
@@ -176,7 +176,7 @@
   become: yes
   template: >
     src=torrc
-    dest="{{ (ansible_pkg_mgr != 'apt')| ternary(tor_ConfDir ~ '/' ~ item[0] ~ '_' ~ item.1.orport ~ '.torrc', tor_ConfDir ~ '/' ~ item[0] ~ '_' ~ item.1.orport ~ '/torrc') }}"
+    dest="{{ (ansible_pkg_mgr != 'apt')| ternary(tor_ConfDir ~ '/' ~ item.0.ipv4 ~ '_' ~ item.1.orport ~ '.torrc', tor_ConfDir ~ '/' ~ item.0.ipv4 ~ '_' ~ item.1.orport ~ '/torrc') }}"
     owner=root
     mode=0644
     backup=yes

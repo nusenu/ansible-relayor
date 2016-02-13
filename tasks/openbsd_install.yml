@@ -33,7 +33,7 @@
 # An instance is identified by its rc.d file name.
 - name: Ensure Tor process file descriptor limits are reasonable (OpenBSD)
   become: yes
-  lineinfile: "dest=/etc/login.conf line='tor{{ item[0]| replace('.','_') }}_{{ item.1.orport }}::openfiles-max=13500::tc=daemon:'"
+  lineinfile: "dest=/etc/login.conf line='tor{{ item.0.ipv4| replace('.','_') }}_{{ item.1.orport }}::openfiles-max=13500::tc=daemon:'"
   with_nested:
    - tor_ips
    - tor_ports

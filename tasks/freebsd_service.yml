@@ -2,7 +2,7 @@
 
 - name: Ensure Tor starts at boot (FreeBSD)
   become: yes
-  lineinfile: dest=/etc/rc.local line="/usr/local/bin/tor -f {{ tor_ConfDir }}/{{ item[0] }}_{{ item.1.orport }}.torrc" create=yes
+  lineinfile: dest=/etc/rc.local line="/usr/local/bin/tor -f {{ tor_ConfDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}.torrc" create=yes
   with_nested:
    - tor_ips
    - tor_ports
@@ -16,9 +16,9 @@
 
 - name: Ensure PidDir is owned by per-instance tor_user (FreeBSD)
   become: yes
-  file: path={{ tor_PidDir }}/{{ item[0] }}_{{ item.1.orport }}
+  file: path={{ tor_PidDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}
     state=directory
-    owner=_tor-{{ item[0] }}_{{ item.1.orport }}
+    owner=_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}
     mode=0700
   with_nested:
    - tor_ips
@@ -26,7 +26,7 @@
 
 - name: Ensure Tor instances are reloaded if its torrc changed (FreeBSD)
   become: yes
-  shell: "kill -HUP `cat {{ tor_PidDir }}/{{ item.item[0] }}_{{ item.item.1.orport }}/pid`"
+  shell: "kill -HUP `cat {{ tor_PidDir }}/{{ item.item.0.ipv4 }}_{{ item.item.1.orport }}/pid`"
   ignore_errors: yes
   with_items: instances.results
   when: item.changed == True
@@ -35,7 +35,7 @@
 
 - name: Ensure Tor instances are running (FreeBSD)
   become: yes
-  shell: "kill -0 `cat {{ tor_PidDir }}/{{ item[0] }}_{{ item.1.orport }}/pid` || tor -f {{ tor_ConfDir }}/{{ item[0] }}_{{ item.1.orport }}.torrc"
+  shell: "kill -0 `cat {{ tor_PidDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/pid` || tor -f {{ tor_ConfDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}.torrc"
   with_nested:
    - tor_ips
    - tor_ports
