@@ -72,6 +72,10 @@ All variables mentioned here are optional.
 * `tor_ContactInfo`
     - Sets the relay's ContactInfo field.
 
+* `tor_IPv6` boolean
+    - default: True (autodetects if you have IPv6 IPs and enables support for it accordingly)
+    - you can opt-out by setting it to False
+
 * `tor_nickname`
     - up to 19 chars long, must contain only the characters [a-zA-Z0-9]
     - all tor instances on a host will get the same nickname

@@ -10,11 +10,8 @@ User _tor-{{ item.0.ipv4 }}_{{ item.1.orport }}
 DataDirectory {{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}
 
 ORPort {{ item.0.ipv4 }}:{{ item.1.orport }}
-{% if item.0.ipv6 != "" and item.0.ipv6 != "False" %}
-# IPv6 detected and enabled
+{% if item.0.ipv6 != "" and item.0.ipv6 != "False" and tor_IPv6 == True %}
 ORPort [{{item.0.ipv6}}]:{{item.1.orport}}
-{% else %}
-# no ipv6 detected
 {% endif %}
 {% if item.1.dirport != 0 %}
 DirPort {{ item.0.ipv4 }}:{{ item.1.dirport }}
@@ -44,7 +41,7 @@ MyFamily {{ family.stdout }}
 {% if tor_ExitRelay == True %}
 # we are an exit relay!
 ExitRelay 1
-{% if item.0.ipv6 != "" and item.0.ipv6 != "False" %}
+{% if item.0.ipv6 != "" and item.0.ipv6 != "False" and tor_IPv6 == True %}
 IPv6Exit 1
 {% endif %}
 ExitPolicy {{ tor_ExitPolicy }}

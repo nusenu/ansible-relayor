@@ -20,6 +20,8 @@ tor_maxips: 3
 # Logic is implemented in templates/torrc
 tor_ExitRelay: False
 
+tor_IPv6: True
+
 # minimal kern.ipc.somaxconn value
 freebsd_somaxconn: 1024
 # minimal kern.ipc.nmbclusters value
