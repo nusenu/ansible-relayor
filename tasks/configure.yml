@@ -1,7 +1,7 @@
 ---
 
 - name: Ensure local DataDir folders exist (LOCAL)
-  file: path={{ offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}
+  file: path={{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}
     state=directory mode=700
   delegate_to: 127.0.0.1
   with_nested:
@@ -11,13 +11,13 @@
    - createdir
 
 - name: Ensure all relay keys exist (LOCAL)
-  local_action: command tor --PublishServerDescriptor 0 --orport 1234 --list-fingerprint --datadirectory "{{ offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}" --Log "err stdout"
+  local_action: command tor --PublishServerDescriptor 0 --orport 1234 --list-fingerprint --datadirectory "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}" --Log "err stdout"
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
 
 - name: Generate new Ed25519 signing keys (LOCAL)
-  local_action: command tor --keygen --SigningKeyLifetime {{ tor_signingkeylifetime_days}}\ days --datadirectory "{{ offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}" --Log "err stdout"
+  local_action: command tor --keygen --SigningKeyLifetime {{ tor_signingkeylifetime_days}}\ days --datadirectory "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}" --Log "err stdout"
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
@@ -25,7 +25,7 @@
    - renewkey
 
 - name: Detect duplicate relay keys across relays (LOCAL)
-  shell: sha1sum {{ offline_masterkey_dir }}/*/keys/secret_id_key {{ offline_masterkey_dir }}/*/keys/ed25519_master_id_secret_key|cut -d/ -f1|sort|uniq -d|wc -l
+  shell: sha1sum {{ tor_offline_masterkey_dir }}/*/keys/secret_id_key {{ tor_offline_masterkey_dir }}/*/keys/ed25519_master_id_secret_key|cut -d/ -f1|sort|uniq -d|wc -l
   delegate_to: 127.0.0.1
   register: dupcount
 
@@ -49,7 +49,7 @@
   with_items: masterkeycheck.results
 
 - name: Collect fingerprints for MyFamily (LOCAL)
-  shell: cut {{ offline_masterkey_dir }}/*/fingerprint -d" " -f2|xargs|sed -e 's/ /,/g'
+  shell: cut {{ tor_offline_masterkey_dir }}/*/fingerprint -d" " -f2|xargs|sed -e 's/ /,/g'
   delegate_to: 127.0.0.1
   register: family
   tags:
@@ -91,7 +91,7 @@
 
 - name: Ensure RSA key is in place (without overriding existing keys)
   become: yes
-  copy: src={{ offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}
+  copy: src={{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}
    dest={{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}
    owner="_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
    mode=700 force=no
@@ -103,7 +103,7 @@
 - name: Fetch RSA key for comparision
   become: yes
   fetch: src={{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}
-    dest={{ offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}.untrustedremotekey
+    dest={{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}.untrustedremotekey
     flat=yes
   with_nested:
    - "{{ tor_ips }}"
@@ -111,7 +111,7 @@
    - [ 'secret_id_key' ]
 
 - name: Compare local vs. remote RSA key (secret_id_key)
-  local_action: shell sha1sum {{ offline_masterkey_dir }}/{{ inventory_hostname }}-"{{ item.0.ipv4 }}_{{ item.1.orport }}"/keys/secret_id_key*|cut -d/ -f1|uniq -d|wc -l
+  local_action: shell sha1sum {{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-"{{ item.0.ipv4 }}_{{ item.1.orport }}"/keys/secret_id_key*|cut -d/ -f1|uniq -d|wc -l
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
@@ -138,7 +138,7 @@
 # this task is separated from the task named "Ensure RSA key is in place" because it is not run with 'force=no'
 - name: Transmit new Ed25519 signing keys
   become: yes
-  copy: src={{ offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}
+  copy: src={{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}
    dest={{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}
    owner="_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
    mode=700

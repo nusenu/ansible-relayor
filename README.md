@@ -52,7 +52,7 @@ Role Variables
 --------------
 All variables mentioned here are optional.
 
-* `offline_masterkey_dir`
+* `tor_offline_masterkey_dir`
     - default: ~/.tor/offlinemasterkeys
     - Defines the location where on the ansible host relay keys (ed25519 and RSA) are stored.
     - Within that folder ansible will create a subfolder for every tor instance.

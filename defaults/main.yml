@@ -30,7 +30,7 @@ tor_DataDir: /var/lib/tor
 tor_PidDir: /var/run/tor
 tor_LogLevel: notice
 
-offline_masterkey_dir: ~/.tor/offlinemasterkeys
+tor_offline_masterkey_dir: ~/.tor/offlinemasterkeys
 tor_signingkeylifetime_days: 30
 
 tor_distribution_release: "{{ ansible_distribution_release }}"
