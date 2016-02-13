@@ -19,31 +19,21 @@
 - name: Ensure sequential IP IDs are avoided (net.inet.ip.random_id)
   become: yes
   sysctl: name=net.inet.ip.random_id value=1 reload=no sysctl_set=yes
-  tags:
-    - freebsdkern
 
 - name: Gather current kern.ipc.somaxconn setting (FreeBSD)
   shell: "sysctl kern.ipc.somaxconn|cut -d' '  -f2"
   register: currentsomaxconn
-  tags:
-   - freebsdkern
 
 - name: Ensure somaxconn setting is reasonable (FreeBSD)
   become: yes
   sysctl: name=kern.ipc.somaxconn value={{ freebsd_somaxconn }} reload=no sysctl_set=yes
   when: currentsomaxconn.stdout|int < {{ freebsd_somaxconn }}
-  tags:
-   - freebsdkern
 
 - name: Gather current kern.ipc.nmbclusters setting (FreeBSD)
   shell: "sysctl kern.ipc.nmbclusters|cut -d' '  -f2"
   register: currentnmbc
-  tags:
-   - freebsdkern
 
 - name: Ensure nmbclusters setting is reasonable (FreeBSD)
   become: yes
   sysctl: name=kern.ipc.nmbclusters value={{ freebsd_nmbclusters }} reload=no sysctl_set=yes
   when: currentnmbc.stdout|int < {{ freebsd_nmbclusters }}
-  tags:
-   - freebsdkern

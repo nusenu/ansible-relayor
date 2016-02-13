@@ -143,16 +143,12 @@ There are OS specific tags:
 * freebsd
 * openbsd
 
-Non OS specific tags:
+Task oriented tags:
 
 * **renewkey** - takes care of renewing online Ed25519 keys only (assumes that tor instances are fully configured and running already)
 * install - installs tor but does not start or enable it
 * createdir - creates (empty) directories (locally and remote) and the tor users required to setup fs permissions, usefull for migration
 * reconfigure - regenerates torrc files and reloads tor (requires previously configured tor instances)
-
-Misc tags:
-
-* freebsdkern - takes care of setting kern.ipc.somaxconn and kern.ipc.nmbclusters
 
 So if you have a big family and you are about to add an OpenBSD host you typically
 make two steps
