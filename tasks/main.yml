@@ -2,15 +2,7 @@
 
 - include: ip-list.yml
   tags:
-    - install
-    - createdir
-    - renewkey
-    - reconfigure
-    - debian
-    - centos
-    - fedora
-    - openbsd
-    - freebsd
+    - always
 
 - include: apt_install.yml
   when: ansible_pkg_mgr == 'apt'
