@@ -38,7 +38,7 @@ Supported Operating Systems
 
 - Debian 8
 - CentOS 7 (incl. SELinux support)
-- OpenBSD >= 5.8 with tor >= 0.2.7.5 (available via snapshots since 2015-11-28)
+- OpenBSD 5.9
 - FreeBSD 10.1, 10.2
 - Ubuntu 15.10
 - Fedora 23
