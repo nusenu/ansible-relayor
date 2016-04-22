@@ -25,7 +25,7 @@ Requirements
 ansible host:
 
 - tor >= 0.2.7
-- ansible >= 1.9.4 < 2.0
+- ansible >= 1.9.6 < 2.0
 - python-netaddr
 
 target hosts:
