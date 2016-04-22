@@ -77,8 +77,20 @@ All variables mentioned here are optional.
     - you can opt-out by setting it to False
 
 * `tor_nickname`
+    - defines the nickname tor instances will use
     - up to 19 chars long, must contain only the characters [a-zA-Z0-9]
     - all tor instances on a host will get the same nickname
+    - to use the server's hostname as the nickname set it to {{ ansible_hosname }}
+    - tor_nicknamefile overrules this setting
+    - default: none
+
+* `tor_nicknamefile` /path/to/file.csv
+    - this is a simple comma separated csv file stored on the ansible host specifying nicknames
+    - first column: instance identifier (inventory_hostname-ip_orport)
+    - second column: nickname
+    - one instance per line
+    - all instances MUST be present in the csv file
+    - default: none
 
 * `tor_ExitRelay` boolean 
     - You will want to set this to True if you want to run exit relays.
