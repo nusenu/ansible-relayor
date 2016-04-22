@@ -11,6 +11,7 @@ galaxy_info:
     versions:
     - 10.1
     - 10.2
+    - 10.3
   - name: OpenBSD
     versions:
     - 5.9

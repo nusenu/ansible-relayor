@@ -39,7 +39,7 @@ Supported Operating Systems
 - Debian 8
 - CentOS 7 (incl. SELinux support)
 - OpenBSD 5.9
-- FreeBSD 10.1, 10.2
+- FreeBSD 10.x
 - Ubuntu 15.10
 - Fedora 23
 
