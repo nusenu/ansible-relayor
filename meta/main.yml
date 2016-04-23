@@ -20,7 +20,7 @@ galaxy_info:
     - 7
   - name: Ubuntu
     versions:
-    - wily
+    - xenial
   - name: Fedora
     versions:
     - 23

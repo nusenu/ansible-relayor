@@ -40,7 +40,7 @@ Supported Operating Systems
 - CentOS 7 (incl. SELinux support)
 - OpenBSD 5.9
 - FreeBSD 10.x
-- Ubuntu 15.10
+- Ubuntu 16.04
 - Fedora 23
 
 Supported Tor Releases
