@@ -20,6 +20,9 @@ tor_maxips: 3
 # Logic is implemented in templates/torrc
 tor_ExitRelay: False
 
+# deploy default tor-exit-notice.html if we are an exit
+tor_ExitNoticePage: True
+
 tor_IPv6: True
 
 # the following var only matters if tor_ExitRelay is True
