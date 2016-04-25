@@ -43,7 +43,7 @@ MyFamily {{ family.stdout }}
 {% if tor_ExitRelay == True %}
 # we are an exit relay!
 ExitRelay 1
-{% if item.0.ipv6 != "" and item.0.ipv6 != "False" and tor_IPv6 == True %}
+{% if item.0.ipv6 != "" and item.0.ipv6 != "False" and tor_IPv6 == True and tor_IPv6Exit == True %}
 IPv6Exit 1
 {% endif %}
 ExitPolicy {{ tor_ExitPolicy }}
@@ -80,9 +80,6 @@ EntryStatistics {{ tor_EntryStatistics }}
 {% endif %}
 {% if tor_ExitPortStatistics is defined %}
 ExitPortStatistics {{ tor_ExitPortStatistics }}
-{% endif %}
-{% if tor_IPv6Exit is defined %}
-IPv6Exit {{ tor_IPv6Exit }}
 {% endif %}
 {% if tor_MaxOnionQueueDelay is defined %}
 MaxOnionQueueDelay {{ tor_MaxOnionQueueDelay }}

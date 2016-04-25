@@ -22,6 +22,9 @@ tor_ExitRelay: False
 
 tor_IPv6: True
 
+# the following var only matters if tor_ExitRelay is True
+tor_IPv6Exit: True
+
 # minimal kern.ipc.somaxconn value
 freebsd_somaxconn: 1024
 # minimal kern.ipc.nmbclusters value
