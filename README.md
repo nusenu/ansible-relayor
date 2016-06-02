@@ -2,8 +2,6 @@ ansible-relayor
 ----------------
 This is an ansible role for tor relay operators.
 
-THIS ANSIBLE ROLE IS CURRENTLY EXPERIMENTAL!
-
 The main focus of this role is to automate as many steps as possible for a tor relay
 operator including key management (OfflineMasterKey).
 Deploying a new tor server is as easy as adding a new host to the inventory,
@@ -26,7 +24,7 @@ ansible host:
 
 - tor >= 0.2.7
 - ansible >= 1.9.6 < 2.0
-- python-netaddr
+- python-netaddr package must be installed
 
 target hosts:
 
@@ -204,4 +202,4 @@ or if you like via GPG encrypted email.
 
 Origins
 -------
-This is a fork of https://github.com/david415/ansible-tor
+https://github.com/david415/ansible-tor (changed significantly since then)
