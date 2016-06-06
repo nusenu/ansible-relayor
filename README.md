@@ -78,7 +78,7 @@ All variables mentioned here are optional.
     - defines the nickname tor instances will use
     - up to 19 chars long, must contain only the characters [a-zA-Z0-9]
     - all tor instances on a host will get the same nickname
-    - to use the server's hostname as the nickname set it to {{ ansible_hosname }}
+    - to use the server's hostname as the nickname set it to {{ ansible_hostname }}
     - tor_nicknamefile overrules this setting
     - default: none
 
@@ -167,7 +167,7 @@ Task oriented tags:
 
 * **renewkey** - takes care of renewing online Ed25519 keys only (assumes that tor instances are fully configured and running already)
 * install - installs tor but does not start or enable it
-* createdir - creates (empty) directories (locally and remote) and the tor users required to setup fs permissions, usefull for migration
+* createdir - creates (empty) directories (locally and remote) and the tor users required to setup fs permissions, useful for migration
 * reconfigure - regenerates torrc files and reloads tor (requires previously configured tor instances)
 
 So if you have a big family and you are about to add an OpenBSD host you typically
@@ -186,7 +186,7 @@ Security Considerations
 This ansible role makes use of tor's OfflineMasterKey feature without requiring any manual configuration.
 
 The offline master key feature exposes only a temporary signing key to the relay (valid for 30 days by default).
-This allows to recover from a complete server compromize without loosing a relay's reputation (no need to bootstrap a new permanent master key from scratch).
+This allows to recover from a complete server compromise without losing a relay's reputation (no need to bootstrap a new permanent master key from scratch).
 
 Every tor instance is run with a distinct system user. A per-instance user has only access to his own (temporary) keys, but not to those of other instances.
 We do not ultimately trust every tor relay we operate (we try to perform input validation when we use relay provided data on the ansible host or another relay).
