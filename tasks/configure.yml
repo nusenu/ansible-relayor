@@ -46,7 +46,7 @@
 
             Ed25519 MASTER KEY detected on the relay - it is NOT supposed to be there! Aborting."
   when: item.stat.exists == True
-  with_items: masterkeycheck.results
+  with_items: "{{ masterkeycheck.results }}"
 
 - name: Collect fingerprints for MyFamily (LOCAL)
   shell: cut {{ tor_offline_masterkey_dir }}/*/fingerprint -d" " -f2|xargs|sed -e 's/ /,/g'
@@ -66,8 +66,8 @@
   become: yes
   file: path={{ tor_ConfDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }} state=directory mode=755
   with_nested:
-   - tor_ips
-   - tor_ports
+   - "{{ tor_ips }}"
+   - "{{ tor_ports }}"
   when: ansible_pkg_mgr == 'apt'
 
 - name: Ensure DataDir exists
@@ -133,7 +133,7 @@
 
    mv secret_id_key.untrustedremotekey secret_id_key"'
   when: item.stdout != "1"
-  with_items: rsakey.results
+  with_items: "{{ rsakey.results }}"
 
 # this task is separated from the task named "Ensure RSA key is in place" because it is not run with 'force=no'
 - name: Transmit new Ed25519 signing keys
@@ -187,8 +187,8 @@
     backup=yes
     validate="tor --verify-config -f %s"
   with_nested:
-   - tor_ips
-   - tor_ports
+   - "{{ tor_ips }}"
+   - "{{ tor_ports }}"
   register: instances
   tags:
    - reconfigure
