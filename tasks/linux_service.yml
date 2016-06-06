@@ -28,7 +28,7 @@
 - name: Ensure Tor instances are reloaded if its torrc changed (Linux/systemd)
   become: yes
   service: name=tor@{{ item.item.0.ipv4 }}_{{ item.item.1.orport }}.service state=reloaded
-  with_items: instances.results
+  with_items: "{{ instances.results }}"
   when: item.changed == True
   tags:
    - reconfigure
@@ -37,5 +37,5 @@
   become: yes
   service: name=tor@{{ item.0.ipv4 }}_{{ item.1.orport }}.service enabled=yes state=started
   with_nested:
-   - tor_ips
-   - tor_ports
+   - "{{ tor_ips }}"
+   - "{{ tor_ports }}"
