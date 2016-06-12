@@ -134,6 +134,15 @@ All variables mentioned here are optional.
     - authentication relies on filesystem permissions
     - default: False
 
+* `tor_enableControlPort`
+    - enables an automatically determined ControlPort for each instance
+    - authentication via CookieAuthentication unless `tor_CookieAuthentication` is set to 0
+    - default: False
+
+* `tor_enableCookieAuthentication`
+    - enable CookieAuthentication for ControlPort
+    - default: False (unless `tor_enableControlPort` is true)
+
 * `freebsd_somaxconn`
     - configure kern.ipc.somaxconn on FreeBSD
     - by default we increase this value to at least 1024

@@ -59,6 +59,7 @@ tor_RunAsDaemon: 1
 tor_SocksPort: 0
 
 tor_enableControlSocket: False
+tor_enableControlPort: False
 
 tor_shutdownwaitlength: 1
 
