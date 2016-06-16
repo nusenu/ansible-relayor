@@ -115,6 +115,8 @@ All variables mentioned here are optional.
         - reduce the number of Tor instances created per IP address
     - disable DirPorts by setting them to 0
     - HINT: choose them wisely and *never* change them again ;)
+    - NOTE: on SELinux-enabled systems you must choose from the following ports:
+    - 80, 81, 443, 488, 6969, 8008, 8009, 8443, 9000, 9001, 9030, 9050, 9051, 9150
     - default:
         - instance 1: ORPort 9000, DirPort 9001
         - instance 2: ORPort 9100, DirPort 9101
