@@ -18,6 +18,13 @@ Main benefits for a tor relay operator
 - easily choose between exit relay/non-exit relay mode using a single boolean
 - easily restore a relay setup (the ansible host becomes a backup location for all keys out of the box)
 
+Installation
+------------
+
+This ansible role is available on galaxy https://galaxy.ansible.com/nusenu/relayor/
+
+```ansible-galaxy install nusenu.relayor```
+
 Requirements
 ------------
 ansible host:
