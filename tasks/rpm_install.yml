@@ -9,7 +9,6 @@
   tags:
    - reconfigure
    - renewkey
-   - createdir
 
 - name: Ensure tor package is installed (dnf)
   become: yes

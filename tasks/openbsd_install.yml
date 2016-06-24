@@ -7,7 +7,6 @@
   tags:
    - reconfigure
    - renewkey
-   - createdir
 
 - name: Ensure Tor is installed (OpenBSD)
   become: yes

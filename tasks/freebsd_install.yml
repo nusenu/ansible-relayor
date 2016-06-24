@@ -8,7 +8,6 @@
   tags:
    - reconfigure
    - renewkey
-   - createdir
 
 - name: Ensure Tor is installed (FreeBSD)
   become: yes
