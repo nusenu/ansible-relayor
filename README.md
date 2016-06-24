@@ -176,7 +176,7 @@ Task oriented tags:
 
 * **renewkey** - takes care of renewing online Ed25519 keys only (assumes that tor instances are fully configured and running already)
 * install - installs tor but does not start or enable it
-* createdir - creates (empty) directories (locally and remote) and the tor users required to setup fs permissions, useful for migration
+* createdir - creates (empty) directories on the ansible host only, useful for migration
 * reconfigure - regenerates torrc files and reloads tor (requires previously configured tor instances)
 
 So if you have a big family and you are about to add an OpenBSD host you typically
