@@ -7,6 +7,8 @@ operator including key management (OfflineMasterKey).
 Deploying a new tor server is as easy as adding a new host to the inventory,
 no further manual configuration is required.
 
+This ansible role does not aim to support tor bridges.
+
 Main benefits for a tor relay operator
 --------------------------------------
 - security: **offline Ed25519 master keys** are generated on the ansible host and are never exposed to the relay (OfflineMasterKey)
