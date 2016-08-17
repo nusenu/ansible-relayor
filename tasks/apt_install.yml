@@ -33,7 +33,7 @@
   # apt starts a tor client instance by default after installing the package
   # we do not need that
   notify:
-    - stop-and-disable default tor
+    - stop-and-mask default tor instance
 
 
 #- name: Ensure AppArmor allows access to necessary files (Ubuntu)

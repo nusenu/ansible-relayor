@@ -1,7 +1,7 @@
 ---
-- name: stop-and-disable default tor
+- name: stop-and-mask default tor instance
   become: yes
-  service: name=tor state=stopped enabled=no
+  shell: systemctl stop tor@default && systemctl mask tor@default
 
 - name: restart apparmor
   become: yes
