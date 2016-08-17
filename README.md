@@ -43,7 +43,7 @@ target hosts:
 Supported Operating Systems
 ---------------------------
 
-- Debian 8
+- Debian 8 / Debian Testing
 - CentOS 7 (incl. SELinux support)
 - OpenBSD 5.9
 - FreeBSD 10.x

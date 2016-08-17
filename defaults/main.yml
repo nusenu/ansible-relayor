@@ -41,7 +41,7 @@ tor_LogLevel: notice
 tor_offline_masterkey_dir: ~/.tor/offlinemasterkeys
 tor_signingkeylifetime_days: 30
 
-tor_distribution_release: "{{ ansible_distribution_release }}"
+tor_distribution_release: "{{ ansible_lsb.codename }}"
 
 # filter potentially malicious input from relay-provided IPv4/v6 addresses
 # https://docs.ansible.com/ansible/playbooks_filters_ipaddr.html
