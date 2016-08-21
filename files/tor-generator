@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# systemd generator to create dependency symlink to start
+# all tor instances from /etc/tor/instances/
+
+set -eu
+
+if [ $# -lt 1 ]; then
+    echo >&2 "Usage: $0 <wantdir> [...]"
+    exit 1
+fi
+
+GENDIR="$1"
+WANTDIR="$1/tor.service.wants"
+SERVICEFILE="/lib/systemd/system/tor@.service"
+DEFAULTTOR="/lib/systemd/system/tor@default.service"
+BASEETC="/etc/tor/instances"
+
+mkdir -p "$WANTDIR"
+
+[ -e "/etc/tor/torrc" ] && ln -s "$DEFAULTTOR" "$WANTDIR/"
+for name in $( find "$BASEETC" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' ); do
+    if echo "x$name" | grep -q '[^a-zA-Z0-9_.]' ||
+       [ "$name" = "default" ] ; then
+        continue
+    fi
+    [ -e "$BASEETC/$name/torrc" ] && ln -s "$SERVICEFILE" "$WANTDIR/tor@$name.service"
+done
+
+exit 0
