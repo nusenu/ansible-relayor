@@ -4,6 +4,9 @@ RunAsDaemon {{ tor_RunAsDaemon }}
 PidFile {{ tor_PidDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/pid
 {% endif %}
 Log {{ tor_LogLevel }} syslog
+{% if ansible_os_family != 'OpenBSD' %}
+SyslogIdentityTag {{ item.0.ipv4 }}_{{ item.1.orport }}
+{% endif %}
 
 User _tor-{{ item.0.ipv4 }}_{{ item.1.orport }}
 
