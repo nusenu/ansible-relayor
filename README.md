@@ -45,7 +45,7 @@ Supported Operating Systems
 
 - Debian 8 / Debian Testing
 - CentOS 7 (incl. SELinux support)
-- OpenBSD 5.9
+- OpenBSD 6.0
 - FreeBSD 10.x
 - Ubuntu 16.04
 - Fedora 24
