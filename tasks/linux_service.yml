@@ -19,7 +19,7 @@
   copy: src=local.conf
    dest=/etc/systemd/system/tor@.service.d/local.conf
    owner=root
-   mode=640
+   mode=644
   when: ansible_os_family == 'RedHat'
   notify: systemctl daemon-reload
 
