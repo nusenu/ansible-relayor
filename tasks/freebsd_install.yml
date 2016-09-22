@@ -11,13 +11,19 @@
 
 - name: Ensure Tor is installed (FreeBSD)
   become: yes
-  pkgng: name=tor state=present
+  pkgng:
+    name: tor
+    state: present
   tags:
    - install
 
 - name: Ensure sequential IP IDs are avoided (net.inet.ip.random_id)
   become: yes
-  sysctl: name=net.inet.ip.random_id value=1 reload=no sysctl_set=yes
+  sysctl:
+    name: net.inet.ip.random_id
+    value: 1
+    reload: no
+    sysctl_set: yes
 
 - name: Gather current kern.ipc.somaxconn setting (FreeBSD)
   shell: "sysctl kern.ipc.somaxconn|cut -d' '  -f2"
@@ -25,7 +31,11 @@
 
 - name: Ensure somaxconn setting is reasonable (FreeBSD)
   become: yes
-  sysctl: name=kern.ipc.somaxconn value={{ freebsd_somaxconn }} reload=no sysctl_set=yes
+  sysctl:
+    name: kern.ipc.somaxconn
+    value: "{{ freebsd_somaxconn }}"
+    reload: no
+    sysctl_set: yes
   when: currentsomaxconn.stdout|int < {{ freebsd_somaxconn }}
 
 - name: Gather current kern.ipc.nmbclusters setting (FreeBSD)
@@ -34,5 +44,9 @@
 
 - name: Ensure nmbclusters setting is reasonable (FreeBSD)
   become: yes
-  sysctl: name=kern.ipc.nmbclusters value={{ freebsd_nmbclusters }} reload=no sysctl_set=yes
+  sysctl:
+    name: kern.ipc.nmbclusters
+    value: "{{ freebsd_nmbclusters }}"
+    reload: no
+    sysctl_set: yes
   when: currentnmbc.stdout|int < {{ freebsd_nmbclusters }}
