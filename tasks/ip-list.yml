@@ -11,4 +11,5 @@
   register: ipsinterm
 
 - name: setup IP list (2/2)
-  set_fact: tor_ips="{{ ipsinterm.results | map(attribute='ansible_facts.ips')|list}}"
+  set_fact:
+    tor_ips: "{{ ipsinterm.results | map(attribute='ansible_facts.ips')|list}}"
