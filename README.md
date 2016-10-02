@@ -52,7 +52,8 @@ Supported Operating Systems
 
 Supported Tor Releases
 -----------------------
-- tor >= 0.2.7.5
+- tor >= 0.2.8.x
+- on OpenBSD: tor >= 0.2.7.x
 
 
 Role Variables
