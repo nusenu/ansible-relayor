@@ -10,30 +10,22 @@
    - reconfigure
    - renewkey
 
-- name: Ensure tor package is installed (dnf)
-  become: yes
-  dnf:
-    name: tor,libselinux-python,libsemanage-python
-    state: present
-  when: ansible_pkg_mgr == 'dnf'
-  notify: re-gather facts
-
-# re-gathering facts after installing libselinux-python on F23
-# is a workaround for https://github.com/ansible/ansible-modules-core/issues/2432
-- meta: flush_handlers
-
 - name: Ensure EPEL repo is installed (yum)
   become: yes
   yum:
     name: epel-release
   when: ansible_pkg_mgr == 'yum'
 
-- name: Ensure tor package is installed (yum)
+- name: Ensure tor package is installed (dnf/yum)
   become: yes
-  yum:
-    name: tor,libsemanage-python
+  package:
+    name: tor,libselinux-python,libsemanage-python
     state: present
-  when: ansible_pkg_mgr == 'yum'
+  notify: re-gather facts
+
+# re-gathering facts after installing libselinux-python
+# is a workaround for https://github.com/ansible/ansible-modules-core/issues/2432
+- meta: flush_handlers
 
 - name: Ensure SELinux boolean (tor_can_network_relay) is set appropriately (Fedora)
   become: yes
