@@ -9,14 +9,6 @@
    - reconfigure
    - renewkey
 
-- name: Ensure Tor is installed (FreeBSD)
-  become: yes
-  pkgng:
-    name: tor
-    state: present
-  tags:
-   - install
-
 - name: Ensure sequential IP IDs are avoided (net.inet.ip.random_id)
   become: yes
   sysctl:

@@ -17,15 +17,26 @@
    - fedora
    - install
 
-- include: openbsd_install.yml
-  when: ansible_pkg_mgr == 'openbsd_pkg'
+- include: openbsd_prepare.yml
+  when: ansible_system == 'OpenBSD'
   tags:
    - openbsd
 
-- include: freebsd_install.yml
-  when: ansible_pkg_mgr == 'pkgng'
+- include: freebsd_prepare.yml
+  when: ansible_system == 'FreeBSD'
   tags:
    - freebsd
+
+- name: Ensure tor package is installed (*BSD)
+  become: yes
+  package:
+    name: tor
+    state: present
+  when: (ansible_system == 'OpenBSD') or (ansible_system == 'FreeBSD')
+  tags:
+   - openbsd
+   - freebsd
+   - install
 
 - include: configure.yml
   tags:

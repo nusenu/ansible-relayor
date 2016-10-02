@@ -8,14 +8,6 @@
    - reconfigure
    - renewkey
 
-- name: Ensure Tor is installed (OpenBSD)
-  become: yes
-  openbsd_pkg:
-    name: tor
-    state: present
-  tags:
-   - install
-
 - name: Gather current system-wide file descriptor limits (OpenBSD)
   shell: "sysctl kern.maxfiles|cut -d= -f2"
   register: currentlimits
