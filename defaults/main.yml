@@ -50,7 +50,11 @@ ipv4_count: "{{ tor_v4ips | length|int }}"
 
 # we can not use more IPv6 IPs than we have IPv4 IPs so we truncate (but fewer is ok)
 v6tmp: "{{ ansible_all_ipv6_addresses|ipv6('public')|ipv6('address') }}"
-tor_v6ips: "{{ v6tmp[0:ipv4_count|int]|ipv6('address') }}"
+
+# the following line is commented out and handled in ip-list.yml until
+# https://github.com/ansible/ansible/issues/14829
+# gets fixed
+#tor_v6ips: "{{ v6tmp[0:ipv4_count|int]|ipv6('address') }}"
 
 tor_RunAsDaemon: 1
 

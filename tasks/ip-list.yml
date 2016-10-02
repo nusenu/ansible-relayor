@@ -1,5 +1,22 @@
 ---
 
+# workaround for this ansible IPv6 filter bug
+# https://github.com/ansible/ansible/issues/14829
+# we simply convert False to empty lists
+- name: workaround for ansible bug 14829 (1/3)
+  set_fact:
+    v6tmp: []
+  when: v6tmp == False
+
+- name: workaround for ansible bug 14829 (2/3)
+  set_fact:
+    tor_v6ips: "{{ v6tmp[0:ipv4_count|int]|ipv6('address') }}"
+
+- name: workaround for ansible bug 14829 (3/3)
+  set_fact:
+    tor_v6ips: []
+  when: tor_v6ips == False
+
 - name: setup IP list (1/2)
   set_fact:
     ips:
