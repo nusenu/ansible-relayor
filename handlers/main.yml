@@ -2,6 +2,7 @@
 - name: stop-and-mask default tor instance
   become: yes
   shell: systemctl stop tor@default && systemctl mask tor@default
+  when: ansible_pkg_mgr == 'apt'
 
 - name: restart apparmor
   become: yes
@@ -13,3 +14,4 @@
 
 - name: re-gather facts
   setup:
+  when: ansible_pkg_mgr == 'dnf'

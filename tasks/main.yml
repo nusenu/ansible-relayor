@@ -4,13 +4,13 @@
   tags:
     - always
 
-- include: apt_install.yml
+- include: apt_prepare.yml
   when: ansible_pkg_mgr == 'apt'
   tags:
    - debian
    - install
 
-- include: rpm_install.yml
+- include: rpm_prepare.yml
   when: ansible_os_family == 'RedHat'
   tags:
    - centos
@@ -27,15 +27,23 @@
   tags:
    - freebsd
 
-- name: Ensure tor package is installed (*BSD)
+# we specifically opt for present over latest to improve performance
+- name: Ensure tor is installed
   become: yes
   package:
-    name: tor
+    name: "{{ item }}"
     state: present
-  when: (ansible_system == 'OpenBSD') or (ansible_system == 'FreeBSD')
+  with_items: "{{ tor_packages }}"
+  # apt starts a tor client instance by default after installing the package
+  # we do not need that
+  notify:
+    - stop-and-mask default tor instance
   tags:
    - openbsd
    - freebsd
+   - debian
+   - centos
+   - fedora
    - install
 
 - include: configure.yml

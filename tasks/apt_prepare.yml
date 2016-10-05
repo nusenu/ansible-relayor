@@ -6,6 +6,9 @@
     tor_DataDir: /var/lib/tor-instances
     tor_ConfDir: /etc/tor/instances
     tor_RunAsDaemon: 0
+    tor_packages:
+        - deb.torproject.org-keyring
+        - tor
   tags:
    - reconfigure
    - renewkey
@@ -23,21 +26,6 @@
     repo: 'deb http://deb.torproject.org/torproject.org {{ tor_distribution_release }} main'
     state: present
     update_cache: yes
-
-# we specifically opt for present over latest to improve performance
-# "latest" is covered by auto updates
-- name: Ensure Tor is installed (APT)
-  become: yes
-  apt:
-    pkg: "{{ item }}"
-    state: present
-  with_items: 
-    - deb.torproject.org-keyring
-    - tor
-  # apt starts a tor client instance by default after installing the package
-  # we do not need that
-  notify:
-    - stop-and-mask default tor instance
 
 # Background:
 # https://github.com/nusenu/ansible-relayor/issues/72
@@ -73,4 +61,4 @@
 #  when: ansible_distribution == 'Ubuntu'
 #  notify: restart apparmor
 
-- meta: flush_handlers
+#- meta: flush_handlers
