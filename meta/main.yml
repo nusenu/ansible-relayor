@@ -10,9 +10,8 @@ galaxy_info:
     - stretch
   - name: FreeBSD
     versions:
-    - 10.1
-    - 10.2
     - 10.3
+    - 11.0
   - name: OpenBSD
     versions:
     - 6.0

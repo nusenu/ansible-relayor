@@ -9,7 +9,7 @@
    - reconfigure
    - renewkey
 
-- name: Ensure sequential IP IDs are avoided (net.inet.ip.random_id)
+- name: Ensure sequential IP IDs are avoided (FreeBSD)
   become: yes
   sysctl:
     name: net.inet.ip.random_id
