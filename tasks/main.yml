@@ -38,6 +38,7 @@
   # we do not need that
   notify:
     - stop-and-mask default tor instance
+    - disable default tor instance FreeBSD
   tags:
    - openbsd
    - freebsd
@@ -45,6 +46,8 @@
    - centos
    - fedora
    - install
+
+- meta: flush_handlers
 
 - include: configure.yml
   tags:

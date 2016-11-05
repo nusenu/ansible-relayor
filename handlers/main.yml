@@ -15,3 +15,19 @@
 - name: re-gather facts
   setup:
   when: ansible_pkg_mgr == 'dnf'
+
+- name: disable default tor instance FreeBSD
+  become: yes
+  lineinfile:
+    dest: /etc/rc.conf
+    line: "tor_disable_default_instance=\"YES\""
+    create: yes
+  when: ansible_system == 'FreeBSD'
+
+# TODO: this reloads all instances on a FreeBSD host even if just one torrc changed
+- name: Ensure Tor instances are reloaded if its torrc changed (FreeBSD)
+  become: yes
+  service:
+    name: tor
+    state: reloaded
+  when: ansible_system == 'FreeBSD'
