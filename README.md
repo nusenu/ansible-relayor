@@ -32,7 +32,7 @@ Requirements
 ansible host:
 
 - tor >= 0.2.7
-- ansible >= 2.0
+- ansible >= 2.1.3
 - python-netaddr package must be installed
 
 target hosts:
