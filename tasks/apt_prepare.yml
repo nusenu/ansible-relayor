@@ -1,18 +1,5 @@
 ---
 
-- name: Setup Debian specific variables (set_fact)
-  set_fact:
-    tor_user: debian-tor
-    tor_DataDir: /var/lib/tor-instances
-    tor_ConfDir: /etc/tor/instances
-    tor_RunAsDaemon: 0
-    tor_packages:
-        - deb.torproject.org-keyring
-        - tor
-  tags:
-   - reconfigure
-   - renewkey
-
 - name: Ensure torproject gpg key is installed (A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89)
   become: yes
   apt_key:

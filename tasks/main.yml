@@ -11,6 +11,12 @@
       - "{{ ansibleversion.stdout | version_compare('2.1.3.0', '>=') }}"
     msg: "VULNERABLE ansible version DETECTED, please update to v2.1.3 or newer! Exiting."
 
+- name: Set OS specific variables
+  include_vars: "{{ ansible_os_family }}.yml"
+  tags:
+   - renewkey
+   - reconfigure
+
 - include: ip-list.yml
   tags:
     - always

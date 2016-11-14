@@ -1,0 +1,9 @@
+---
+
+tor_user: debian-tor
+tor_DataDir: /var/lib/tor-instances
+tor_ConfDir: /etc/tor/instances
+tor_RunAsDaemon: 0
+tor_packages:
+    - deb.torproject.org-keyring
+    - tor
