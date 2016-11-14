@@ -15,6 +15,15 @@
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
 
+# this task is a workaround, because 'service tor status'
+# fails if this line is not present (which in turn fails the ansible service module)
+- name: ensure tor instance FreeBSD
+  become: yes
+  lineinfile:
+    dest: /etc/rc.conf
+    line: "tor_enable=\"YES\""
+    create: yes
+
 - name: Ensure PidDir exists (FreeBSD)
   become: yes
   file:
