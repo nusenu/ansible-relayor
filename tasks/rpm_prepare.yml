@@ -1,15 +1,5 @@
 ---
 
-- name: Setup RPM specific variables (set_fact)
-  set_fact:
-    tor_user: toranon
-    tor_ConfDir: /etc/tor
-    tor_RunAsDaemon: 0
-    tor_DataDir: /var/lib/tor-instances
-  tags:
-   - reconfigure
-   - renewkey
-
 - name: Ensure EPEL repo is installed (yum)
   become: yes
   yum:

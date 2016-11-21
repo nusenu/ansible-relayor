@@ -1,13 +1,5 @@
 ---
 
-- name: Setup OpenBSD specific variables (set_fact)
-  set_fact:
-    tor_DataDir: /var/tor-instances
-    tor_ConfDir: /etc/tor/enabled
-  tags:
-   - reconfigure
-   - renewkey
-
 - name: Gather current system-wide file descriptor limits (OpenBSD)
   shell: "sysctl kern.maxfiles|cut -d= -f2"
   register: currentlimits

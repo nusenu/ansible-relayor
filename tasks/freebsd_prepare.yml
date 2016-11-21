@@ -1,14 +1,5 @@
 ---
 
-- name: Setup FreeBSD specific variables (set_fact)
-  set_fact:
-    tor_DataDir: /var/db/tor-instances
-    tor_ConfDir: /usr/local/etc/tor/enabled
-    tor_PidDir: /var/run/tor-instances
-  tags:
-   - reconfigure
-   - renewkey
-
 - name: Ensure sequential IP IDs are avoided (FreeBSD)
   become: yes
   sysctl:
