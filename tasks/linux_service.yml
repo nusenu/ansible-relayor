@@ -3,16 +3,6 @@
 # Linux/systemd section (uses service module)
 # ===========================================
 
-- name: Ensure Tor instances are reloaded if its torrc changed (Linux/systemd)
-  become: yes
-  service:
-    name: "tor@{{ item.item.0.ipv4 }}_{{ item.item.1.orport }}.service"
-    state: reloaded
-  with_items: "{{ instances.results }}"
-  when: item.changed == True
-  tags:
-   - reconfigure
-
 - name: Ensure Tor instances are enabled and started (Linux/systemd)
   become: yes
   service:

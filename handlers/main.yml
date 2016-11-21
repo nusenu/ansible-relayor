@@ -31,3 +31,11 @@
     name: tor
     state: reloaded
   when: ansible_system == 'FreeBSD'
+
+- name: Ensure Tor instances are reloaded if its torrc changed (Linux)
+  become: yes
+  service:
+    name: "tor@{{ item.item.0.ipv4 }}_{{ item.item.1.orport }}.service"
+    state: reloaded
+  with_items: "{{ instances.results }}"
+  when: item.changed == True and ansible_system == 'Linux'

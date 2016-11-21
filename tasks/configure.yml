@@ -214,5 +214,6 @@
   register: instances
   notify:
     - Ensure Tor instances are reloaded if its torrc changed (FreeBSD)
+    - Ensure Tor instances are reloaded if its torrc changed (Linux)
   tags:
    - reconfigure
