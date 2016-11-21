@@ -1,5 +1,16 @@
 ---
 
+- name: Get ansible version
+  shell:  ansible --version|head -1|cut -d" " -f2
+  delegate_to: 127.0.0.1
+  register: ansibleversion
+
+- name: Check for vulnerable ansible version (CVE-2016-8614, CVE-2016-8628)
+  assert:
+    that:
+      - "{{ ansibleversion.stdout | version_compare('2.1.3.0', '>=') }}"
+    msg: "VULNERABLE ansible version DETECTED, please update to v2.1.3 or newer! Exiting."
+
 - include: ip-list.yml
   tags:
     - always
