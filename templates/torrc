@@ -27,6 +27,16 @@ OfflineMasterKey 1
 ControlSocket {{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/controlsocket
 {% else %}
 ControlSocket 0
+{% endif %}
+{% if tor_enableControlPort == True %}
+ControlPort auto
+{% else %}
+ControlPort 0
+{% endif %}
+{# enable CookieAuthentication by default if ControlPort is enabled #}
+{% if tor_enableCookieAuthentication|default(False, true) == True or (tor_enableControlPort == True and tor_enableCookieAuthentication|default(True) == True) %}
+CookieAuthentication 1
+{% else %}
 CookieAuthentication 0
 {% endif %}
 
