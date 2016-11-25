@@ -48,7 +48,7 @@ Supported Operating Systems
 - OpenBSD 6.0
 - FreeBSD 10.3, 11.0
 - Ubuntu 16.04
-- Fedora 24
+- Fedora 25
 
 Supported Tor Releases
 -----------------------

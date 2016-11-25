@@ -23,7 +23,7 @@ galaxy_info:
     - xenial
   - name: Fedora
     versions:
-    - 24
+    - 25
   galaxy_tags:
     - tor
     - ipv6
