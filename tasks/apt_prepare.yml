@@ -14,6 +14,15 @@
     state: present
     update_cache: yes
 
+# known problem: requires manual adjustment with every major tor release 0.2.8.x, 0.2.9.x, ...
+- name: Ensure torproject.org alpha repo is present if enabled (APT)
+  become: yes
+  apt_repository:
+    repo: 'deb http://deb.torproject.org/torproject.org tor-experimental-0.2.9.x-{{ tor_distribution_release }} main'
+    state: present
+    update_cache: yes
+  when: tor_alpha == True
+
 # Background:
 # https://github.com/nusenu/ansible-relayor/issues/72
 - name: Ensure systemd generator folder exists (Debian Testing and Ubuntu)

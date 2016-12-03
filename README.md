@@ -147,6 +147,11 @@ All variables mentioned here are optional.
     - authentication relies on filesystem permissions
     - default: False
 
+* `tor_alpha` boolean
+    - Set to True if you want to run Tor alpha releases.
+    - default: False
+    - This setting is supported on Debian/Ubuntu only (ignored on other platforms).
+
 * `freebsd_somaxconn`
     - configure kern.ipc.somaxconn on FreeBSD
     - by default we increase this value to at least 1024
