@@ -46,7 +46,7 @@
   become: yes
   package:
     name: "{{ item }}"
-    state: present
+    state: latest
   with_items: "{{ tor_packages }}"
   # apt starts a tor client instance by default after installing the package
   # we do not need that
