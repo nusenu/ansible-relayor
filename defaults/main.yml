@@ -68,7 +68,7 @@ tor_enableControlSocket: False
 # setting tor_alpha to True
 # will install tor alpha repos.
 # This is only supported for Debian/Ubuntu
--tor_alpha: False
+tor_alpha: False
 
 tor_shutdownwaitlength: 1
 
