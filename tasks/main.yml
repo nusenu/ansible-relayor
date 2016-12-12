@@ -11,8 +11,7 @@
 - name: Set OS specific variables
   include_vars: "{{ ansible_os_family }}.yml"
   tags:
-   - renewkey
-   - reconfigure
+   - always
 
 - include: ip-list.yml
   tags:
