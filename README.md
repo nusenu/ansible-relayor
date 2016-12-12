@@ -39,6 +39,7 @@ target hosts:
 
 - a non-root user with sudo
 - python 2 under /usr/bin/python
+- static public IPv4 address(es)
 
 Supported Operating Systems
 ---------------------------
