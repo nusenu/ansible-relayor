@@ -29,13 +29,14 @@ This ansible role is available on galaxy https://galaxy.ansible.com/nusenu/relay
 
 Requirements
 ------------
-ansible host:
+Control Machine Requirements
 
 - tor >= 0.2.7
-- ansible >= 2.1.3
 - python-netaddr package must be installed
+- required coreutils commands: sha1sum, sort, uniq, wc, cut
+- ansible >= 2.1.3
 
-target hosts:
+Managed Node Requirements
 
 - a non-root user with sudo
 - python 2 under /usr/bin/python
