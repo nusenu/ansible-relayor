@@ -27,7 +27,7 @@
    - renewkey
 
 - name: Detect duplicate relay keys across relays (LOCAL)
-  shell: sha1sum {{ tor_offline_masterkey_dir }}/*/keys/secret_id_key {{ tor_offline_masterkey_dir }}/*/keys/ed25519_master_id_secret_key|cut -d/ -f1|sort|uniq -d|wc -l
+  shell: sha1sum {{ tor_offline_masterkey_dir }}/*/keys/secret_id_key {{ tor_offline_masterkey_dir }}/*/keys/ed25519_master_id_secret_key|cut -d/ -f1|sort|uniq -d|wc -l|sed -e 's/ //g'
   delegate_to: 127.0.0.1
   register: dupcount
 
