@@ -33,7 +33,7 @@
 
 - name: Abort on duplicate relay keys
   fail: msg="Duplicate relay key detected! Aborting."
-  when: dupcount.stdout != "0"
+  when: dupcount.stdout|int(1) != 0
 
 - name: Detect if Ed25519 master keys are on the relay
   stat:
@@ -148,7 +148,7 @@
    cd ~/.tor/offlinemasterkeys/<inventoryname>-<IP_port>/keys
 
    mv secret_id_key.untrustedremotekey secret_id_key"'
-  when: item.stdout != "1"
+  when: item.stdout|int != 1
   with_items: "{{ rsakey.results }}"
 
 # this task is separated from the task named "Ensure RSA key is in place" because it is not run with 'force=no'
