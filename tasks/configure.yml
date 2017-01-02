@@ -145,7 +145,7 @@
    If you want to make use of the remote RSA key you have to override the local key manually:
 
 
-   cd ~/.tor/offlinemasterkeys/<inventoryname>-<IP_port>/keys
+   cd {{ tor_offline_masterkey_dir }}/<inventoryname>-<IP_port>/keys
 
    mv secret_id_key.untrustedremotekey secret_id_key"'
   when: item.stdout|int != 1
