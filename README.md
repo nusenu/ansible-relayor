@@ -56,7 +56,7 @@ Supported Tor Releases
 -----------------------
 - tor >= 0.2.8.x
 - on OpenBSD: tor >= 0.2.7.x
-- on FreeBSD: >= 0.2.8.9**_2**  (not 0.2.9.x)
+- on FreeBSD: >= 0.2.8.9**_2**
 
 
 Role Variables
