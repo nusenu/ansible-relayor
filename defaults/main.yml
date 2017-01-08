@@ -70,6 +70,9 @@ tor_enableControlSocket: False
 # This is only supported for Debian/Ubuntu
 tor_alpha: False
 
+# known problem: requires manual adjustment with every major tor release
+tor_alpha_version: 0.3.0
+
 tor_shutdownwaitlength: 1
 
 # Default exit policy if the user wants to be an exit but doesn't specify one

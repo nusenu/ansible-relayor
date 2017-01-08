@@ -56,7 +56,7 @@ Supported Tor Releases
 -----------------------
 - tor >= 0.2.8.x
 - on OpenBSD: tor >= 0.2.7.x
-- on FreeBSD: >= 0.2.8.9**_2**  (not 0.2.9.x)
+- on FreeBSD: >= 0.2.8.9**_2**
 
 
 Role Variables
@@ -150,9 +150,10 @@ All variables mentioned here are optional.
     - default: False
 
 * `tor_alpha` boolean
-    - Set to True if you want to run Tor alpha releases.
-    - default: False
+    - Set to True if you want to enable the Tor alpha version repository.
+    - Note: This setting does not ensure an installed tor is upgraded to the alpha release.
     - This setting is supported on Debian/Ubuntu only (ignored on other platforms).
+    - default: False
 
 * `freebsd_somaxconn`
     - configure kern.ipc.somaxconn on FreeBSD
