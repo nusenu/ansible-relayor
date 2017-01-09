@@ -29,10 +29,12 @@
 - name: Detect duplicate relay keys across relays (LOCAL)
   shell: sha1sum {{ tor_offline_masterkey_dir }}/*/keys/secret_id_key {{ tor_offline_masterkey_dir }}/*/keys/ed25519_master_id_secret_key|cut -d/ -f1|sort|uniq -d|wc -l
   delegate_to: 127.0.0.1
+  run_once: true
   register: dupcount
 
 - name: Abort on duplicate relay keys
   fail: msg="Duplicate relay key detected! Aborting."
+  run_once: true
   when: dupcount.stdout|int(1) != 0
 
 - name: Detect if Ed25519 master keys are on the relay
@@ -54,6 +56,7 @@
 - name: Collect fingerprints for MyFamily (LOCAL)
   shell: cut  -d" " -f2 {{ tor_offline_masterkey_dir }}/*/fingerprint|sort|xargs|sed -e 's/ /,/g'
   delegate_to: 127.0.0.1
+  run_once: true
   register: family
   tags:
    - reconfigure
