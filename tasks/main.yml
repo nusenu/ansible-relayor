@@ -10,6 +10,13 @@
   tags:
     - always
 
+- name: Check for local requirements
+  shell: command -V tor && command -V sha1sum && command -V sort && command -V uniq && command -V wc && command -V cut && command -V xargs && command -V sed
+  run_once: true
+  delegate_to: 127.0.0.1
+  tags:
+    - always
+
 - name: Set OS specific variables
   include_vars: "{{ ansible_os_family }}.yml"
   tags:
