@@ -33,7 +33,7 @@ Control Machine Requirements
 
 - tor >= 0.2.7
 - python-netaddr package must be installed
-- required coreutils commands: sha1sum, sort, uniq, wc, cut
+- required commands: openssl, sort, uniq, wc, cut, sed, xargs
 - ansible >= 2.1.3
 
 Managed Node Requirements
