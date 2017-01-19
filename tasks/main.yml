@@ -15,6 +15,12 @@
   tags:
    - always
 
+- name: Use public IPv4 addresses only (when requested)
+  include_vars: public_IPv4_only.yml
+  when: tor_publicIPsOnly == True
+  tags:
+   - always
+
 - include: ip-list.yml
   tags:
     - always

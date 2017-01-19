@@ -44,6 +44,8 @@ tor_signingkeylifetime_days: 30
 
 tor_distribution_release: "{{ ansible_lsb.codename }}"
 
+tor_publicIPsOnly: False
+
 # filter potentially malicious input from relay-provided IPv4/v6 addresses
 # https://docs.ansible.com/ansible/playbooks_filters_ipaddr.html
 tor_v4ips: "{{ ansible_all_ipv4_addresses[0:tor_maxips] | ipv4('address') }}"

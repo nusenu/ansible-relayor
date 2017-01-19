@@ -138,6 +138,10 @@ All variables mentioned here are optional.
     - If you want to use only specific IPv4 addresses for Tor.
     - Makes only sense in host_vars context.
 
+* `tor_publicIPsOnly` boolean
+    - use only public IPs when binding tor instances
+    - default: False
+
 * `tor_maxips`
     - Limits the amount of IPs we will use to generate instances on a single host.
     - Indirectly limits the amount of instances we generate per host.
