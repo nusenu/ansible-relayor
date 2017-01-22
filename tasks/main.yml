@@ -31,7 +31,7 @@
 - name: Ensure we have IPv4 addresses to work with
   assert:
     that:
-      - "{{ tor_v4ips }} != []"
+      - "tor_v4ips != []"
   tags:
    - always
 
