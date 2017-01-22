@@ -28,6 +28,13 @@
   tags:
    - always
 
+- name: Ensure we have IPv4 addresses to work with
+  assert:
+    that:
+      - "{{ tor_v4ips }} != []"
+  tags:
+   - always
+
 - include: ip-list.yml
   tags:
     - always
