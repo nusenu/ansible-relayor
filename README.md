@@ -134,18 +134,10 @@ All variables mentioned here are optional.
         - instance 1: ORPort 9000, DirPort 9001
         - instance 2: ORPort 9100, DirPort 9101
 
-* `tor_v4ips`
-    - If you want to use only specific IPv4 addresses for Tor.
-    - Makes only sense in host_vars context.
-
-* `tor_publicIPsOnly` boolean
-    - use only public IPs when binding tor instances
-    - default: False
-
 * `tor_maxips`
     - Limits the amount of IPs we will use to generate instances on a single host.
     - Indirectly limits the amount of instances we generate per host.
-    - If tor_ips is set, tor_maxips has no effect.
+    - If you run on private IPs only we will use a single IP only no matter what.
     - default: 3
 
 * `tor_enableControlSocket`

@@ -22,16 +22,9 @@
   tags:
    - always
 
-- name: Use public IPv4 addresses only (when requested)
-  include_vars: public_IPv4_only.yml
-  when: tor_publicIPsOnly == True
-  tags:
-   - always
-
-- name: Ensure we have IPv4 addresses to work with
-  assert:
-    that:
-      - "tor_v4ips != []"
+- name: Use a single private IPv4 address if we have no public IPv4 addresses
+  include_vars: private_IPv4_only.yml
+  when: tor_v4ips == []
   tags:
    - always
 
