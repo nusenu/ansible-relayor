@@ -139,7 +139,7 @@ All variables mentioned here are optional.
 * `tor_maxPublicIPs`
     - Limits the amount of public IPs we will use to generate instances on a single host.
     - Indirectly limits the amount of instances we generate per host.
-    - default: 3
+    - default: 1
 
 * `tor_enableControlSocket`
     - will create a ControlSocket file named 'controlsocket' in every instance's datadir

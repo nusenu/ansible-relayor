@@ -13,7 +13,7 @@ tor_ports:
 # by default to 3, this limits the amount
 # of generated Tor instances to 6 per host.
 # Specifying tor_ips overwrites this limitation.
-tor_maxPublicIPs: 3
+tor_maxPublicIPs: 1
 
 # We only use a single private IP by default since
 # we can not reliably tell wether we are NATed
