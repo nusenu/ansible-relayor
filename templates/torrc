@@ -19,7 +19,6 @@ ORPort [{{item.0.ipv6}}]:{{item.1.orport}}
 {% if item.1.dirport != 0 %}
 DirPort {{ item.0.ipv4 }}:{{ item.1.dirport }}
 {% endif %}
-Address {{ item.0.ipv4 }}
 OutboundBindAddress {{ item.0.ipv4 }}
 SocksPort {{ tor_SocksPort }}
 OfflineMasterKey 1

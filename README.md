@@ -40,7 +40,9 @@ Managed Node Requirements
 
 - a non-root user with sudo
 - python 2 under /usr/bin/python
-- static public IPv4 address(es)
+- static IPv4 address(es)
+    - we can use multiple public IPs
+    - if you have no public IP we will use a single private IP (and assume NAT)
 
 Supported Operating Systems
 ---------------------------
@@ -134,14 +136,9 @@ All variables mentioned here are optional.
         - instance 1: ORPort 9000, DirPort 9001
         - instance 2: ORPort 9100, DirPort 9101
 
-* `tor_v4ips`
-    - If you want to use only specific IPv4 addresses for Tor.
-    - Makes only sense in host_vars context.
-
-* `tor_maxips`
-    - Limits the amount of IPs we will use to generate instances on a single host.
+* `tor_maxPublicIPs`
+    - Limits the amount of public IPs we will use to generate instances on a single host.
     - Indirectly limits the amount of instances we generate per host.
-    - If tor_ips is set, tor_maxips has no effect.
     - default: 3
 
 * `tor_enableControlSocket`

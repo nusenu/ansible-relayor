@@ -1,5 +1,9 @@
 ---
 
+- name: Use a single private IPv4 address if we have no public IPv4 address
+  include_vars: private_IPv4_only.yml
+  when: tor_v4ips == []
+
 # workaround for this ansible IPv6 filter bug
 # https://github.com/ansible/ansible/issues/14829
 # we simply convert False to empty lists

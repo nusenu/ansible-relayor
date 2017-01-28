@@ -13,7 +13,12 @@ tor_ports:
 # by default to 3, this limits the amount
 # of generated Tor instances to 6 per host.
 # Specifying tor_ips overwrites this limitation.
-tor_maxips: 3
+tor_maxPublicIPs: 3
+
+# We only use a single private IP by default since
+# we can not reliably tell wether we are NATed
+# to more than a single public IP address
+tor_maxPrivateIPs: 1
 
 # we are a non-exit by default
 # setting this to true will enable reduced exit policy
@@ -46,7 +51,8 @@ tor_distribution_release: "{{ ansible_lsb.codename }}"
 
 # filter potentially malicious input from relay-provided IPv4/v6 addresses
 # https://docs.ansible.com/ansible/playbooks_filters_ipaddr.html
-tor_v4ips: "{{ ansible_all_ipv4_addresses[0:tor_maxips] | ipv4('address') }}"
+v4tmp: "{{ ansible_all_ipv4_addresses | ipv4('address') | ipv4('public') }}"
+tor_v4ips: "{{ v4tmp[0:tor_maxPublicIPs] }}"
 ipv4_count: "{{ tor_v4ips | length|int }}"
 
 # we can not use more IPv6 IPs than we have IPv4 IPs so we truncate (but fewer is ok)
