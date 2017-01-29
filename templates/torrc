@@ -49,12 +49,15 @@ ExitPolicy {{ tor_ExitPolicy }}
 {% if item.0.ipv6 != "" and item.0.ipv6 != "False" and tor_IPv6 == True and tor_IPv6Exit == True %}
 IPv6Exit 1
 {% endif %}
-{% if tor_ExitNoticePage == True %}
+{% if tor_ExitNoticePage == True and tor_DirPortFrontPage is not defined %}
 DirPortFrontPage {{ tor_ConfDir }}/tor-exit-notice.html
 {% endif %}
 {% else %}
 ExitRelay 0
 ExitPolicy reject *:*
+{% endif %}
+{% if tor_DirPortFrontPage is defined %}
+DirPortFrontPage {{ tor_DirPortFrontPage }}
 {% endif %}
 
 ShutdownWaitLength {{ tor_shutdownwaitlength }}
