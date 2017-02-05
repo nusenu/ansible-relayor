@@ -69,8 +69,6 @@ All variables mentioned here are optional.
     - default: ~/.tor/offlinemasterkeys
     - Defines the location where on the ansible host relay keys (ed25519 and RSA) are stored.
     - Within that folder ansible will create a subfolder for every tor instance.
-    - see the [documentation](https://github.com/nusenu/ansible-relayor/wiki/How-to-migrate-all-tor-instances-of-one-server-to-another) if you want to migrate instances to a new server
-    - DO NOT manually mangle file and/or foldernames/content in these tor DataDirs
 
 * `tor_signingkeylifetime_days` integer
     - defines the lifetime of Ed25519 signing keys in days
