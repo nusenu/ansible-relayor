@@ -12,11 +12,16 @@
   tags:
    - createdir
 
+# this task also makes sure the datadir/fingerprint file
+# is regenerated/overwritten and matches the actual key
+# which is crucial for the 'Collect fingerprints for MyFamily (LOCAL)' task
 - name: Ensure all relay keys exist (LOCAL)
   local_action: command tor --PublishServerDescriptor 0 --orport auto --list-fingerprint --datadirectory "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}" --Log "err stdout"
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
+  tags:
+   - reconfigure
 
 - name: Generate new Ed25519 signing keys (LOCAL)
   local_action: command tor --keygen --SigningKeyLifetime {{ tor_signingkeylifetime_days}}\ days --datadirectory "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}" --Log "err stdout"
