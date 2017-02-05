@@ -53,8 +53,9 @@
   when: item.stat.exists == True
   with_items: "{{ masterkeycheck.results }}"
 
+# not relying on the datadir/fingerprint file is more robust
 - name: Collect fingerprints for MyFamily (LOCAL)
-  shell: cut  -d" " -f2 {{ tor_offline_masterkey_dir }}/*/fingerprint|sort|xargs|sed -e 's/ /,/g'
+  shell: for key in {{ tor_offline_masterkey_dir }}/*/keys/secret_id_key; do openssl rsa -in $key -outform DER -RSAPublicKey_out 2> /dev/null| openssl sha1 -r; done|cut -d" " -f1|sort|xargs|sed -e 's/ /,/g'
   delegate_to: 127.0.0.1
   run_once: true
   register: family
