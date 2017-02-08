@@ -34,7 +34,7 @@ Control Machine Requirements
 - tor >= 0.2.7
 - python-netaddr package must be installed
 - required commands: openssl, sort, uniq, wc, cut, sed, xargs
-- ansible >= 2.1.3
+- ansible >= 2.1.4
 
 Managed Node Requirements
 
@@ -107,7 +107,7 @@ All variables mentioned here are optional.
     - all instances MUST be present in the csv file
     - default: none
 
-* `tor_ExitRelay` boolean 
+* `tor_ExitRelay` boolean
     - You will want to set this to True if you want to run exit relays.
     - default: False
 
