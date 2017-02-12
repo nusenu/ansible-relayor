@@ -11,12 +11,12 @@ This ansible role does not aim to support tor bridges.
 
 Main benefits for a tor relay operator
 --------------------------------------
-- security: **offline Ed25519 master keys** are generated on the ansible host and are never exposed to the relay (OfflineMasterKey)
+- security: **offline Ed25519 master keys** are generated on the ansible host and are never exposed to the relay ([OfflineMasterKey](https://trac.torproject.org/projects/tor/wiki/doc/TorRelaySecurity/OfflineKeys))
 - **easy Ed25519 signing key renewal** (valid for 30 days by default - configurable)
 - security: compartmentalization: every tor instance is run with a distinct user
 - automatically makes use of IPv6 IPs (if available)
 - **automatic MyFamily management**
-- automatic tor instance generation (two per available IP address by default - configurable)
+- automatic tor instance generation (two by default - configurable)
 - easily choose between exit relay/non-exit relay mode using a single boolean
 - easily restore a relay setup (the ansible host becomes a backup location for all keys out of the box)
 
@@ -38,7 +38,7 @@ Control Machine Requirements
 
 Managed Node Requirements
 
-- a non-root user with sudo
+- a non-root user with sudo permissions
 - python 2 under /usr/bin/python
 - static IPv4 address(es)
     - we can use multiple public IPs
@@ -65,66 +65,16 @@ Role Variables
 --------------
 All variables mentioned here are optional.
 
-* `tor_offline_masterkey_dir`
-    - default: ~/.tor/offlinemasterkeys
-    - Defines the location where on the ansible host relay keys (ed25519 and RSA) are stored.
-    - Within that folder ansible will create a subfolder for every tor instance.
-    - see the [documentation](https://github.com/nusenu/ansible-relayor/wiki/How-to-migrate-all-tor-instances-of-one-server-to-another) if you want to migrate instances to a new server
-    - **note**: do not manually mangle file and/or foldernames/content in these tor DataDirs
-
-* `tor_signingkeylifetime_days` integer
-    - defines the lifetime of Ed25519 signing keys in days
-    - indirectly defines **how often you have to run your ansible playbook to ensure keys do not expire**
-    - lower values (eg. 7) are better from a security point of view but require more frequent playbook runs
-    - default: 30
-
-* `tor_LogLevel`
-    - specify tor's loglevel (minSeverity)
-    - possible values: debug, info, notice, warn and err
-    - logs will go to syslog only (distinct files are not supported)
-    - default: notice
-
-* `tor_ContactInfo`
+* `tor_ContactInfo` string
     - Sets the relay's ContactInfo field.
 
-* `tor_IPv6` boolean
-    - default: True (autodetects if you have IPv6 IPs and enables support for it accordingly)
-    - you can opt-out by setting it to False
-
-* `tor_nickname`
-    - defines the nickname tor instances will use
-    - up to 19 chars long, must contain only the characters [a-zA-Z0-9]
-    - all tor instances on a host will get the same nickname
-    - to use the server's hostname as the nickname set it to {{ ansible_hostname }}
-    - tor_nicknamefile overrules this setting
-    - default: none
-
-* `tor_nicknamefile` /path/to/file.csv
-    - this is a simple comma separated csv file stored on the ansible host specifying nicknames
-    - first column: instance identifier (inventory_hostname-ip_orport)
-    - second column: nickname
-    - one instance per line
-    - all instances MUST be present in the csv file
-    - default: none
-
-* `tor_ExitRelay` boolean 
-    - You will want to set this to True if you want to run exit relays.
-    - default: False
-
-* `tor_ExitNoticePage` boolean
-    - specifies whether we display the default tor exit notice [html page](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) on the DirPort
-    - only relevant if we are an exit
-    - default: True
-
-* `tor_AbuseEmailAddress` email-address
-    - if set this email address is used on the tor exit notice [html page](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) published on the DirPort
-    - you are encouraged to set it if you run an exit
-    - only relevant if you run exits
-
-* `tor_ExitPolicy`
-    - specify your custom exit policy
-    - is only relevant if tor_ExitRelay is True
-    - default: reduced exit policy (https://trac.torproject.org/projects/tor/wiki/doc/ReducedExitPolicy)
+* `tor_signingkeylifetime_days` integer
+    - all tor instances created by relayor run in [OfflineMasterKey](https://www.torproject.org/docs/tor-manual.html.en#OfflineMasterKey) mode
+    - this setting defines the lifetime of Ed25519 signing keys in days
+    - indirectly defines **how often you have to run your ansible playbook to ensure your relay keys do not expire**
+    - **a tor instance in OfflineMasterKey mode automatically stops when his key/cert expires, so this is a crucial setting!**
+    - lower values (eg. 7) are better from a security point of view but require more frequent playbook runs
+    - default: 30
 
 * `tor_ports`
     - This var allows you to
@@ -138,20 +88,73 @@ All variables mentioned here are optional.
         - instance 1: ORPort 9000, DirPort 9001
         - instance 2: ORPort 9100, DirPort 9101
 
-* `tor_maxPublicIPs`
-    - Limits the amount of public IPs we will use to generate instances on a single host.
-    - Indirectly limits the amount of instances we generate per host.
-    - default: 1
+* `tor_offline_masterkey_dir`
+    - default: ~/.tor/offlinemasterkeys
+    - Defines the location where on the ansible host relay keys (ed25519 and RSA) are stored.
+    - Within that folder ansible will create a subfolder for every tor instance.
+    - see the [documentation](https://github.com/nusenu/ansible-relayor/wiki/How-to-migrate-all-tor-instances-of-one-server-to-another) if you want to migrate instances to a new server
+    - **note**: do not manually mangle file and/or foldernames/content in these tor DataDirs
 
-* `tor_enableControlSocket`
-    - will create a ControlSocket file named 'controlsocket' in every instance's datadir
-    - authentication relies on filesystem permissions
-    - default: False
+* `tor_nickname` string
+    - defines the nickname tor instances will use
+    - up to 19 chars long, must contain only the characters [a-zA-Z0-9]
+    - all tor instances on a host will get the same nickname
+    - to use the server's hostname as the nickname set it to {{ ansible_hostname }}
+    - tor_nicknamefile overrules this setting
+    - default: none
+
+* `tor_nicknamefile` /path/to/file.csv
+    - this is a simple comma separated csv file stored on the ansible control machine specifying nicknames
+    - first column: instance identifier (inventory_hostname-ip_orport)
+    - second column: nickname
+    - one instance per line
+    - all instances MUST be present in the csv file
+    - default: not set
 
 * `tor_alpha` boolean
     - Set to True if you want to enable the Tor alpha version repository.
     - Note: This setting does not ensure an installed tor is upgraded to the alpha release.
     - This setting is supported on Debian/Ubuntu only (ignored on other platforms).
+    - default: False
+
+* `tor_ExitRelay` boolean
+    - You will want to set this to True if you want to run exit relays.
+    - default: False
+
+* `tor_ExitNoticePage` boolean
+    - specifies whether we display the default tor exit notice [html page](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) on the DirPort
+    - only relevant if we are an exit
+    - default: True
+
+* `tor_AbuseEmailAddress` email-address
+    - if set this email address is used on the tor exit notice [html page](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) published on the DirPort
+    - you are encouraged to set it if you run an exit
+    - only relevant if `tor_ExitRelay` is True
+    - default: not set
+
+* `tor_ExitPolicy`
+    - specify your custom exit policy
+    - only relevant if `tor_ExitRelay` is True
+    - default: reduced exit policy (https://trac.torproject.org/projects/tor/wiki/doc/ReducedExitPolicy)
+
+* `tor_maxPublicIPs`
+    - Limits the amount of public IPs we will use to generate instances on a single host.
+    - Indirectly limits the amount of instances we generate per host.
+    - default: 1
+
+* `tor_IPv6` boolean
+    - autodetects if you have IPv6 IPs and enables an IPv6 ORPort accordingly
+    - you can opt-out by setting it to False
+    - default: True
+
+* `tor_IPv6Exit` boolean
+    - enables IPv6 exit traffic
+    - only relevant if tor_ExitRelay and tor_IPv6 are True and we have an IPv6 address
+    - default: True (unlike tor's default)
+
+* `tor_enableControlSocket`
+    - will create a ControlSocket file named 'controlsocket' in every instance's datadir
+    - authentication relies on filesystem permissions
     - default: False
 
 * `freebsd_somaxconn`
@@ -211,7 +214,7 @@ This allows to recover from a complete server compromise without losing a relay'
 Every tor instance is run with a distinct system user. A per-instance user has only access to his own (temporary) keys, but not to those of other instances.
 We do not ultimately trust every tor relay we operate (we try to perform input validation when we use relay provided data on the ansible host or another relay).
 
-**Be aware that the host running ansible stores ALL your relay keys (RSA and Ed25519) - apply security measures accordingly.**
+**Be aware that the ansible control machine stores ALL your relay keys (RSA and Ed25519) - apply security measures accordingly.**
 
 
 Reporting Security Bugs
