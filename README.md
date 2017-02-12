@@ -90,7 +90,7 @@ All variables mentioned here are optional.
 
 * `tor_offline_masterkey_dir`
     - default: ~/.tor/offlinemasterkeys
-    - Defines the location where on the ansible host relay keys (ed25519 and RSA) are stored.
+    - Defines the location where on the ansible control machine we store relay keys (Ed25519 and RSA)
     - Within that folder ansible will create a subfolder for every tor instance.
     - see the [documentation](https://github.com/nusenu/ansible-relayor/wiki/How-to-migrate-all-tor-instances-of-one-server-to-another) if you want to migrate instances to a new server
     - **note**: do not manually mangle file and/or foldernames/content in these tor DataDirs
@@ -149,7 +149,7 @@ All variables mentioned here are optional.
 
 * `tor_IPv6Exit` boolean
     - enables IPv6 exit traffic
-    - only relevant if tor_ExitRelay and tor_IPv6 are True and we have an IPv6 address
+    - only relevant if `tor_ExitRelay` and `tor_IPv6` are True and we have an IPv6 address
     - default: True (unlike tor's default)
 
 * `tor_enableControlSocket`
