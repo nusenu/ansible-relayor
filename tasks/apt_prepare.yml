@@ -1,5 +1,14 @@
 ---
 
+- name: Ensure lsb-release requirement is installed
+  become: yes
+  apt:
+    name: lsb-release
+  notify:
+    - re-gather facts
+
+- meta: flush_handlers
+
 - name: Ensure torproject gpg key is installed (A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89)
   become: yes
   apt_key:

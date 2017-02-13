@@ -14,7 +14,6 @@
 
 - name: re-gather facts
   setup:
-  when: ansible_pkg_mgr == 'dnf'
 
 - name: disable default tor instance FreeBSD
   become: yes
