@@ -10,6 +10,7 @@
 
 - name: Gather current kern.ipc.somaxconn setting (FreeBSD)
   shell: "sysctl kern.ipc.somaxconn|cut -d' '  -f2"
+  become: no
   register: currentsomaxconn
 
 - name: Ensure somaxconn setting is reasonable (FreeBSD)
@@ -22,6 +23,7 @@
   when: currentsomaxconn.stdout|int < {{ freebsd_somaxconn }}
 
 - name: Gather current kern.ipc.nmbclusters setting (FreeBSD)
+  become: no
   shell: "sysctl kern.ipc.nmbclusters|cut -d' '  -f2"
   register: currentnmbc
 

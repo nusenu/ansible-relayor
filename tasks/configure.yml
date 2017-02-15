@@ -1,6 +1,7 @@
 ---
 
 - name: Ensure local DataDir folders exist (LOCAL)
+  become: no
   file:
     path: "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}"
     state: directory
@@ -13,12 +14,14 @@
    - createdir
 
 - name: Ensure all relay keys exist (LOCAL)
+  become: no
   local_action: command tor --PublishServerDescriptor 0 --orport auto --list-fingerprint --datadirectory "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}" --Log "err stdout"
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
 
 - name: Generate new Ed25519 signing keys (LOCAL)
+  become: no
   local_action: command tor --keygen --SigningKeyLifetime {{ tor_signingkeylifetime_days}}\ days --datadirectory "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}" --Log "err stdout"
   with_nested:
    - "{{ tor_ips }}"
@@ -27,6 +30,7 @@
    - renewkey
 
 - name: Detect duplicate relay keys across relays (LOCAL)
+  become: no
   shell: openssl sha256 -r {{ tor_offline_masterkey_dir }}/*/keys/secret_id_key {{ tor_offline_masterkey_dir }}/*/keys/ed25519_master_id_secret_key|cut -d' ' -f1|sort|uniq -d|wc -l
   delegate_to: 127.0.0.1
   run_once: true
@@ -38,9 +42,9 @@
   when: dupcount.stdout|int(1) != 0
 
 - name: Detect if Ed25519 master keys are on the relay
+  become: yes
   stat:
     path: "{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/ed25519_master_id_secret_key"
-  become: yes
   register: masterkeycheck
   with_nested:
    - "{{ tor_ips }}"
@@ -55,6 +59,7 @@
 
 # not relying on the datadir/fingerprint file is more robust
 - name: Collect fingerprints for MyFamily (LOCAL)
+  become: no
   shell: for key in {{ tor_offline_masterkey_dir }}/*/keys/secret_id_key; do openssl rsa -in $key -outform DER -RSAPublicKey_out 2> /dev/null| openssl sha1 -r; done|cut -d" " -f1|sort|xargs|sed -e 's/ /,/g'
   delegate_to: 127.0.0.1
   run_once: true
@@ -131,6 +136,7 @@
    - [ 'secret_id_key' ]
 
 - name: Compare local vs. remote RSA key (secret_id_key)
+  become: no
   local_action: shell openssl sha256 -r {{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-"{{ item.0.ipv4 }}_{{ item.1.orport }}"/keys/secret_id_key*|cut -d' ' -f1|uniq -d|wc -l
   with_nested:
    - "{{ tor_ips }}"

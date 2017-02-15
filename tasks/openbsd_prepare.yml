@@ -2,6 +2,7 @@
 
 - name: Gather current system-wide file descriptor limits (OpenBSD)
   shell: "sysctl kern.maxfiles|cut -d= -f2"
+  become: no
   register: currentlimits
 
 - name: Ensure system-wide runtime file descriptor limits are reasonable (OpenBSD)
