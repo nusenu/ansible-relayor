@@ -35,9 +35,9 @@ tor_IPv6: True
 tor_IPv6Exit: True
 
 # minimal kern.ipc.somaxconn value
-freebsd_somaxconn: 1024
+tor_freebsd_somaxconn: 1024
 # minimal kern.ipc.nmbclusters value
-freebsd_nmbclusters: 30000
+tor_freebsd_nmbclusters: 30000
 
 # Attention: we will run chown tor_user on these folders
 tor_DataDir: /var/lib/tor
@@ -51,8 +51,8 @@ tor_distribution_release: "{{ ansible_lsb.codename }}"
 
 # filter potentially malicious input from relay-provided IPv4/v6 addresses
 # https://docs.ansible.com/ansible/playbooks_filters_ipaddr.html
-v4tmp: "{{ ansible_all_ipv4_addresses | ipv4('address') | ipv4('public') }}"
-tor_v4ips: "{{ v4tmp[0:tor_maxPublicIPs] }}"
+tor_v4tmp: "{{ ansible_all_ipv4_addresses | ipv4('address') | ipv4('public') }}"
+tor_v4ips: "{{ tor_v4tmp[0:tor_maxPublicIPs] }}"
 ipv4_count: "{{ tor_v4ips | length|int }}"
 
 # we can not use more IPv6 IPs than we have IPv4 IPs so we truncate (but fewer is ok)

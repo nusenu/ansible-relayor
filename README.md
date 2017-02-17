@@ -158,12 +158,12 @@ All variables mentioned here are optional.
     - authentication relies on filesystem permissions
     - default: False
 
-* `freebsd_somaxconn`
+* `tor_freebsd_somaxconn`
     - configure kern.ipc.somaxconn on FreeBSD
     - by default we increase this value to at least 1024
     - if the value is higher than that we do not touch it
 
-* `freebsd_nmbclusters`
+* `tor_freebsd_nmbclusters`
     - configure kern.ipc.nmbclusters on FreeBSD
     - by default we increase this value to at least 30000
     - if the value is higher than that we do not touch it
