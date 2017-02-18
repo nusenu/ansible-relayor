@@ -53,15 +53,15 @@ tor_distribution_release: "{{ ansible_lsb.codename }}"
 # https://docs.ansible.com/ansible/playbooks_filters_ipaddr.html
 tor_v4tmp: "{{ ansible_all_ipv4_addresses | ipv4('address') | ipv4('public') }}"
 tor_v4ips: "{{ tor_v4tmp[0:tor_maxPublicIPs] }}"
-ipv4_count: "{{ tor_v4ips | length|int }}"
+tor_ipv4_count: "{{ tor_v4ips | length|int }}"
 
 # we can not use more IPv6 IPs than we have IPv4 IPs so we truncate (but fewer is ok)
-v6tmp: "{{ ansible_all_ipv6_addresses|ipv6('public')|ipv6('address') }}"
+tor_v6tmp: "{{ ansible_all_ipv6_addresses|ipv6('public')|ipv6('address') }}"
 
 # the following line is commented out and handled in ip-list.yml until
 # https://github.com/ansible/ansible/issues/14829
 # gets fixed
-#tor_v6ips: "{{ v6tmp[0:ipv4_count|int]|ipv6('address') }}"
+#tor_v6ips: "{{ tor_v6tmp[0:tor_ipv4_count|int]|ipv6('address') }}"
 
 tor_RunAsDaemon: 1
 
