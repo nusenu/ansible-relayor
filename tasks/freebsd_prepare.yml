@@ -11,7 +11,7 @@
 - name: Gather current kern.ipc.somaxconn setting (FreeBSD)
   shell: "sysctl kern.ipc.somaxconn|cut -d' '  -f2"
   become: no
-  register: currentsomaxconn
+  register: tor_currentsomaxconn
 
 - name: Ensure somaxconn setting is reasonable (FreeBSD)
   become: yes
@@ -20,12 +20,12 @@
     value: "{{ tor_freebsd_somaxconn }}"
     reload: no
     sysctl_set: yes
-  when: currentsomaxconn.stdout|int < {{ tor_freebsd_somaxconn }}
+  when: tor_currentsomaxconn.stdout|int < {{ tor_freebsd_somaxconn }}
 
 - name: Gather current kern.ipc.nmbclusters setting (FreeBSD)
   become: no
   shell: "sysctl kern.ipc.nmbclusters|cut -d' '  -f2"
-  register: currentnmbc
+  register: tor_currentnmbc
 
 - name: Ensure nmbclusters setting is reasonable (FreeBSD)
   become: yes
@@ -34,4 +34,4 @@
     value: "{{ tor_freebsd_nmbclusters }}"
     reload: no
     sysctl_set: yes
-  when: currentnmbc.stdout|int < {{ tor_freebsd_nmbclusters }}
+  when: tor_currentnmbc.stdout|int < {{ tor_freebsd_nmbclusters }}
