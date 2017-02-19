@@ -29,8 +29,8 @@
   with_together:
         - "{{ tor_v4ips }}"
         - "{{ tor_v6ips }}"
-  register: ipsinterm
+  register: tor_ipsinterm
 
 - name: setup IP list (2/2)
   set_fact:
-    tor_ips: "{{ ipsinterm.results | map(attribute='ansible_facts.ips')|list}}"
+    tor_ips: "{{ tor_ipsinterm.results | map(attribute='ansible_facts.ips')|list}}"
