@@ -39,7 +39,7 @@ Nickname {{ lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orpo
 Nickname {{ tor_nickname }}
 {% endif %}
 
-MyFamily {{ family.stdout }}
+MyFamily {{ tor_family.stdout }}
 
 
 {% if tor_ExitRelay == True %}
