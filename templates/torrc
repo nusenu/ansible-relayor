@@ -16,7 +16,7 @@ ORPort {{ item.0.ipv4 }}:{{ item.1.orport }}
 {% if item.0.ipv6 != "" and item.0.ipv6 != "False" and tor_IPv6 == True %}
 ORPort [{{item.0.ipv6}}]:{{item.1.orport}}
 {% endif %}
-{% if item.1.dirport != 0 %}
+{% if item.1.dirport != 0 and tor_DirCache == 1 %}
 DirPort {{ item.0.ipv4 }}:{{ item.1.dirport }}
 {% endif %}
 OutboundBindAddress {{ item.0.ipv4 }}
@@ -110,4 +110,6 @@ AccountingStart {{ tor_AccountingStart }}
 {% if tor_MaxMemInQueues is defined %}
 MaxMemInQueues {{ tor_MaxMemInQueues }}
 {% endif %}
+
+DirCache {{ tor_DirCache }}
 # end of torrc
