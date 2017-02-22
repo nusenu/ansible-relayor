@@ -1,0 +1,14 @@
+---
+
+# list of DNS servers taken from
+# https://developers.google.com/speed/public-dns/docs/using
+- name: Check if /etc/resolv.conf contains any Google DNS servers (Exits only)
+  command: 'grep -qE "(^nameserver 8\.8\.8\.8[[:space:]]*$|^nameserver 8\.8\.4\.4[[:space:]]*$|^nameserver 2001:4860:4860::8888[[:space:]]*$|^nameserver 2001:4860:4860::8844[[:space:]]*$|^nameserver 2001:4860:4860:0:0:0:0:8888[[:space:]]*$|^nameserver 2001:4860:4860:0:0:0:0:8888[[:space:]]*$)" /etc/resolv.conf'
+  ignore_errors: yes
+  register: tor_google_dns_check
+
+- name: Abort if Google DNS server is in use (Exits only)
+  assert:
+    that:
+      - "tor_google_dns_check.rc != 0"
+    msg: "You are using Google DNS servers on an exit relay, please choose alternative or a local DNS server. Exiting. Background: https://nymity.ch/dns-traffic-correlation/"

@@ -19,6 +19,9 @@
   tags:
     - always
 
+- include: fail_google_dns.yml
+  when: tor_ExitRelay == True
+
 - name: Set OS specific variables
   include_vars: "os_{{ ansible_os_family }}.yml"
   tags:
