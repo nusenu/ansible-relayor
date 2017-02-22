@@ -107,7 +107,9 @@ AccountingStart {{ tor_AccountingStart }}
 {% if tor_MaxMemInQueues is defined %}
 MaxMemInQueues {{ tor_MaxMemInQueues }}
 {% endif %}
+{% if tor_ShutdownWaitLength is defined %}
+ShutdownWaitLength {{ tor_ShutdownWaitLength }}
+{% endif %}
 
-ShutdownWaitLength {{ tor_shutdownwaitlength }}
 MyFamily {{ tor_family.stdout }}
 # end of torrc
