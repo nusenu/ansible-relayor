@@ -1,36 +1,35 @@
-# ansible generated torrc
+# ansible-relayor generated torrc configuration file
+# Note: manual changes will be OVERWRITTEN on the next ansible-playbook run
+
+OfflineMasterKey 1
 RunAsDaemon {{ tor_RunAsDaemon }}
-{% if ansible_os_family == 'FreeBSD' %}
-PidFile {{ tor_PidDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/pid
-{% endif %}
 Log {{ tor_LogLevel }} syslog
-{% if ansible_os_family != 'OpenBSD' %}
-SyslogIdentityTag {{ item.0.ipv4 }}_{{ item.1.orport }}
-{% endif %}
-
+OutboundBindAddress {{ item.0.ipv4 }}
+SocksPort {{ tor_SocksPort }}
 User _tor-{{ item.0.ipv4 }}_{{ item.1.orport }}
-
 DataDirectory {{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}
-
 ORPort {{ item.0.ipv4 }}:{{ item.1.orport }}
-{% if item.0.ipv6 != "" and item.0.ipv6 != "False" and tor_IPv6 == True %}
-ORPort [{{item.0.ipv6}}]:{{item.1.orport}}
-{% endif %}
+
 {% if item.1.dirport != 0 %}
 DirPort {{ item.0.ipv4 }}:{{ item.1.dirport }}
 {% endif %}
-OutboundBindAddress {{ item.0.ipv4 }}
-SocksPort {{ tor_SocksPort }}
-OfflineMasterKey 1
+
+{% if item.0.ipv6 != "" and item.0.ipv6 != "False" and tor_IPv6 == True %}
+ORPort [{{item.0.ipv6}}]:{{item.1.orport}}
+{% endif %}
+
+{% if ansible_os_family != 'OpenBSD' %}
+SyslogIdentityTag {{ item.0.ipv4 }}_{{ item.1.orport }}
+{% endif %}
+{% if ansible_os_family == 'FreeBSD' %}
+PidFile {{ tor_PidDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/pid
+{% endif %}
+
 {% if tor_enableControlSocket == True %}
 ControlSocket {{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/controlsocket
 {% else %}
 ControlSocket 0
 CookieAuthentication 0
-{% endif %}
-
-{% if tor_ContactInfo is defined %}
-ContactInfo {{ tor_ContactInfo }}
 {% endif %}
 
 {% if tor_nicknamefile is defined %}
@@ -39,16 +38,13 @@ Nickname {{ lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orpo
 Nickname {{ tor_nickname }}
 {% endif %}
 
-MyFamily {{ tor_family.stdout }}
-
-
 {% if tor_ExitRelay == True %}
 # we are an exit relay!
 ExitRelay 1
-ExitPolicy {{ tor_ExitPolicy }}
 {% if item.0.ipv6 != "" and item.0.ipv6 != "False" and tor_IPv6 == True and tor_IPv6Exit == True %}
 IPv6Exit 1
 {% endif %}
+ExitPolicy {{ tor_ExitPolicy }}
 {% if tor_ExitNoticePage == True and tor_DirPortFrontPage is not defined %}
 DirPortFrontPage {{ tor_ConfDir }}/tor-exit-notice.html
 {% endif %}
@@ -56,12 +52,13 @@ DirPortFrontPage {{ tor_ConfDir }}/tor-exit-notice.html
 ExitRelay 0
 ExitPolicy reject *:*
 {% endif %}
+
 {% if tor_DirPortFrontPage is defined %}
 DirPortFrontPage {{ tor_DirPortFrontPage }}
 {% endif %}
-
-ShutdownWaitLength {{ tor_shutdownwaitlength }}
-
+{% if tor_ContactInfo is defined %}
+ContactInfo {{ tor_ContactInfo }}
+{% endif %}
 {% if tor_PublishServerDescriptor is defined %}
 PublishServerDescriptor {{ tor_PublishServerDescriptor }}
 {% endif %}
@@ -110,4 +107,7 @@ AccountingStart {{ tor_AccountingStart }}
 {% if tor_MaxMemInQueues is defined %}
 MaxMemInQueues {{ tor_MaxMemInQueues }}
 {% endif %}
+
+ShutdownWaitLength {{ tor_shutdownwaitlength }}
+MyFamily {{ tor_family.stdout }}
 # end of torrc
