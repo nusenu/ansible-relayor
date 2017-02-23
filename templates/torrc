@@ -33,9 +33,9 @@ CookieAuthentication 0
 {% endif %}
 
 {% if tor_nicknamefile is defined %}
-Nickname {{ lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orport~' file='~tor_nicknamefile~' delimiter=,')}}
+Nickname {{ lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orport~' file='~tor_nicknamefile~' delimiter=,') |regex_replace('[^a-zA-Z0-9]', '') |truncate(19, True, '')}}
 {% elif tor_nickname is defined %}
-Nickname {{ tor_nickname }}
+Nickname {{ tor_nickname |regex_replace('[^a-zA-Z0-9]', '') |truncate(19, True, '') }}
 {% endif %}
 
 {% if tor_ExitRelay == True %}

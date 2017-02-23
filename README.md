@@ -99,9 +99,9 @@ All variables mentioned here are optional.
 
 * `tor_nickname` string
     - defines the nickname tor instances will use
-    - up to 19 chars long, must contain only the characters [a-zA-Z0-9]
     - all tor instances on a host will get the same nickname
     - to use the server's hostname as the nickname set it to {{ ansible_hostname }}
+    - non-alphanum chars are automatically removed and nicknames longer than 19 characters are truncated to meet tor's nickname requirements
     - tor_nicknamefile overrules this setting
     - default: none
 
@@ -111,6 +111,7 @@ All variables mentioned here are optional.
     - second column: nickname
     - one instance per line
     - all instances MUST be present in the csv file
+    - non-alphanum chars are automatically removed and nicknames longer than 19 characters are truncated to meet tor's nickname requirements
     - default: not set
 
 * `tor_alpha` boolean
