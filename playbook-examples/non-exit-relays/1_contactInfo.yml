@@ -1,0 +1,7 @@
+---
+
+- hosts: relays
+  vars:
+    #tor_ContactInfo: relayor-example@example.com
+  roles:
+   - nusenu.relayor

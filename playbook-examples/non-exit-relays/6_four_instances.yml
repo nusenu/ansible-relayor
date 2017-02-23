@@ -1,0 +1,10 @@
+---
+
+- hosts: relays
+  vars:
+    #tor_ContactInfo: relayor-example@example.com
+    tor_signingkeylifetime_days: 90
+    tor_nickname: "{{ ansible_hostname }}"
+    tor_maxPublicIPs: 2
+  roles:
+   - nusenu.relayor

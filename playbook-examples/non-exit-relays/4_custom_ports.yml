@@ -1,0 +1,12 @@
+---
+
+- hosts: relays
+  vars:
+    #tor_ContactInfo: relayor-example@example.com
+    tor_signingkeylifetime_days: 90
+    tor_nickname: "{{ ansible_hostname }}"
+    tor_ports:
+        - { orport: 443, dirport: 80}
+        - { orport: 444, dirport: 8080}
+  roles:
+   - nusenu.relayor
