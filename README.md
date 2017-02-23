@@ -53,7 +53,7 @@ Supported Operating Systems
 
 - Debian 8 / Debian Testing
 - CentOS 7 (incl. SELinux support)
-- OpenBSD 6.0
+- (OpenBSD 6.0)
 - FreeBSD 10.3, 11.0
 - Ubuntu 16.04
 - Fedora 25
@@ -61,7 +61,6 @@ Supported Operating Systems
 Supported Tor Releases
 -----------------------
 - tor >= 0.2.8.x
-- on OpenBSD: tor >= 0.2.7.x
 - on FreeBSD: >= 0.2.8.9**_2**
 
 
