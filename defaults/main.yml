@@ -5,13 +5,15 @@ tor_packages: tor
 
 # The tor_ports dictionary defines how many instances are created per
 # available IP address and what ports are used.
+# min entries: 1
+# max entries: 2
 tor_ports:
   - { orport: 9000, dirport: 9001}
   - { orport: 9100, dirport: 9101}
 
 # Limit the amount of used IP addresses 
-# by default to 3, this limits the amount
-# of generated Tor instances to 6 per host.
+# by default to 1, this limits the amount
+# of generated Tor instances to 2 per host.
 # Specifying tor_ips overwrites this limitation.
 tor_maxPublicIPs: 1
 
@@ -29,11 +31,16 @@ tor_ExitRelay: False
 # deploy default tor-exit-notice.html if we are an exit
 tor_ExitNoticePage: True
 
+# automatically detect IPv6 addresses and enable IPv6 ORPort
 tor_IPv6: True
 
-# the following var only matters if tor_ExitRelay is True
+# enable IPv6 exiting
+# the following var only matters if
+# tor_ExitRelay and tor_IPv6 is True
 tor_IPv6Exit: True
 
+# on FreeBSD we increase the following kernel
+# settings if they are lower than that.
 # minimal kern.ipc.somaxconn value
 tor_freebsd_somaxconn: 1024
 # minimal kern.ipc.nmbclusters value
@@ -42,11 +49,18 @@ tor_freebsd_nmbclusters: 30000
 # Attention: we will run chown tor_user on these folders
 tor_DataDir: /var/lib/tor
 tor_PidDir: /var/run/tor
+
+# specify tor's loglevel
 tor_LogLevel: notice
 
+# Where do you want to store key material on the
+# ansible control machine?
 tor_offline_masterkey_dir: ~/.tor/offlinemasterkeys
+
+# How long should online keys/certs be valid before expiring?
 tor_signingkeylifetime_days: 30
 
+# this var is used for apt sources.list entries
 tor_distribution_release: "{{ ansible_lsb.codename }}"
 
 # filter potentially malicious input from relay-provided IPv4/v6 addresses
