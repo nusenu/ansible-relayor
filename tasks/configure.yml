@@ -105,7 +105,7 @@
     state: directory
     owner: "_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
     group: "_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
-    mode: 0700
+    mode: u=rwX,g=,o=
     recurse: yes
   with_nested:
    - "{{ tor_ips }}"
@@ -117,7 +117,7 @@
     src: "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}"
     dest: "{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}"
     owner: "_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
-    mode: 0700
+    mode: 0600
     force: no
   with_nested:
    - "{{ tor_ips }}"
@@ -157,7 +157,7 @@
     src: "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}"
     dest: "{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}"
     owner: "_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
-    mode: 0700
+    mode: 0600
     setype: tor_var_lib_t
   with_nested:
    - "{{ tor_ips }}"
@@ -174,7 +174,7 @@
     state: directory
     owner: "_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
     group: "_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
-    mode: 0700
+    mode: u=rwX,g=,o=
     recurse: yes
     setype: tor_var_lib_t
   with_nested:
