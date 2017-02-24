@@ -11,14 +11,17 @@ This ansible role does not aim to support tor bridges.
 
 Main benefits for a tor relay operator
 --------------------------------------
-- security: **offline Ed25519 master keys** are generated on the ansible host and are never exposed to the relay ([OfflineMasterKey](https://trac.torproject.org/projects/tor/wiki/doc/TorRelaySecurity/OfflineKeys))
+- **automation** - no more manual setup tasks
+- security: **[offline Ed25519 master keys](https://trac.torproject.org/projects/tor/wiki/doc/TorRelaySecurity/OfflineKeys)** are generated on the ansible host and are never exposed to the relay
 - **easy Ed25519 signing key renewal** (valid for 30 days by default - configurable)
 - security: compartmentalization: every tor instance is run with a distinct user
 - automatically makes use of IPv6 IPs (if available)
-- **automatic MyFamily management**
 - automatic tor instance generation (two by default - configurable)
-- easily choose between exit relay/non-exit relay mode using a single boolean
+- easily choose between alpha/non-alpha releases (Debian/Ubuntu only)
 - easily restore a relay setup (the ansible host becomes a backup location for all keys out of the box)
+- easily choose between exit relay/non-exit relay mode using a single boolean
+- automatic deployment of a [tor exit notice html](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) page via tor's DirPort (on exits only)
+- **automatic MyFamily management**
 
 Installation
 ------------
