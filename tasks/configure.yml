@@ -31,7 +31,7 @@
 
 - name: Detect duplicate relay keys across relays (LOCAL)
   become: no
-  shell: openssl sha256 -r {{ tor_offline_masterkey_dir }}/*/keys/secret_id_key {{ tor_offline_masterkey_dir }}/*/keys/ed25519_master_id_secret_key|cut -d' ' -f1|sort|uniq -d|wc -l
+  shell: openssl sha256 -r {{ tor_offline_masterkey_dir }}/*/keys/secret_id_key {{ tor_offline_masterkey_dir }}/*/keys/ed25519_master_id_secret_key|cut -d' ' -f1|sort|uniq -d|wc -l|xargs
   delegate_to: 127.0.0.1
   run_once: true
   register: tor_dupkeycount
@@ -137,7 +137,7 @@
 
 - name: Compare local vs. remote RSA key (secret_id_key)
   become: no
-  local_action: shell openssl sha256 -r {{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-"{{ item.0.ipv4 }}_{{ item.1.orport }}"/keys/secret_id_key*|cut -d' ' -f1|uniq -d|wc -l
+  local_action: shell openssl sha256 -r {{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-"{{ item.0.ipv4 }}_{{ item.1.orport }}"/keys/secret_id_key*|cut -d' ' -f1|uniq -d|wc -l|xargs
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
