@@ -7,3 +7,4 @@ tor_RunAsDaemon: 0
 tor_packages:
     - deb.torproject.org-keyring
     - tor
+    - tor-geoipdb
