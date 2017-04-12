@@ -18,9 +18,7 @@ DirPort {{ item.0.ipv4 }}:{{ item.1.dirport }}
 ORPort [{{item.0.ipv6}}]:{{item.1.orport}}
 {% endif %}
 
-{% if ansible_os_family != 'OpenBSD' %}
 SyslogIdentityTag {{ item.0.ipv4 }}_{{ item.1.orport }}
-{% endif %}
 {% if ansible_os_family == 'FreeBSD' %}
 PidFile {{ tor_PidDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/pid
 {% endif %}
