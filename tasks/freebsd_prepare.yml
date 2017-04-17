@@ -20,7 +20,7 @@
     value: "{{ tor_freebsd_somaxconn }}"
     reload: no
     sysctl_set: yes
-  when: tor_currentsomaxconn.stdout|int < {{ tor_freebsd_somaxconn }}
+  when: tor_currentsomaxconn.stdout|int < tor_freebsd_somaxconn
 
 - name: Gather current kern.ipc.nmbclusters setting (FreeBSD)
   become: no
@@ -34,4 +34,4 @@
     value: "{{ tor_freebsd_nmbclusters }}"
     reload: no
     sysctl_set: yes
-  when: tor_currentnmbc.stdout|int < {{ tor_freebsd_nmbclusters }}
+  when: tor_currentnmbc.stdout|int < tor_freebsd_nmbclusters
