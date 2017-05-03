@@ -9,13 +9,21 @@ SocksPort {{ tor_SocksPort }}
 User _tor-{{ item.0.ipv4 }}_{{ item.1.orport }}
 DataDirectory {{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}
 ORPort {{ item.0.ipv4 }}:{{ item.1.orport }}
+{% if item.0.ipv6 != "" and item.0.ipv6 != "False" and tor_IPv6 == True %}
+ORPort [{{item.0.ipv6}}]:{{item.1.orport}}
+{% endif %}
+
+{% if tor_dedicatedExitIP == True and tor_ExitRelay == True %}
+{% if tor_available_public_ipv4s|length > tor_maxPublicIPs %}
+OutboundBindAddressExit {{ tor_available_public_ipv4s[tor_maxPublicIPs] }}
+{% endif %}
+{% if tor_available_public_ipv6s|length > tor_maxPublicIPs and tor_IPv6 == True and tor_IPv6Exit == True %}
+OutboundBindAddressExit {{ tor_available_public_ipv6s[tor_maxPublicIPs] }}
+{% endif %}
+{% endif %}
 
 {% if item.1.dirport != 0 %}
 DirPort {{ item.0.ipv4 }}:{{ item.1.dirport }}
-{% endif %}
-
-{% if item.0.ipv6 != "" and item.0.ipv6 != "False" and tor_IPv6 == True %}
-ORPort [{{item.0.ipv6}}]:{{item.1.orport}}
 {% endif %}
 
 SyslogIdentityTag {{ item.0.ipv4 }}_{{ item.1.orport }}

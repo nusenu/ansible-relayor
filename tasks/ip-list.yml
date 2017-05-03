@@ -9,12 +9,12 @@
 # we simply convert False to empty lists
 - name: workaround for ansible bug 14829 (1/3)
   set_fact:
-    tor_v6tmp: []
-  when: tor_v6tmp == False
+    tor_available_public_ipv6s: []
+  when: tor_available_public_ipv6s == False
 
 - name: workaround for ansible bug 14829 (2/3)
   set_fact:
-    tor_v6ips: "{{ tor_v6tmp[0:tor_ipv4_count|int]|ipv6('address') }}"
+    tor_v6ips: "{{ tor_available_public_ipv6s[0:tor_ipv4_count|int]|ipv6('address') }}"
 
 - name: workaround for ansible bug 14829 (3/3)
   set_fact:

@@ -27,6 +27,18 @@
   tags:
     - always
 
+- name: Ensure preconditions for tor_dedicatedExitIP are met (number of public IPv4 or IPv6 addresses must be bigger than tor_maxPublicIPs)
+  assert:
+    that:
+      - "tor_available_public_ipv4s|length > tor_maxPublicIPs or tor_available_public_ipv6s|length > tor_maxPublicIPs"
+      - "tor_ExitRelay == True"
+      - "tor_IPv6Exit == True"
+      - "tor_IPv6 == True"
+    msg: "You have to few public IPv4 or IPv6 addresses for the tor_dedicatedExitIP feature (or you did not enable exiting)"
+  when: tor_dedicatedExitIP == True
+  tags:
+    - always
+
 - include: fail_google_dns.yml
   when: tor_ExitRelay == True
 
