@@ -63,6 +63,7 @@ Supported Tor Releases
 -----------------------
 - tor >= 0.2.8.x
 - on FreeBSD: >= 0.2.8.9**_2**
+- some specific but optional features might require newer tor versions (i.e. `tor_dedicatedExitIP`)
 
 
 Role Variables
@@ -161,11 +162,12 @@ All variables mentioned here are optional.
 * `tor_dedicatedExitIP` boolean
     - this feature **requires** tor version >= v0.3.0.3-alpha
     - only relevant for exit relays
-    - automatically configures the OutboundBindAddressExit tor feature (does not require you to manually specify the IP address to use)
+    - automatically configures the [OutboundBindAddressExit](https://www.torproject.org/docs/tor-manual.html.en#OutboundBindAddressExit) tor feature (does not require you to manually specify the IP address to use)
     - this means tor will establish outbound exit connections on a separate IP(v4/v6) address (different from the IP announced in the consensus)
-    - to make use of this feature you need more public IPv4 or IPv6 addresses than tor_maxPublicIPs
+    - to make use of this feature you need more public IPv4 or IPv6 addresses than `tor_maxPublicIPs`
     - if this condition is not met we will abort
-    - all instances on a host will use the same OutboundBindAddressExit address
+    - all instances on a host will use the same `OutboundBindAddressExit` address
+    - manually specifying the IP address used by `OutboundBindAddressExit` is not supported
     - default: False
 
 * `tor_enableControlSocket`
