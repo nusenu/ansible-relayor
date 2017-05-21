@@ -30,6 +30,8 @@ This ansible role is available on galaxy https://galaxy.ansible.com/nusenu/relay
 
 ```ansible-galaxy install nusenu.relayor```
 
+An introduction to relayor can be found **[here](https://medium.com/@nusenu/deploying-tor-relays-with-ansible-6612593fa34d)**.
+
 Requirements
 ------------
 Control Machine Requirements
