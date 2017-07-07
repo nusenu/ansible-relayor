@@ -1,5 +1,5 @@
 # ansible-relayor generated torrc configuration file
-# Note: manual changes will be OVERWRITTEN on the next ansible-playbook run
+# {{ ansible_managed }}
 
 OfflineMasterKey 1
 RunAsDaemon {{ tor_RunAsDaemon }}
