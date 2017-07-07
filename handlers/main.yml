@@ -1,7 +1,12 @@
 ---
+
 - name: stop-and-mask default tor instance
   become: yes
-  shell: systemctl stop tor@default && systemctl mask tor@default
+  systemd:
+    name: 'tor@default'
+    state: 'stopped'
+    enabled: False
+    masked: True
   when: ansible_pkg_mgr == 'apt'
 
 - name: restart apparmor
