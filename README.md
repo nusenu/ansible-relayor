@@ -53,7 +53,7 @@ Managed Node Requirements
 Supported Operating Systems
 ---------------------------
 
-- Debian 8 / Debian Testing
+- Debian 8, 9 and Debian Testing
 - CentOS 7 (incl. SELinux support)
 - OpenBSD 6.1
 - FreeBSD 10.3, 11.0
