@@ -1,5 +1,10 @@
 ---
 
+- name: Choose tor alpha version package (FreeBSD)
+  set_fact:
+    tor_packages: tor-devel
+  when: tor_alpha == True
+
 - name: Ensure sequential IP IDs are avoided (FreeBSD)
   become: yes
   sysctl:

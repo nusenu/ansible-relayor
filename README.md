@@ -18,7 +18,7 @@ Main benefits for a tor relay operator
 - security: compartmentalization: every tor instance is run with a distinct user
 - automatically makes use of IPv6 IPs (if available)
 - automatic tor instance generation (two by default - configurable)
-- easily choose between alpha/non-alpha releases (Debian/Ubuntu only)
+- easily choose between alpha/non-alpha releases (Debian/Ubuntu/FreeBSD only)
 - easily restore a relay setup (the ansible host becomes a backup location for all keys out of the box)
 - easily choose between exit relay/non-exit relay mode using a single boolean
 - automatic deployment of a [tor exit notice html](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) page via tor's DirPort (on exits only)
@@ -120,9 +120,9 @@ All variables mentioned here are optional.
     - default: not set
 
 * `tor_alpha` boolean
-    - Set to True if you want to enable the Tor alpha version repository.
+    - Set to True if you want to use Tor alpha version releases.
     - Note: This setting does not ensure an installed tor is upgraded to the alpha release.
-    - This setting is supported on Debian/Ubuntu only (ignored on other platforms).
+    - This setting is supported on Debian/Ubuntu/FreeBSD only (ignored on other platforms).
     - default: False
 
 * `tor_ExitRelay` boolean
