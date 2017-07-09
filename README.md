@@ -18,6 +18,7 @@ Main benefits for a tor relay operator
 - security: compartmentalization: every tor instance is run with a distinct user
 - automatically makes use of IPv6 IPs (if available)
 - automatic tor instance generation (two by default - configurable)
+- enables tor's Sandbox feature by default on Debian-based systems
 - easily choose between alpha/non-alpha releases (Debian/Ubuntu/FreeBSD only)
 - easily restore a relay setup (the ansible host becomes a backup location for all keys out of the box)
 - easily choose between exit relay/non-exit relay mode using a single boolean

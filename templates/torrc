@@ -45,6 +45,11 @@ Nickname {{ lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orpo
 Nickname {{ tor_nickname |regex_replace('[^a-zA-Z0-9]', '') |truncate(19, True, '') }}
 {% endif %}
 
+{% if tor_Sandbox is defined %}
+Sandbox {{ tor_Sandbox }}
+{% elif ansible_os_family == 'Debian' %}
+Sandbox 1
+{% endif %}
 {% if tor_ExitRelay == True %}
 # we are an exit relay!
 ExitRelay 1
@@ -158,9 +163,6 @@ DisableAllSwap {{ tor_DisableAllSwap }}
 {% endif %}
 {% if tor_DisableDebuggerAttachment is defined %}
 DisableDebuggerAttachment {{ tor_DisableDebuggerAttachment }}
-{% endif %}
-{% if tor_Sandbox is defined %}
-Sandbox {{ tor_Sandbox }}
 {% endif %}
 {% if tor_KeepalivePeriod is defined %}
 KeepalivePeriod {{ tor_KeepalivePeriod }}
