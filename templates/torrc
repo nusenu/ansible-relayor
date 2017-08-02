@@ -47,7 +47,7 @@ Nickname {{ tor_nickname |regex_replace('[^a-zA-Z0-9]', '') |truncate(19, True, 
 
 {% if tor_Sandbox is defined %}
 Sandbox {{ tor_Sandbox }}
-{% elif ansible_os_family == 'Debian' %}
+{% elif ansible_os_family == 'Debian' and ansible_kernel|version_compare('3.5', '>=') %}
 Sandbox 1
 {% endif %}
 {% if tor_ExitRelay == True %}
