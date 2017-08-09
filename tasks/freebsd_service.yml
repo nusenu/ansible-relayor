@@ -17,7 +17,7 @@
 
 # this task is a workaround, because 'service tor status'
 # fails if this line is not present (which in turn fails the ansible service module)
-- name: ensure tor instance FreeBSD
+- name: Ensure tor is enabled in /etc/rc.conf (FreeBSD)
   become: yes
   lineinfile:
     dest: /etc/rc.conf
