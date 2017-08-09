@@ -9,6 +9,7 @@
   delegate_to: 127.0.0.1
   tags:
     - always
+    - ansible-version-check
 
 - name: Check for local requirements
   shell: command -V tor && command -V openssl && command -V sort && command -V uniq && command -V wc && command -V cut && command -V xargs && command -V sed
