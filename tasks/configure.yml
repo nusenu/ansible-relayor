@@ -198,7 +198,7 @@
     mode: 0444
   when: tor_ExitRelay == True and tor_ExitNoticePage == True
 
-- name: Generating torrc file(s)
+- name: Ensure torrc configuration file(s) are in place
   become: yes
   template:
     src: torrc
