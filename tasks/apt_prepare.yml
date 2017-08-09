@@ -40,7 +40,7 @@
 
 # Background:
 # https://github.com/nusenu/ansible-relayor/issues/72
-- name: Ensure systemd generator folder exists (Debian Testing and Ubuntu)
+- name: Ensure systemd generator folder exists (Debian/Ubuntu except Debian 8)
   become: yes
   file:
     path: /etc/systemd/system-generators
