@@ -19,7 +19,7 @@ Main benefits for a tor relay operator
 - automatically makes use of IPv6 IPs (if available)
 - automatic tor instance generation (two by default - configurable)
 - enables tor's Sandbox feature by default on Debian-based systems
-- easily choose between alpha/non-alpha releases (Debian/Ubuntu/FreeBSD only)
+- easily choose between alpha/non-alpha releases (Debian/Ubuntu/FreeBSD/HardenedBSD only)
 - easily restore a relay setup (the ansible host becomes a backup location for all keys out of the box)
 - easily choose between exit relay/non-exit relay mode using a single boolean
 - automatic deployment of a [tor exit notice html](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) page via tor's DirPort (on exits only)
@@ -58,13 +58,13 @@ Supported Operating Systems
 - CentOS 7 (incl. SELinux support)
 - OpenBSD 6.1
 - FreeBSD 10.3, 11.1
+- HardenedBSD 11.1
 - Ubuntu 16.04
 - Fedora 25
 
 Supported Tor Releases
 -----------------------
 - tor >= 0.2.8.x
-- on FreeBSD: >= 0.2.8.9**_2**
 - some specific but optional features might require newer tor versions (i.e. `tor_dedicatedExitIP`)
 
 
@@ -123,7 +123,7 @@ All variables mentioned here are optional.
 * `tor_alpha` boolean
     - Set to True if you want to use Tor alpha version releases.
     - Note: This setting does not ensure an installed tor is upgraded to the alpha release.
-    - This setting is supported on Debian/Ubuntu/FreeBSD only (ignored on other platforms).
+    - This setting is supported on Debian/Ubuntu/FreeBSD/HardenedBSD only (ignored on other platforms).
     - default: False
 
 * `tor_ExitRelay` boolean
@@ -178,12 +178,12 @@ All variables mentioned here are optional.
     - default: False
 
 * `tor_freebsd_somaxconn`
-    - configure kern.ipc.somaxconn on FreeBSD
+    - configure kern.ipc.somaxconn on FreeBSD/HardenedBSD
     - by default we increase this value to at least 1024
     - if the value is higher than that we do not touch it
 
 * `tor_freebsd_nmbclusters`
-    - configure kern.ipc.nmbclusters on FreeBSD
+    - configure kern.ipc.nmbclusters on FreeBSD/HardenedBSD
     - by default we increase this value to at least 30000
     - if the value is higher than that we do not touch it
 
