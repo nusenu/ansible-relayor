@@ -39,7 +39,8 @@ Control Machine Requirements
 - do **not** run this role with `become: yes`
 - tor >= 0.2.8
 - python-netaddr package must be installed
-- required commands: openssl, sort, uniq, wc, cut, sed, xargs
+- required commands: sort, uniq, wc, cut, sed, xargs
+- openssl >= 1.0.0
 - ansible >= 2.3.1
 
 Managed Node Requirements
