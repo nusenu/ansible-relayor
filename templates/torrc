@@ -45,7 +45,7 @@ Nickname {{ lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orpo
 Nickname {{ tor_nickname |regex_replace('[^a-zA-Z0-9]', '') |truncate(19, True, '') }}
 {% endif %}
 
-{% if tor_Sandbox is defined %}
+{% if tor_Sandbox is defined and ansible_system == 'Linux' %}
 Sandbox {{ tor_Sandbox }}
 {% elif ansible_os_family == 'Debian' and ansible_kernel|version_compare('3.5', '>=') %}
 Sandbox 1

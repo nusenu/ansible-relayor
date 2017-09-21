@@ -121,6 +121,12 @@ All variables mentioned here are optional.
     - non-alphanum chars are automatically removed and nicknames longer than 19 characters are truncated to meet tor's nickname requirements
     - default: not set
 
+* `tor_Sandbox`
+    - enables (1) or disables (0) tor's syscall sandbox feature
+    - this setting is ignored on non-Linux systems
+    - unlike upstream tor we enable this by default on Debian-based systems which have a Linux kernel (>=3.5) that supports it.
+    - default on Debian-based systems: 1 (others: 0)
+
 * `tor_alpha` boolean
     - Set to True if you want to use Tor alpha version releases.
     - Note: This setting does not ensure an installed tor is upgraded to the alpha release.
