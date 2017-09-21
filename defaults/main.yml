@@ -95,7 +95,7 @@ tor_enableControlSocket: False
 tor_alpha: False
 
 # known problem: requires manual adjustment with every major tor release
-tor_alpha_version: 0.3.1
+tor_alpha_version: 0.3.2
 
 # Default exit policy if the user wants to be an exit but doesn't specify one
 # taken from https://trac.torproject.org/projects/tor/wiki/doc/ReducedExitPolicy
