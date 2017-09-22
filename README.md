@@ -56,12 +56,12 @@ Supported Operating Systems
 ---------------------------
 
 - Debian 8, 9 and Debian Testing
-- CentOS 7 (incl. SELinux support)
 - OpenBSD 6.1
 - FreeBSD 10.3, 11.1
 - HardenedBSD 11.1
 - Ubuntu 16.04
-- Fedora 25
+- CentOS 7 (**unmaintained** tor package)
+- Fedora 26 (**unmaintained** tor package)
 
 Supported Tor Releases
 -----------------------
