@@ -60,8 +60,8 @@ Supported Operating Systems
 - FreeBSD 10.3, 11.1
 - HardenedBSD 11.1
 - Ubuntu 16.04
-- CentOS 7 (**unmaintained** tor package)
-- Fedora 26 (**unmaintained** tor package)
+- CentOS 7
+- Fedora 26
 
 Supported Tor Releases
 -----------------------
