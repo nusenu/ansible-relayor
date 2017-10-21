@@ -3,6 +3,8 @@ ansible-relayor
 This is an ansible role for tor relay operators.
 An introduction to relayor can be found **[here](https://medium.com/@nusenu/deploying-tor-relays-with-ansible-6612593fa34d)**.
 
+Email Support: relayor-support AT riseup.net
+
 The main focus of this role is to automate as many steps as possible for a tor relay
 operator including key management (OfflineMasterKey).
 Deploying a new tor server is as easy as adding a new host to the inventory,
