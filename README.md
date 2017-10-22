@@ -10,6 +10,9 @@ operator including key management (OfflineMasterKey).
 Deploying a new tor server is as easy as adding a new host to the inventory,
 no further manual configuration is required.
 
+Keeping the tor package updated (an important task of running a relay) is not in scope of this ansible role.
+We recommend you enable automatic updates to keep your relay well maintained if your OS supports that.
+
 This ansible role does not aim to support tor bridges.
 
 Main benefits for a tor relay operator
