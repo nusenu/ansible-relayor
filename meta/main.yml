@@ -29,5 +29,5 @@ galaxy_info:
     - ipv6
     - anonymity
     - networking
-  min_ansible_version: 2.3.1
+  min_ansible_version: 2.4.1
 dependencies: []

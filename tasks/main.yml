@@ -3,8 +3,8 @@
 - name: Check for min. ansible version requirement
   assert:
     that:
-      - "{{ ansible_version.full | version_compare('2.3.1.0', '>=') }}"
-    msg: "Your ansible version contains known vulnerabilities (CVE-2017-7481), please update to v2.3.1 or newer! Exiting."
+      - "{{ ansible_version.full | version_compare('2.4.1.0', '>=') }}"
+    msg: "Your ansible version is too old, please upgrade to v2.4.1 or newer. Exiting."
   run_once: true
   delegate_to: 127.0.0.1
   tags:
