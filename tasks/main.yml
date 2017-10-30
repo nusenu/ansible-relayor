@@ -40,7 +40,8 @@
   tags:
     - always
 
-- include: fail_google_dns.yml
+- name: Check DNS servers (Exit only)
+  include_tasks: fail_google_dns.yml
   when: tor_ExitRelay == True
 
 - name: Set OS specific variables
@@ -48,29 +49,33 @@
   tags:
    - always
 
-- include: ip-list.yml
+- import_tasks: ip-list.yml
   tags:
     - always
 
-- include: apt_prepare.yml
+- name: Preparation for Debian-based systems
+  include_tasks: apt_prepare.yml
   when: ansible_pkg_mgr == 'apt'
   tags:
    - debian
    - install
 
-- include: rpm_prepare.yml
+- name: Preparation for RPM based systems
+  include_tasks: rpm_prepare.yml
   when: ansible_os_family == 'RedHat'
   tags:
    - centos
    - fedora
    - install
 
-- include: openbsd_prepare.yml
+- name: Preparation for OpenBSD systems
+  include_tasks: openbsd_prepare.yml
   when: ansible_system == 'OpenBSD'
   tags:
    - openbsd
 
-- include: freebsd_prepare.yml
+- name: Preparation for FreeBSD based systems
+  include_tasks: freebsd_prepare.yml
   when: ansible_system == 'FreeBSD'
   tags:
    - freebsd
@@ -97,7 +102,7 @@
 
 - meta: flush_handlers
 
-- include: configure.yml
+- import_tasks: configure.yml
   tags:
    - debian
    - centos
@@ -105,19 +110,22 @@
    - openbsd
    - freebsd
 
-- include: linux_service.yml
+- name: Linux service configuration
+  include_tasks: linux_service.yml
   when: ansible_system == 'Linux'
   tags:
    - debian
    - centos
    - fedora
 
-- include: openbsd_service.yml
+- name: OpenBSD service configuration
+  include_tasks: openbsd_service.yml
   when: ansible_system == 'OpenBSD'
   tags:
    - openbsd
 
-- include: freebsd_service.yml
+- name: FreeBSD service configuration
+  include_tasks: freebsd_service.yml
   when: ansible_system == 'FreeBSD'
   tags:
    - freebsd
