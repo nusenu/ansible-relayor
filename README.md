@@ -199,6 +199,11 @@ All variables mentioned here are optional.
     - by default we increase this value to at least 30000
     - if the value is higher than that we do not touch it
 
+* `tor_package_state`
+    - specify what package state the tor package should have
+    - possible values: present, latest
+    - default: present
+
 This role supports most torrc options documented in the 'SERVER OPTIONS'
 section of tor's manual. Set them via 'tor_OptionName'.
 Have a look at templates/torrc if you want to have list of supported

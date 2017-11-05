@@ -2,6 +2,7 @@
 
 tor_user: _tor
 tor_packages: tor
+tor_package_state: present
 
 # The tor_ports dictionary defines how many instances are created per
 # available IP address and what ports are used.
