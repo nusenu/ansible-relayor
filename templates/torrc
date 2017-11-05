@@ -26,6 +26,9 @@ OutboundBindAddressExit {{ tor_available_public_ipv6s[tor_maxPublicIPs] }}
 {% if item.1.dirport != 0 %}
 DirPort {{ item.0.ipv4 }}:{{ item.1.dirport }}
 {% endif %}
+{% if tor_Address is defined %}
+Address tor_Address
+{% endif %}
 
 SyslogIdentityTag {{ item.0.ipv4 }}_{{ item.1.orport }}
 {% if ansible_os_family == 'FreeBSD' %}
