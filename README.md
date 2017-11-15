@@ -201,7 +201,8 @@ All variables mentioned here are optional.
 
 * `tor_package_state`
     - specify what package state the tor package should have
-    - possible values: present, latest
+    - possible values: present, latest (not supported on BSDs)
+    - Note: The repository metadata is not updated, so setting this to latest does not give you any guarantees if it actually is the latest version.
     - default: present
 
 This role supports most torrc options documented in the 'SERVER OPTIONS'
