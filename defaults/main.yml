@@ -98,6 +98,9 @@ tor_alpha: False
 # known problem: requires manual adjustment with every major tor release
 tor_alpha_version: 0.3.2
 
+# Path to the tor-exit-notice HTML file
+tor_exit_notice_file: tor-exit-notice.html
+
 # Default exit policy if the user wants to be an exit but doesn't specify one
 # taken from https://trac.torproject.org/projects/tor/wiki/doc/ReducedExitPolicy
 tor_ExitPolicy: "accept *:20-23,accept *:43,accept *:53,accept *:79-81,accept *:88,accept *:110,accept *:143,accept *:194,accept *:220,accept *:389,accept *:443,accept *:464,accept *:465,accept *:531,accept *:543-544,accept *:554,accept *:563,accept *:587,accept *:636,accept *:706,accept *:749,accept *:873,accept *:902-904,accept *:981,accept *:989-995,accept *:1194,accept *:1220,accept *:1293,accept *:1500,accept *:1533,accept *:1677,accept *:1723,accept *:1755,accept *:1863,accept *:2082,accept *:2083,accept *:2086-2087,accept *:2095-2096,accept *:2102-2104,accept *:3128,accept *:3389,accept *:3690,accept *:4321,accept *:4643,accept *:5050,accept *:5190,accept *:5222-5223,accept *:5228,accept *:5900,accept *:6660-6669,accept *:6679,accept *:6697,accept *:8000,accept *:8008,accept *:8074,accept *:8080,accept *:8082,accept *:8087-8088,accept *:8332-8333,accept *:8443,accept *:8888,accept *:9418,accept *:9999,accept *:10000,accept *:11371,accept *:19294,accept *:19638,accept *:50002,accept *:64738,reject *:12350,reject *:23456,reject *:33033,reject *:*"

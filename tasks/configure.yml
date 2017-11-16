@@ -193,7 +193,7 @@
 - name: Ensure tor-exit-notice.html is present (if we are an exit)
   become: yes
   template:
-    src: tor-exit-notice.html
+    src: "{{ tor_exit_notice_file }}"
     dest: "{{ tor_ConfDir }}/tor-exit-notice.html"
     mode: 0444
   when: tor_ExitRelay == True and tor_ExitNoticePage == True

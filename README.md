@@ -144,13 +144,18 @@ All variables mentioned here are optional.
 
 * `tor_ExitNoticePage` boolean
     - specifies whether we display the default tor exit notice [html page](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) on the DirPort
-    - only relevant if we are an exit
+    - only relevant if we are an exit relay
     - default: True
+
+* `tor_exit_notice_file`
+    - path to a HTML file on the control machine that you would like to display (via the DirPort) instead of the default [tor-exit-notice.html](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) provided by the Tor Project
+    - only relevant if we are an exit relay and if tor_ExitNoticePage is True
 
 * `tor_AbuseEmailAddress` email-address
     - if set this email address is used on the tor exit notice [html page](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) published on the DirPort
     - you are encouraged to set it if you run an exit
-    - only relevant if `tor_ExitRelay` is True
+    - only relevant if we are an exit relay
+    - Note: if you use your own custom tor-exit-notice template this var is ignored if you do not include it in your template.
     - default: not set
 
 * `tor_ExitPolicy`
