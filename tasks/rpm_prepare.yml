@@ -13,8 +13,7 @@
     state: present
   notify: re-gather facts
 
-# re-gathering facts after installing libselinux-python
-# is a workaround for https://github.com/ansible/ansible-modules-core/issues/2432
+# re-gathering facts after installing ansible SELinux dependencies (libselinux-python)
 - meta: flush_handlers
 
 - name: Ensure SELinux boolean (tor_can_network_relay) is set appropriately
