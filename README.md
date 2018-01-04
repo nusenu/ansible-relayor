@@ -66,7 +66,7 @@ Supported Operating Systems
 - HardenedBSD 11.1
 - Ubuntu 16.04
 - CentOS 7
-- Fedora 26
+- Fedora 27
 
 Supported Tor Releases
 -----------------------
