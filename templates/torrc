@@ -53,8 +53,17 @@ Sandbox {{ tor_Sandbox }}
 {% elif ansible_os_family == 'Debian' and ansible_kernel|version_compare('3.5', '>=') %}
 Sandbox 1
 {% endif %}
-{% if tor_ExitRelay == True %}
+{% if tor_ExitRelay == True and tor_ExitRelaySetting_file is not defined %}
 # we are an exit relay!
+ExitRelay 1
+{% if item.0.ipv6 != "" and item.0.ipv6 != "False" and tor_IPv6 == True and tor_IPv6Exit == True %}
+IPv6Exit 1
+{% endif %}
+ExitPolicy {{ tor_ExitPolicy }}
+{% if tor_ExitNoticePage == True and tor_DirPortFrontPage is not defined %}
+DirPortFrontPage {{ tor_ConfDir }}/tor-exit-notice.html
+{% endif %}
+{% elif tor_ExitRelay == True and tor_ExitRelaySetting_file is defined and (lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orport~' file='~tor_ExitRelaySetting_file~' delimiter=,') == "exit") %}
 ExitRelay 1
 {% if item.0.ipv6 != "" and item.0.ipv6 != "False" and tor_IPv6 == True and tor_IPv6Exit == True %}
 IPv6Exit 1

@@ -139,8 +139,16 @@ All variables mentioned here are optional.
     - default: False
 
 * `tor_ExitRelay` boolean
-    - You will want to set this to True if you want to run exit relays.
+    - You have to set this to True if you want to enable exiting for all or some tor instances on a server
+    - If this var is not True this will be a non-exit relay
+    - If you want to run a mixed server (exit and non-exit tor instances) use `tor_ExitRelaySetting_file` for per-instance configuration in additon to this var
     - default: False
+
+* `tor_ExitRelaySetting_file`
+    - this is a simple comma separated csv file stored on the ansible control machine defining the `ExitRelay` torrc setting for each instance (instead of server-wide)
+    - first column: instance identifier (inventory_hostname-ip_orport)
+    - second column: "exit" for exit tor instances, any other value (including empty) for non-exit tor instances
+    - this var is ignored if tor_ExitRelay is False
 
 * `tor_ExitNoticePage` boolean
     - specifies whether we display the default tor exit notice [html page](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) on the DirPort
