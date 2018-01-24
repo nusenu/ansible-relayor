@@ -1,0 +1,42 @@
+---
+driver:
+  name: vagrant
+  customize:
+    memory: 512
+
+platforms:
+  - name: debian-8
+  - name: debian-9
+  - name: ubuntu-16.04
+  - name: centos-7
+  - name: fedora-27
+    driver:
+      provision: True
+      vagrantfiles:
+        - test/vagrant_provisions/fedora27_vagrant_provision.rb
+  - name: freebsd-10
+    driver:
+      provision: True
+      vagrantfiles:
+        - test/vagrant_provisions/freebsd_vagrant_provision.rb
+  - name: freebsd-11
+    driver:
+      provision: True
+      vagrantfiles:
+        - test/vagrant_provisions/freebsd_vagrant_provision.rb
+
+provisioner:
+  name: ansible_push
+  ansible_config: test/ansible.cfg
+  chef_bootstrap_url: nil
+
+transport:
+  max_ssh_sessions: 6
+
+suites:
+  - name: suite-tor-default
+    provisioner:
+      playbook: "test/integration/default/default.yml"
+  - name: suite-tor-exit-node
+    provisioner:
+      playbook: "test/integration/default/exit-node.yml"

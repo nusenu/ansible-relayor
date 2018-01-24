@@ -284,6 +284,18 @@ We do not ultimately trust every tor relay we operate (we try to perform input v
 
 **Be aware that the ansible control machine stores ALL your relay keys (RSA and Ed25519) - apply security measures accordingly.**
 
+Testing
+-----------------------
+
+Install `test-kitchen` and ansible plugin using `gem`:
+
+```bash
+gem install test-kitchen kitchen-ansiblepush kitchen-vagrant
+```
+
+Then you can run tests with `kitchen test`.
+
+Note that to run tests, you also need Vagrant and VirtualBox.
 
 Reporting Security Bugs
 -----------------------
