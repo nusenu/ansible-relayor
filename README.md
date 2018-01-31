@@ -138,6 +138,12 @@ All variables mentioned here are optional.
     - This setting is supported on Debian/Ubuntu/FreeBSD/HardenedBSD only (ignored on other platforms).
     - default: False
 
+* `tor_nightly_builds` boolean
+    - Set to True if you want to use Tor nightly builds repo from deb.torproject.org.
+    - nightly builds follow the tor git master branch.
+    - Only supported on Debian and Ubuntu (ignored on other platforms).
+    - default: False
+
 * `tor_ExitRelay` boolean
     - You have to set this to True if you want to enable exiting for all or some tor instances on a server
     - If this var is not True this will be a non-exit relay
