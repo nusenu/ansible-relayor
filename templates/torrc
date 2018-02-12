@@ -16,10 +16,10 @@ OutboundBindAddress {{item.0.ipv6}}
 
 {% if tor_dedicatedExitIP == True and tor_ExitRelay == True %}
 {% if tor_available_public_ipv4s|length > tor_maxPublicIPs %}
-OutboundBindAddressExit {{ tor_available_public_ipv4s[tor_maxPublicIPs] }}
+OutboundBindAddressExit {{ tor_available_public_ipv4s[-1] }}
 {% endif %}
 {% if tor_available_public_ipv6s|length > tor_maxPublicIPs and tor_IPv6 == True and tor_IPv6Exit == True %}
-OutboundBindAddressExit {{ tor_available_public_ipv6s[tor_maxPublicIPs] }}
+OutboundBindAddressExit {{ tor_available_public_ipv6s[-1] }}
 {% endif %}
 {% endif %}
 

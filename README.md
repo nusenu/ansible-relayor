@@ -196,6 +196,7 @@ All variables mentioned here are optional.
     - this feature **requires** tor version >= v0.3.0.3-alpha
     - only relevant for exit relays
     - automatically configures the [OutboundBindAddressExit](https://www.torproject.org/docs/tor-manual.html.en#OutboundBindAddressExit) tor feature (does not require you to manually specify the IP address to use)
+    - we will use the public IPv4/IPv6 address with the highest numerical value available on the system as the `OutboundBindAddressExit`
     - this means tor will establish outbound exit connections on a separate IP(v4/v6) address (different from the IP announced in the consensus)
     - to make use of this feature you need more public IPv4 or IPv6 addresses than `tor_maxPublicIPs`
     - if this condition is not met we will abort
