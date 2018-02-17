@@ -242,6 +242,36 @@ TLSECGroup {{ tor_TLSECGroup }}
 {% if tor_ShutdownWaitLength is defined %}
 ShutdownWaitLength {{ tor_ShutdownWaitLength }}
 {% endif %}
+{% if tor_DoSCircuitCreationEnabled is defined %}
+DoSCircuitCreationEnabled {{ tor_DoSCircuitCreationEnabled }}
+{% endif %}
+{% if tor_DoSCircuitCreationMinConnections is defined %}
+DoSCircuitCreationMinConnections {{ tor_DoSCircuitCreationMinConnections }}
+{% endif %}
+{% if tor_DoSCircuitCreationRate is defined %}
+DoSCircuitCreationRate {{ tor_DoSCircuitCreationRate }}
+{% endif %}
+{% if tor_DoSCircuitCreationBurst is defined %}
+DoSCircuitCreationBurst {{ tor_DoSCircuitCreationBurst }}
+{% endif %}
+{% if tor_DoSCircuitCreationDefenseType is defined %}
+DoSCircuitCreationDefenseType {{ tor_DoSCircuitCreationDefenseType }}
+{% endif %}
+{% if tor_DoSCircuitCreationDefenseTimePeriod is defined %}
+DoSCircuitCreationDefenseTimePeriod {{ tor_DoSCircuitCreationDefenseTimePeriod }}
+{% endif %}
+{% if tor_DoSConnectionEnabled is defined %}
+DoSConnectionEnabled {{ tor_DoSConnectionEnabled }}
+{% endif %}
+{% if tor_DoSConnectionMaxConcurrentCount is defined %}
+DoSConnectionMaxConcurrentCount {{ tor_DoSConnectionMaxConcurrentCount }}
+{% endif %}
+{% if tor_DoSConnectionDefenseType is defined %}
+DoSConnectionDefenseType {{ tor_DoSConnectionDefenseType }}
+{% endif %}
+{% if tor_DoSRefuseSingleHopClientRendezvous is defined %}
+DoSRefuseSingleHopClientRendezvous {{ tor_DoSRefuseSingleHopClientRendezvous }}
+{% endif %}
 
 MyFamily {{ tor_family.stdout }}
 # end of torrc
