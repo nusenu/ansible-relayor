@@ -150,18 +150,28 @@ All variables mentioned here are optional.
     - If you want to run a mixed server (exit and non-exit tor instances) use `tor_ExitRelaySetting_file` for per-instance configuration in additon to this var
     - default: False
 
-* `tor_ExitRelaySetting_file`
-    - this is a simple comma separated csv file stored on the ansible control machine defining the `ExitRelay` torrc setting for each instance (instead of server-wide)
+* `tor_ExitRelaySetting_file` /path/to/file
+    - this is a simple comma separated csv file stored on the ansible control machine defining the `ExitRelay` torrc setting for each tor instance (instead of server-wide)
     - first column: instance identifier (inventory_hostname-ip_orport)
     - second column: "exit" for exit tor instances, any other value (including empty) for non-exit tor instances
     - this var is ignored if tor_ExitRelay is False
+
+* `tor_RelayBandwidthRate_file` /path/to/file
+    - this is a simple comma separated csv file stored on the ansible control machine defining the `RelayBandwidthRate` torrc setting for each tor instance (instead of server-wide)
+    - first column: instance identifier (inventory_hostname-ip_orport)
+    - second column: value as accepted by `RelayBandwidthRate` (see tor manpage)
+
+* `tor_RelayBandwidthBurst_file` /path/to/file
+    - this is a simple comma separated csv file stored on the ansible control machine defining the `RelayBandwidthBurst` torrc setting for each tor instance (instead of server-wide)
+    - first column: instance identifier (inventory_hostname-ip_orport)
+    - second column: value as accepted by `RelayBandwidthBurst` (see tor manpage)
 
 * `tor_ExitNoticePage` boolean
     - specifies whether we display the default tor exit notice [html page](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) on the DirPort
     - only relevant if we are an exit relay
     - default: True
 
-* `tor_exit_notice_file`
+* `tor_exit_notice_file` /path/to/file
     - path to a HTML file on the control machine that you would like to display (via the DirPort) instead of the default [tor-exit-notice.html](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) provided by the Tor Project
     - only relevant if we are an exit relay and if tor_ExitNoticePage is True
 

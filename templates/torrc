@@ -98,10 +98,14 @@ SafeLogging {{ tor_SafeLogging }}
 {% if tor_MaxAdvertisedBandwidth is defined %}
 MaxAdvertisedBandwidth {{ tor_MaxAdvertisedBandwidth }}
 {% endif %}
-{% if tor_RelayBandwidthRate is defined %}
+{% if tor_RelayBandwidthRate_file is defined %}
+RelayBandwidthRate {{ lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orport~' file='~tor_RelayBandwidthRate_file~' delimiter=,') }}
+{% elif tor_RelayBandwidthRate is defined %}
 RelayBandwidthRate {{ tor_RelayBandwidthRate }}
 {% endif %}
-{% if tor_RelayBandwidthBurst is defined %}
+{% if tor_RelayBandwidthBurst_file is defined %}
+RelayBandwidthBurst {{ lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orport~' file='~tor_RelayBandwidthBurst_file~' delimiter=,') }}
+{% elif tor_RelayBandwidthBurst is defined %}
 RelayBandwidthBurst {{ tor_RelayBandwidthBurst }}
 {% endif %}
 {% if tor_PerConnBWRate is defined %}
