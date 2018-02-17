@@ -94,6 +94,7 @@ tor_enableControlSocket: False
 # will install tor alpha repos.
 # This is only supported for Debian/Ubuntu
 tor_alpha: False
+tor_nightly_builds: False
 
 # known problem: requires manual adjustment with every major tor release
 tor_alpha_version: experimental-0.3.3.x
