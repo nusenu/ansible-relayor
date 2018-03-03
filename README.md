@@ -138,16 +138,40 @@ All variables mentioned here are optional.
     - This setting is supported on Debian/Ubuntu/FreeBSD/HardenedBSD only (ignored on other platforms).
     - default: False
 
-* `tor_ExitRelay` boolean
-    - You will want to set this to True if you want to run exit relays.
+* `tor_nightly_builds` boolean
+    - Set to True if you want to use Tor nightly builds repo from deb.torproject.org.
+    - nightly builds follow the tor git master branch.
+    - Only supported on Debian and Ubuntu (ignored on other platforms).
     - default: False
+
+* `tor_ExitRelay` boolean
+    - You have to set this to True if you want to enable exiting for all or some tor instances on a server
+    - If this var is not True this will be a non-exit relay
+    - If you want to run a mixed server (exit and non-exit tor instances) use `tor_ExitRelaySetting_file` for per-instance configuration in additon to this var
+    - default: False
+
+* `tor_ExitRelaySetting_file` /path/to/file
+    - this is a simple comma separated csv file stored on the ansible control machine defining the `ExitRelay` torrc setting for each tor instance (instead of server-wide)
+    - first column: instance identifier (inventory_hostname-ip_orport)
+    - second column: "exit" for exit tor instances, any other value (including empty) for non-exit tor instances
+    - this var is ignored if tor_ExitRelay is False
+
+* `tor_RelayBandwidthRate_file` /path/to/file
+    - this is a simple comma separated csv file stored on the ansible control machine defining the `RelayBandwidthRate` torrc setting for each tor instance (instead of server-wide)
+    - first column: instance identifier (inventory_hostname-ip_orport)
+    - second column: value as accepted by `RelayBandwidthRate` (see tor manpage)
+
+* `tor_RelayBandwidthBurst_file` /path/to/file
+    - this is a simple comma separated csv file stored on the ansible control machine defining the `RelayBandwidthBurst` torrc setting for each tor instance (instead of server-wide)
+    - first column: instance identifier (inventory_hostname-ip_orport)
+    - second column: value as accepted by `RelayBandwidthBurst` (see tor manpage)
 
 * `tor_ExitNoticePage` boolean
     - specifies whether we display the default tor exit notice [html page](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) on the DirPort
     - only relevant if we are an exit relay
     - default: True
 
-* `tor_exit_notice_file`
+* `tor_exit_notice_file` /path/to/file
     - path to a HTML file on the control machine that you would like to display (via the DirPort) instead of the default [tor-exit-notice.html](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) provided by the Tor Project
     - only relevant if we are an exit relay and if tor_ExitNoticePage is True
 
@@ -182,6 +206,7 @@ All variables mentioned here are optional.
     - this feature **requires** tor version >= v0.3.0.3-alpha
     - only relevant for exit relays
     - automatically configures the [OutboundBindAddressExit](https://www.torproject.org/docs/tor-manual.html.en#OutboundBindAddressExit) tor feature (does not require you to manually specify the IP address to use)
+    - we will use the public IPv4/IPv6 address with the highest numerical value available on the system as the `OutboundBindAddressExit`
     - this means tor will establish outbound exit connections on a separate IP(v4/v6) address (different from the IP announced in the consensus)
     - to make use of this feature you need more public IPv4 or IPv6 addresses than `tor_maxPublicIPs`
     - if this condition is not met we will abort

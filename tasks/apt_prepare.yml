@@ -30,10 +30,16 @@
     state: present
     update_cache: yes
 
-- name: Ensure torproject.org alpha repo is present if enabled (APT)
+- name: Override tor_alpha_version if nightly builds repo is enabled (APT)
+  set_fact:
+    tor_alpha_version: nightly-master
+    tor_alpha: True
+  when: tor_nightly_builds == True
+
+- name: Ensure torproject.org alpha/nightly repo is present if enabled (APT)
   become: yes
   apt_repository:
-    repo: 'deb http://deb.torproject.org/torproject.org tor-experimental-{{ tor_alpha_version }}.x-{{ tor_distribution_release }} main'
+    repo: 'deb http://deb.torproject.org/torproject.org tor-{{ tor_alpha_version }}-{{ tor_distribution_release }} main'
     state: present
     update_cache: yes
   when: tor_alpha == True

@@ -16,10 +16,10 @@ OutboundBindAddress {{item.0.ipv6}}
 
 {% if tor_dedicatedExitIP == True and tor_ExitRelay == True %}
 {% if tor_available_public_ipv4s|length > tor_maxPublicIPs %}
-OutboundBindAddressExit {{ tor_available_public_ipv4s[tor_maxPublicIPs] }}
+OutboundBindAddressExit {{ tor_available_public_ipv4s[-1] }}
 {% endif %}
 {% if tor_available_public_ipv6s|length > tor_maxPublicIPs and tor_IPv6 == True and tor_IPv6Exit == True %}
-OutboundBindAddressExit {{ tor_available_public_ipv6s[tor_maxPublicIPs] }}
+OutboundBindAddressExit {{ tor_available_public_ipv6s[-1] }}
 {% endif %}
 {% endif %}
 
@@ -53,8 +53,17 @@ Sandbox {{ tor_Sandbox }}
 {% elif ansible_os_family == 'Debian' and ansible_kernel|version_compare('3.5', '>=') %}
 Sandbox 1
 {% endif %}
-{% if tor_ExitRelay == True %}
+{% if tor_ExitRelay == True and tor_ExitRelaySetting_file is not defined %}
 # we are an exit relay!
+ExitRelay 1
+{% if item.0.ipv6 != "" and item.0.ipv6 != "False" and tor_IPv6 == True and tor_IPv6Exit == True %}
+IPv6Exit 1
+{% endif %}
+ExitPolicy {{ tor_ExitPolicy }}
+{% if tor_ExitNoticePage == True and tor_DirPortFrontPage is not defined %}
+DirPortFrontPage {{ tor_ConfDir }}/tor-exit-notice.html
+{% endif %}
+{% elif tor_ExitRelay == True and tor_ExitRelaySetting_file is defined and (lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orport~' file='~tor_ExitRelaySetting_file~' delimiter=,') == "exit") %}
 ExitRelay 1
 {% if item.0.ipv6 != "" and item.0.ipv6 != "False" and tor_IPv6 == True and tor_IPv6Exit == True %}
 IPv6Exit 1
@@ -89,10 +98,14 @@ SafeLogging {{ tor_SafeLogging }}
 {% if tor_MaxAdvertisedBandwidth is defined %}
 MaxAdvertisedBandwidth {{ tor_MaxAdvertisedBandwidth }}
 {% endif %}
-{% if tor_RelayBandwidthRate is defined %}
+{% if tor_RelayBandwidthRate_file is defined %}
+RelayBandwidthRate {{ lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orport~' file='~tor_RelayBandwidthRate_file~' delimiter=,') }}
+{% elif tor_RelayBandwidthRate is defined %}
 RelayBandwidthRate {{ tor_RelayBandwidthRate }}
 {% endif %}
-{% if tor_RelayBandwidthBurst is defined %}
+{% if tor_RelayBandwidthBurst_file is defined %}
+RelayBandwidthBurst {{ lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orport~' file='~tor_RelayBandwidthBurst_file~' delimiter=,') }}
+{% elif tor_RelayBandwidthBurst is defined %}
 RelayBandwidthBurst {{ tor_RelayBandwidthBurst }}
 {% endif %}
 {% if tor_PerConnBWRate is defined %}
@@ -232,6 +245,36 @@ TLSECGroup {{ tor_TLSECGroup }}
 {% endif %}
 {% if tor_ShutdownWaitLength is defined %}
 ShutdownWaitLength {{ tor_ShutdownWaitLength }}
+{% endif %}
+{% if tor_DoSCircuitCreationEnabled is defined %}
+DoSCircuitCreationEnabled {{ tor_DoSCircuitCreationEnabled }}
+{% endif %}
+{% if tor_DoSCircuitCreationMinConnections is defined %}
+DoSCircuitCreationMinConnections {{ tor_DoSCircuitCreationMinConnections }}
+{% endif %}
+{% if tor_DoSCircuitCreationRate is defined %}
+DoSCircuitCreationRate {{ tor_DoSCircuitCreationRate }}
+{% endif %}
+{% if tor_DoSCircuitCreationBurst is defined %}
+DoSCircuitCreationBurst {{ tor_DoSCircuitCreationBurst }}
+{% endif %}
+{% if tor_DoSCircuitCreationDefenseType is defined %}
+DoSCircuitCreationDefenseType {{ tor_DoSCircuitCreationDefenseType }}
+{% endif %}
+{% if tor_DoSCircuitCreationDefenseTimePeriod is defined %}
+DoSCircuitCreationDefenseTimePeriod {{ tor_DoSCircuitCreationDefenseTimePeriod }}
+{% endif %}
+{% if tor_DoSConnectionEnabled is defined %}
+DoSConnectionEnabled {{ tor_DoSConnectionEnabled }}
+{% endif %}
+{% if tor_DoSConnectionMaxConcurrentCount is defined %}
+DoSConnectionMaxConcurrentCount {{ tor_DoSConnectionMaxConcurrentCount }}
+{% endif %}
+{% if tor_DoSConnectionDefenseType is defined %}
+DoSConnectionDefenseType {{ tor_DoSConnectionDefenseType }}
+{% endif %}
+{% if tor_DoSRefuseSingleHopClientRendezvous is defined %}
+DoSRefuseSingleHopClientRendezvous {{ tor_DoSRefuseSingleHopClientRendezvous }}
 {% endif %}
 
 MyFamily {{ tor_family.stdout }}
