@@ -62,11 +62,16 @@
     owner: root
     mode: 0755
 
+- name: Remove previus maintainer's generator (Debian 8 only)
+  command: dpkg-statoverride --remove /lib/systemd/system-generators/tor-generator
+  when: ansible_lsb.codename == 'jessie'
+  changed_when: False
+
 - name: Ensure the maintainer's generator is disabled (Debian 8 only)
   become: yes
   command: dpkg-statoverride --update --add root root 644 /lib/systemd/system-generators/tor-generator
   when: ansible_lsb.codename == 'jessie'
-  ignore_errors: yes
+  changed_when: False
 
 #- name: Ensure AppArmor allows access to necessary files (Ubuntu)
 #  become: yes
