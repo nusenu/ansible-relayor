@@ -1,0 +1,6 @@
+---
+- hosts: all
+  vars_files:
+    - vars/dry-run-vars.yml
+  roles:
+    - ansible-relayor

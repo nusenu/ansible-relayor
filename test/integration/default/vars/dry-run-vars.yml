@@ -1,0 +1,4 @@
+---
+tor_ContactInfo: "ansible-relayor test-kitchen (you should never see this on a public relay) https://github.com/nusenu/ansible-relayor"
+tor_DisableNetwork: 1
+tor_PublishServerDescriptor: 0
