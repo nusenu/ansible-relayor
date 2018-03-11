@@ -9,10 +9,12 @@ tor_package_state: present
 # min entries: 1
 # max entries: 2
 tor_ports:
-  - { orport: 9000, dirport: 9001}
-  - { orport: 9100, dirport: 9101}
+  - orport: 9000
+    dirport: 9001
+  - orport: 9100
+    dirport: 9101
 
-# Limit the amount of used IP addresses 
+# Limit the amount of used IP addresses
 # by default to 1, this limits the amount
 # of generated Tor instances to 2 per host.
 # Specifying tor_ips overwrites this limitation.
