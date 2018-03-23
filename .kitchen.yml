@@ -34,9 +34,9 @@ transport:
   max_ssh_sessions: 6
 
 suites:
-  - name: suite-tor-default
+  - name: t-guard
     provisioner:
       playbook: "test/integration/default/default.yml"
-  - name: suite-tor-exit-node
+  - name: t-exit
     provisioner:
       playbook: "test/integration/default/exit-node.yml"
