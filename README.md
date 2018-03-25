@@ -284,16 +284,35 @@ We do not ultimately trust every tor relay we operate (we try to perform input v
 
 **Be aware that the ansible control machine stores ALL your relay keys (RSA and Ed25519) - apply security measures accordingly.**
 
-Testing
+Integration Testing
 -----------------------
 
-Install `test-kitchen` and ansible plugin using `gem`:
+This ansible role comes with a .kitchen.yml file, that can be used
+to test relayor - using different configurations - against Vagrant Virtualbox machines.
+It is primarily used for development/integration testing (spot regressions)
+but you can also use it to get familiar with relayor in such a local playground environment.
+These tor relays will not join the network since they are only created for testing purposes.
+
+kitchen will download Vagrant boxes from Vagrant cloud to create test VMs.
+
+The following platforms are currently available in the kitchen file:
+* freebsd-10
+* freebsd-11
+* debian-9
+* debian-8
+* ubuntu-16.04
+* centos-7
+* fedora-27
+
+To get started install the required gem packages:
 
 ```bash
 gem install test-kitchen kitchen-ansiblepush kitchen-vagrant
 ```
 
-Then you can run tests with `kitchen test`.
+List available test instances with `kitchen list`.
+
+Then you can run all tests or just select specific instances, for example: `kitchen test t-guard-debian-9`.
 
 Note that to run tests, you also need Vagrant and VirtualBox.
 
