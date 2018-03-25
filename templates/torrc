@@ -28,6 +28,8 @@ DirPort {{ item.0.ipv4 }}:{{ item.1.dirport }}
 {% endif %}
 {% if tor_Address is defined %}
 Address {{ tor_Address }}
+{% elif tor_maxPublicIPs > 1 and tor_available_public_ipv4s|length > 1 %}
+Address {{ item.0.ipv4 }}
 {% endif %}
 
 SyslogIdentityTag {{ item.0.ipv4 }}_{{ item.1.orport }}
