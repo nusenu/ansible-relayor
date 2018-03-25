@@ -36,7 +36,7 @@ transport:
 suites:
   - name: t-guard
     provisioner:
-      playbook: "test/integration/default/default.yml"
+      playbook: "test/integration/default/guard-node.yml"
   - name: t-exit
     provisioner:
       playbook: "test/integration/default/exit-node.yml"
