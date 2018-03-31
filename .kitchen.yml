@@ -40,3 +40,6 @@ suites:
   - name: t-exit
     provisioner:
       playbook: "test/integration/default/exit-node.yml"
+  - name: t-guard-2publicIPs
+    provisioner:
+      playbook: "test/integration/default/guard-node-2-public-ips.yml"
