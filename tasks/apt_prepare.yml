@@ -1,9 +1,9 @@
 ---
 
-- name: Ensure lsb-release requirement is installed
+- name: Ensure lsb-release and apt-transport-https packages are installed
   become: yes
   apt:
-    name: lsb-release
+    name: lsb-release,apt-transport-https
   notify:
     - re-gather facts
 
@@ -26,7 +26,7 @@
 - name: Ensure torproject.org repository is present (APT)
   become: yes
   apt_repository:
-    repo: 'deb http://deb.torproject.org/torproject.org {{ tor_distribution_release }} main'
+    repo: 'deb https://deb.torproject.org/torproject.org {{ tor_distribution_release }} main'
     state: present
     update_cache: yes
 
@@ -39,7 +39,7 @@
 - name: Ensure torproject.org alpha/nightly repo is present if enabled (APT)
   become: yes
   apt_repository:
-    repo: 'deb http://deb.torproject.org/torproject.org tor-{{ tor_alpha_version }}-{{ tor_distribution_release }} main'
+    repo: 'deb https://deb.torproject.org/torproject.org tor-{{ tor_alpha_version }}-{{ tor_distribution_release }} main'
     state: present
     update_cache: yes
   when: tor_alpha == True
