@@ -1,0 +1,29 @@
+---
+- hosts: all
+  vars_files:
+    - vars/dry-run-vars.yml
+  vars:
+    - tor_maxPublicIPs: 2
+  roles:
+    - ansible-relayor
+  pre_tasks:
+    - name: Add first RFC 5737 TEST-NET-1 public IP 192.0.2.10/24 (Linux)
+      become: true
+      shell: "ip address add 192.0.2.10/24 dev {{ ansible_default_ipv4['interface'] }}"
+      when: ansible_system == 'Linux'
+    - name: Add first RFC 5737 TEST-NET-1 public IP 192.0.2.10/24 (FreeBSD)
+      become: true
+      shell: "ifconfig {{ ansible_default_ipv4['interface'] }} 192.0.2.10/24 add"
+      when: ansible_system == 'FreeBSD'
+
+    - name: Add second RFC 5737 TEST-NET-2 public IP 198.51.100.10/24 (Linux)
+      become: true
+      shell: "ip address add 198.51.100.10/24 dev {{ ansible_default_ipv4['interface'] }}"
+      when: ansible_system == 'Linux'
+    - name: Add second RFC 5737 TEST-NET-2 public IP 198.51.100.10/24 (FreeBSD)
+      become: true
+      shell: "ifconfig {{ ansible_default_ipv4['interface'] }} 198.51.100.10/24 add"
+      when: ansible_system == 'FreeBSD'
+
+    - name: Re-gather facts
+      setup:
