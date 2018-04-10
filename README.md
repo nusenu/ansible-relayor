@@ -182,9 +182,10 @@ All variables mentioned here are optional.
     - Note: if you use your own custom tor-exit-notice template this var is ignored if you do not include it in your template.
     - default: not set
 
-* `tor_ExitPolicy`
+* `tor_ExitPolicy` array
     - specify your custom exit policy
     - only relevant if `tor_ExitRelay` is True
+    - see defaults/main.yml for an example on how to set it
     - default: reduced exit policy (https://trac.torproject.org/projects/tor/wiki/doc/ReducedExitPolicy)
 
 * `tor_maxPublicIPs`
