@@ -49,6 +49,12 @@ Nickname {{ lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orpo
 {% elif tor_nickname is defined %}
 Nickname {{ tor_nickname |regex_replace('[^a-zA-Z0-9]', '') |truncate(19, True, '') }}
 {% endif %}
+{% if tor_ContactInfo is defined %}
+ContactInfo {{ tor_ContactInfo }}
+{% endif %}
+{% if tor_DirPortFrontPage is defined %}
+DirPortFrontPage {{ tor_DirPortFrontPage }}
+{% endif %}
 
 {% if tor_Sandbox is defined and ansible_system == 'Linux' %}
 Sandbox {{ tor_Sandbox }}
@@ -62,23 +68,18 @@ ExitRelay 1
 {% if item.0.ipv6 != "" and item.0.ipv6 != "False" and tor_IPv6 == True and tor_IPv6Exit == True %}
 IPv6Exit 1
 {% endif %}
-{% for entry in tor_ExitPolicy %}
-ExitPolicy {{entry}}
-{% endfor %}
 {% if tor_ExitNoticePage == True and tor_DirPortFrontPage is not defined %}
 DirPortFrontPage {{ tor_ConfDir }}/tor-exit-notice.html
 {% endif %}
+
+{% for entry in tor_ExitPolicy %}
+ExitPolicy {{entry}}
+{% endfor %}
 {% else %}
 ExitRelay 0
 ExitPolicy reject *:*
 {% endif %}
 
-{% if tor_DirPortFrontPage is defined %}
-DirPortFrontPage {{ tor_DirPortFrontPage }}
-{% endif %}
-{% if tor_ContactInfo is defined %}
-ContactInfo {{ tor_ContactInfo }}
-{% endif %}
 {% if tor_PublishServerDescriptor is defined %}
 PublishServerDescriptor {{ tor_PublishServerDescriptor }}
 {% endif %}
