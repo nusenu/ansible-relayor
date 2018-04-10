@@ -1,0 +1,8 @@
+---
+- hosts: all
+  vars_files:
+    - vars/dry-run-vars.yml
+  vars:
+    - tor_maxPublicIPs: 2
+  roles:
+    - ansible-relayor

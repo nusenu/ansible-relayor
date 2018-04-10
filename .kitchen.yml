@@ -40,3 +40,10 @@ suites:
   - name: t-exit
     provisioner:
       playbook: "test/integration/default/exit-node.yml"
+  - name: t-guard-2publicIPs
+    driver:
+      network:
+      - ["private_network", {ip: "192.0.2.10"}]
+      - ["private_network", {ip: "198.51.100.10"}]
+    provisioner:
+      playbook: "test/integration/default/2publicIPs-guard-node.yml"
