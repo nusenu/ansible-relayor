@@ -301,7 +301,7 @@ The following platforms are currently available in the kitchen file:
 * freebsd-11
 * debian-9
 * debian-8
-* ubuntu-16.04
+* ubuntu-18.04
 * centos-7
 * fedora-27
 
