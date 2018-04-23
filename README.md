@@ -64,7 +64,7 @@ Supported Operating Systems
 - OpenBSD 6.3
 - FreeBSD 10.4, 11.1
 - HardenedBSD 11
-- Ubuntu 16.04
+- Ubuntu 18.04
 - CentOS 7
 - Fedora 27
 
