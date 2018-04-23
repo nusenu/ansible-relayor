@@ -58,7 +58,7 @@ DirPortFrontPage {{ tor_DirPortFrontPage }}
 
 {% if tor_Sandbox is defined and ansible_system == 'Linux' %}
 Sandbox {{ tor_Sandbox }}
-{% elif ansible_os_family == 'Debian' and ansible_kernel is version_compare('3.5', '>=') %}
+{% elif ansible_os_family == 'Debian' and ansible_kernel is version_compare('3.5', '>=') and tor_distribution_release != "bionic" %}
 Sandbox 1
 {% endif %}
 
