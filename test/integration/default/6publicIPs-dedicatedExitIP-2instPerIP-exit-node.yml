@@ -1,0 +1,10 @@
+---
+- hosts: all
+  vars_files:
+    - vars/dry-run-vars.yml
+  vars:
+    - tor_maxPublicIPs: 3
+    - tor_dedicatedExitIP: True
+    - tor_ExitRelay: True
+  roles:
+    - ansible-relayor

@@ -211,6 +211,8 @@
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
   register: tor_instances_tmp
+  loop_control:
+    index_var: loop_idx
   notify:
     - Ensure Tor instances are reloaded if its torrc changed (FreeBSD)
     - Ensure Tor instances are reloaded if its torrc changed (Linux)

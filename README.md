@@ -204,15 +204,14 @@ All variables mentioned here are optional.
     - default: True (unlike tor's default)
 
 * `tor_dedicatedExitIP` boolean
-    - this feature **requires** tor version >= v0.3.0.3-alpha
-    - only relevant for exit relays
-    - automatically configures the [OutboundBindAddressExit](https://www.torproject.org/docs/tor-manual.html.en#OutboundBindAddressExit) tor feature (does not require you to manually specify the IP address to use)
-    - we will use the public IPv4/IPv6 address with the highest numerical value available on the system as the `OutboundBindAddressExit`
+    - on exit relays only: use a distinct source IP address for traffic leaving the tor network (exit traffic)
     - this means tor will establish outbound exit connections on a separate IP(v4/v6) address (different from the IP announced in the consensus)
+    - automatically configures the [OutboundBindAddressExit](https://www.torproject.org/docs/tor-manual.html.en#OutboundBindAddressExit) tor feature (does not require you to manually specify the IP address to use)
+    - we will use the public IPv4/IPv6 address(es) available directly after the IP addresses we use for tor ORPorts for `OutboundBindAddressExit`
     - to make use of this feature you need more public IPv4 or IPv6 addresses than `tor_maxPublicIPs`
     - if this condition is not met we will abort
-    - all instances on a host will use the same `OutboundBindAddressExit` address
     - manually specifying the IP address used by `OutboundBindAddressExit` is not supported
+    - this feature **requires** tor version >= v0.3.0.3-alpha (on the target system)
     - default: False
 
 * `tor_enableControlSocket`
