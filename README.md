@@ -296,14 +296,7 @@ These tor relays will not join the network since they are only created for testi
 
 kitchen will download Vagrant boxes from Vagrant cloud to create test VMs.
 
-The following platforms are currently available in the kitchen file:
-* freebsd-10
-* freebsd-11
-* debian-9
-* debian-8
-* ubuntu-18.04
-* centos-7
-* fedora-27
+All platforms except OpenBSD are currently supported by the kitchen file.
 
 To get started install the required gem packages:
 
