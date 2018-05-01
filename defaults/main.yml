@@ -53,6 +53,11 @@ tor_freebsd_nmbclusters: 30000
 tor_DataDir: /var/lib/tor
 tor_PidDir: /var/run/tor
 
+# Create a backup of the torrc file on the tor server whenever the file is changed.
+# You might want to disable this if you use other means of backups or version
+# control, for example etckeeper.
+tor_backup_torrc: yes
+
 # specify tor's loglevel
 tor_LogLevel: notice
 

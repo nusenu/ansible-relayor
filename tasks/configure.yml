@@ -205,7 +205,7 @@
     dest: "{{ (ansible_pkg_mgr != 'apt')| ternary(tor_ConfDir ~ '/' ~ item.0.ipv4 ~ '_' ~ item.1.orport ~ '.torrc', tor_ConfDir ~ '/' ~ item.0.ipv4 ~ '_' ~ item.1.orport ~ '/torrc') }}"
     owner: root
     mode: 0644
-    backup: yes
+    backup: "{{ tor_backup_torrc }}"
     validate: "tor --verify-config -f %s"
   with_nested:
    - "{{ tor_ips }}"
