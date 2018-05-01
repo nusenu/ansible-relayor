@@ -124,7 +124,7 @@
    - "{{ tor_ports }}"
    - [ 'secret_id_key' ]
 
-- name: Fetch RSA key for comparision
+- name: Fetch RSA key for comparison
   become: yes
   fetch:
     src: "{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}"
