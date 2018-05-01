@@ -21,7 +21,7 @@ tor_ports:
 tor_maxPublicIPs: 1
 
 # We only use a single private IP by default since
-# we can not reliably tell wether we are NATed
+# we can not reliably tell whether we are NATed
 # to more than a single public IP address
 tor_maxPrivateIPs: 1
 
