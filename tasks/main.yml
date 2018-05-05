@@ -42,7 +42,7 @@
     - always
 
 - name: Check DNS servers (Exit only)
-  include_tasks: fail_google_dns.yml
+  include_tasks: abort_on_big_dns_operators.yml
   when: tor_ExitRelay == True
 
 - name: Set OS specific variables
