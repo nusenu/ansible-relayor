@@ -19,6 +19,7 @@
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
+  changed_when: False
 
 - name: Generate new Ed25519 signing keys (LOCAL)
   become: no
@@ -28,6 +29,7 @@
    - "{{ tor_ports }}"
   tags:
    - renewkey
+  changed_when: False
 
 - name: Detect duplicate relay keys across relays (LOCAL)
   become: no
@@ -35,6 +37,7 @@
   delegate_to: 127.0.0.1
   run_once: true
   register: tor_dupkeycount
+  changed_when: False
 
 - name: Abort on duplicate relay keys
   fail: msg="Duplicate relay key detected! Aborting."
@@ -66,6 +69,7 @@
   register: tor_family
   tags:
    - reconfigure
+  changed_when: False
 
 - name: Ensure per-instance tor users exist
   become: yes
@@ -142,6 +146,7 @@
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
   register: tor_rsakey_match
+  changed_when: False
 
 - name: Abort if local and remote RSA keys do not match
   assert:

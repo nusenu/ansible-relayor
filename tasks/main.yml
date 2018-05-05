@@ -18,6 +18,7 @@
   delegate_to: 127.0.0.1
   tags:
     - always
+  changed_when: False
 
 - name: Ensure we do not create more than two instances per IP
   assert:
