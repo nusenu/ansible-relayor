@@ -182,3 +182,29 @@ tor_ExitPolicy:
   - accept *:50002
   - accept *:64738
   - reject *:*
+
+# List of blacklisted DNS resolvers
+tor_dnsresolver_blacklist:
+  - 8\.8\.8\.8
+  - 8\.8\.4\.4
+  - 2001:4860:4860::8888
+  - 2001:4860:4860::8844
+  - 2001:4860:4860:0:0:0:0:8888
+  - 2001:4860:4860:0:0:0:0:8844
+  - 208\.67\.222\.123
+  - 208\.67\.220\.123
+  - 1\.1\.1\.1
+  - 1\.0\.0\.1
+  - 2606:4700:4700::1111
+  - 2606:4700:4700::1001
+  - 9\.9\.9\.9
+  - 9\.9\.9\.10
+  - 149\.112\.112\.10
+  - 149\.112\.112\.112
+  - 4\.2\.2\.[1-6]
+
+# Construction of grep command to
+# match blacklisted DNS resolvers
+tor_resolvconf_path: /etc/resolv.conf
+tor_dns_resolver_blacklist_pattern: "{% for IP in tor_dnsresolver_blacklist %}{{ '-e \"^nameserver ' + IP + '[[:space:]]*$\" ' }}{% endfor %}"
+tor_grep_blacklisted_dnsresolvers: "{{ [ 'grep -qE', tor_dns_resolver_blacklist_pattern, tor_resolvconf_path ] | join(' ') }}"
