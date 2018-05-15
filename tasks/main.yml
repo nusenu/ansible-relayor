@@ -41,8 +41,11 @@
   tags:
     - always
 
-- name: Check DNS servers (Exit only)
-  include_tasks: abort_on_big_dns_operators.yml
+- name: Abort if we use a centralized/common DNS resolver (Google, Quad9, CloudFlare, OpenDNS, Level3). See https://torproject.org/relay-guide#DNSonExitRelays (Exits only)
+  command: "{{ tor_grep_blacklisted_dnsresolvers }}"
+  register: tor_dns_check
+  failed_when: tor_dns_check.rc == 0
+  changed_when: False
   when: tor_ExitRelay == True
 
 - name: Set OS specific variables
