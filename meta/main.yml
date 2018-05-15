@@ -13,9 +13,6 @@ galaxy_info:
     versions:
     - 10.4
     - 11.1
-  - name: HardenedBSD
-    versions:
-    - 11
   - name: OpenBSD
     versions:
     - 6.3
