@@ -5,7 +5,6 @@ driver:
     memory: 512
 
 platforms:
-  - name: debian-8
   - name: debian-9
   - name: ubuntu-18.04
   - name: centos-7
