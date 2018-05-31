@@ -168,6 +168,7 @@
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
    - [ 'ed25519_signing_cert', 'ed25519_signing_secret_key' ]
+  changed_when: False
   tags:
    - renewkey
 
