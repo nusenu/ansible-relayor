@@ -39,27 +39,20 @@
 
 # Background:
 # https://github.com/nusenu/ansible-relayor/issues/72
-- name: Ensure systemd generator folder exists (Debian/Ubuntu except Debian 8)
+- name: Ensure systemd generator folder exists (Debian/Ubuntu)
   become: yes
   file:
     path: /etc/systemd/system-generators
     state: directory
     mode: 0755
-  when: ansible_lsb.codename != 'jessie'
 
 - name: Ensure custom systemd generator is in place (Debian/Ubuntu only)
   become: yes
   copy:
     src: tor-generator
-    dest: "{{ (ansible_lsb.codename == 'jessie')|ternary('/lib/systemd/system-generators/relayor-generator', '/etc/systemd/system-generators/tor-generator') }}"
+    dest: /etc/systemd/system-generators/tor-generator
     owner: root
     mode: 0755
-
-- name: Ensure the maintainer's generator is disabled (Debian 8 only)
-  become: yes
-  command: dpkg-statoverride --update --add root root 644 /lib/systemd/system-generators/tor-generator
-  when: ansible_lsb.codename == 'jessie'
-  ignore_errors: yes
 
 #- name: Ensure AppArmor allows access to necessary files (Ubuntu)
 #  become: yes

@@ -61,7 +61,7 @@ Managed Node Requirements
 Supported Operating Systems
 ---------------------------
 
-- Debian 8, 9 and Debian Testing
+- Debian 9 and Debian Testing
 - OpenBSD 6.3
 - FreeBSD 10.4, 11.1
 - Ubuntu 18.04
