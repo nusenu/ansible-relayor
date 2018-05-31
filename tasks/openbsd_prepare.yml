@@ -4,6 +4,7 @@
   shell: "sysctl kern.maxfiles|cut -d= -f2"
   become: no
   register: tor_openbsd_maxfiles
+  changed_when: False
 
 - name: Ensure system-wide runtime file descriptor limits are reasonable (OpenBSD)
   become: yes

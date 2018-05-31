@@ -17,6 +17,7 @@
   shell: "sysctl kern.ipc.somaxconn|cut -d' '  -f2"
   become: no
   register: tor_currentsomaxconn
+  changed_when: False
 
 - name: Ensure somaxconn setting is reasonable (FreeBSD)
   become: yes
@@ -31,6 +32,7 @@
   become: no
   shell: "sysctl kern.ipc.nmbclusters|cut -d' '  -f2"
   register: tor_currentnmbc
+  changed_when: False
 
 - name: Ensure nmbclusters setting is reasonable (FreeBSD)
   become: yes
