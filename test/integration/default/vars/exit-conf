@@ -1,0 +1,10 @@
+mixed-freebsd-11-10.0.2.15_9000,exit
+mixed-freebsd-11-10.0.2.15_9100,
+mixed-debian-9-10.0.2.15_9000,exit
+mixed-debian-9-10.0.2.15_9100,
+mixed-ubuntu-1804-10.0.2.15_9000,exit
+mixed-ubuntu-1804-10.0.2.15_9100,
+mixed-centos-7-10.0.2.15_9000,exit
+mixed-centos-7-10.0.2.15_9100,
+mixed-fedora-27-10.0.2.15_9000,exit
+mixed-fedora-27-10.0.2.15_9100,

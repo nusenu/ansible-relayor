@@ -1,0 +1,9 @@
+---
+- hosts: all
+  vars_files:
+    - vars/dry-run-vars.yml
+  vars:
+    tor_ExitRelay: True
+    tor_ExitRelaySetting_file: vars/exit-conf
+  roles:
+    - ansible-relayor
