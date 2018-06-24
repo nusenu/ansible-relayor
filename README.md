@@ -66,7 +66,7 @@ Supported Operating Systems
 - FreeBSD 10.4, 11.1
 - Ubuntu 18.04
 - CentOS 7
-- Fedora 27
+- Fedora 28
 
 Supported Tor Releases
 -----------------------
