@@ -11,7 +11,7 @@ DataDirectory {{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}
 ORPort {{ item.0.ipv4 }}:{{ item.1.orport }}
 {% if item.0.ipv6 != "" and item.0.ipv6 != "False" and tor_IPv6 == True %}
 ORPort [{{item.0.ipv6}}]:{{item.1.orport}}
-OutboundBindAddress {{item.0.ipv6}}
+OutboundBindAddress [{{item.0.ipv6}}]
 {% endif %}
 
 {% if item.1.dirport != 0 %}
