@@ -52,6 +52,9 @@ Sandbox {{ tor_Sandbox }}
 {% elif ansible_os_family == 'Debian' and ansible_kernel is version_compare('3.5', '>=') and ansible_lsb.codename != "bionic" %}
 Sandbox 1
 {% endif %}
+{% if tor_NoExec is defined and ansible_pkg_mgr != 'yum' %}
+NoExec {{ tor_NoExec }}
+{% endif %}
 
 {% if ((tor_ExitRelay == True and tor_ExitRelaySetting_file is not defined) or (tor_ExitRelay == True and tor_ExitRelaySetting_file is defined and (lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orport~' file='~tor_ExitRelaySetting_file~' delimiter=,') == "exit"))) %}
 # we are an exit relay!

@@ -132,6 +132,12 @@ All variables mentioned here are optional.
     - unlike upstream tor we enable this by default on Debian-based systems which have a Linux kernel (>=3.5) that supports it.
     - default on Debian-based systems: 1 (others: 0)
 
+* `tor_NoExec`
+    - enables (1) or disables (0) tor's NoExec feature
+    - unlike upstream we enable this by default (except on CentOS)
+    - this option is not supported on CentOS
+    - default: 1
+
 * `tor_alpha` boolean
     - Set to True if you want to use Tor alpha version releases.
     - Note: This setting does not ensure an installed tor is upgraded to the alpha release.

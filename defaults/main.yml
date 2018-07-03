@@ -25,6 +25,8 @@ tor_maxPublicIPs: 1
 # to more than a single public IP address
 tor_maxPrivateIPs: 1
 
+tor_NoExec: 1
+
 # we are a non-exit by default
 # setting this to true will enable reduced exit policy
 # and allow custom exit policies via tor_ExitPolicy
