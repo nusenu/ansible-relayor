@@ -3,8 +3,8 @@
 - name: Check for min. ansible version requirement
   assert:
     that:
-      - "{{ ansible_version.full is version_compare('2.5.3', '>=') }}"
-    msg: "Your ansible version is too old, please upgrade to v2.5.3 or newer. Exiting."
+      - "{{ ansible_version.full is version_compare('2.6.1', '>=') }}"
+    msg: "Your ansible version is too old, please upgrade to v2.6.1 or newer. Exiting."
   run_once: true
   delegate_to: 127.0.0.1
   tags:
