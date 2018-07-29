@@ -74,7 +74,7 @@
 - name: Ensure per-instance tor users exist
   become: yes
   user:
-    name: _tor-{{ item.0.ipv4 }}_{{ item.1.orport }}
+    name: "_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
     system: yes
     shell: /bin/false
     createhome: no
