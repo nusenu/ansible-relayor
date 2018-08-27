@@ -220,9 +220,14 @@ All variables mentioned here are optional.
     - this feature **requires** tor version >= v0.3.0.3-alpha (on the target system)
     - default: False
 
-* `tor_enableControlSocket`
-    - will create a ControlSocket file named 'controlsocket' in every instance's datadir
-    - authentication relies on filesystem permissions
+* `tor_enableControlSocket` boolean
+    - if True create a ControlSocket file for every tor instance (i.e. to be used for nyx)
+    - access control relies on filesystem permissions
+    - to give a user access to a specific tor instance's controlsocket file you
+    - have to add the user to the primary group of the tor instance
+    - the path to the socket file(s) is /var/run/tor-instances/instance-id/control
+    - this setting affects all instances on a given server
+    - per instance configuration is not supported
     - default: False
 
 * `tor_freebsd_somaxconn`

@@ -29,8 +29,8 @@ PidFile {{ tor_PidDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/pid
 {% endif %}
 
 {% if tor_enableControlSocket == True %}
-ControlSocket {{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/controlsocket
-{% else %}
+ControlSocket {{ tor_PidDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/control GroupWritable RelaxDirModeCheck
+{% elif tor_enableControlSocket == False and ansible_pkg_mgr == 'apt' %}
 ControlSocket 0
 CookieAuthentication 0
 {% endif %}

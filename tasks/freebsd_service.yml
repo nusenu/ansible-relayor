@@ -24,25 +24,6 @@
     line: "tor_enable=\"YES\""
     create: yes
 
-- name: Ensure PidDir exists (FreeBSD)
-  become: yes
-  file:
-    path: "{{ tor_PidDir }}"
-    state: directory
-    owner: root
-    mode: 0755
-
-- name: Ensure PidDir is owned by per-instance tor_user (FreeBSD)
-  become: yes
-  file:
-    path: "{{ tor_PidDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}"
-    state: directory
-    owner: "_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
-    mode: 0700
-  with_nested:
-   - "{{ tor_ips }}"
-   - "{{ tor_ports }}"
-
 # this affects all instances
 - name: Ensure Tor instances are running and enabled (FreeBSD)
   become: yes

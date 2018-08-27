@@ -83,6 +83,32 @@
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
 
+# We only need to create this folder (used for ControlSocket and on FreeBSD for the pidfile) on:
+# - FreeBSD (regardless of tor_enableControlSocket)
+# - CentOS/Fedora/OpenBSD when tor_enableControlSocket is True
+# we never create it on Debian since the systemd service file creates it there (with different permissions)
+- name: Ensure PID/ControlSocket directory exists
+  become: yes
+  file:
+    path: "{{ tor_PidDir }}"
+    state: directory
+    owner: root
+    mode: 0755
+  when: ansible_system == 'FreeBSD' or (tor_enableControlSocket == True and (ansible_system == 'OpenBSD' or ansible_os_family == 'RedHat'))
+
+- name: Ensure PID/ControlSocket directory is owned by per-instance tor user
+  become: yes
+  file:
+    path: "{{ tor_PidDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}"
+    state: directory
+    owner: "_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
+    group: "_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
+    mode: 0750
+  with_nested:
+   - "{{ tor_ips }}"
+   - "{{ tor_ports }}"
+  when: ansible_system == 'FreeBSD' or (tor_enableControlSocket == True and (ansible_system == 'OpenBSD' or ansible_os_family == 'RedHat'))
+
 - name: Ensure per-instance config folders exist (Debian only)
   become: yes
   file:
