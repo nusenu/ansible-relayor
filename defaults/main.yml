@@ -180,8 +180,6 @@ tor_ExitPolicy:
   - accept *:53
   - accept *:79-81
   - accept *:88
-  - accept *:110
-  - accept *:143
   - accept *:194
   - accept *:220
   - accept *:389
