@@ -7,6 +7,9 @@
     tor_nickname: "{{ ansible_hostname }}"
     tor_alpha: True
     tor_ExitRelay: True
-    tor_ExitPolicy: accept *:80,accept *:443,reject *:*
+    tor_ExitPolicy:
+      - accept *:80
+      - accept *:443
+      - reject *:*
   roles:
    - nusenu.relayor
