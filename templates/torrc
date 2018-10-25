@@ -118,7 +118,7 @@ RelayBandwidthRate {{ lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~i
 {% elif tor_RelayBandwidthRate is defined %}
 RelayBandwidthRate {{ tor_RelayBandwidthRate }}
 {% endif %}
-{% if tor_RelayBandwidthBurst_file is defined %}
+{% if tor_RelayBandwidthBurst_file is defined and (lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orport~' file='~tor_RelayBandwidthBurst_file~' delimiter=,') != "") %}
 RelayBandwidthBurst {{ lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orport~' file='~tor_RelayBandwidthBurst_file~' delimiter=,') }}
 {% elif tor_RelayBandwidthBurst is defined %}
 RelayBandwidthBurst {{ tor_RelayBandwidthBurst }}
