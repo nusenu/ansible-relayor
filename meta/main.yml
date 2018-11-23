@@ -23,7 +23,7 @@ galaxy_info:
     - bionic
   - name: Fedora
     versions:
-    - 28
+    - 29
   galaxy_tags:
     - tor
     - ipv6
