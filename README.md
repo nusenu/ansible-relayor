@@ -63,7 +63,7 @@ Supported Operating Systems
 
 - Debian 9 and Debian Testing
 - OpenBSD 6.4
-- FreeBSD 11.2
+- FreeBSD 11.2, 12.0
 - Ubuntu 18.04
 - CentOS 7 (upstream currently broken #185)
 - Fedora 29 (upstream currently broken #185)
