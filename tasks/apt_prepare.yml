@@ -27,7 +27,7 @@
   set_fact:
     tor_alpha_version: nightly-master
     tor_alpha: True
-  when: tor_nightly_builds == True
+  when: tor_nightly_builds
 
 - name: Ensure torproject.org alpha/nightly repo is present if enabled (APT)
   become: yes
@@ -35,7 +35,7 @@
     repo: 'deb https://deb.torproject.org/torproject.org tor-{{ tor_alpha_version }}-{{ tor_distribution_release }} main'
     state: present
     update_cache: yes
-  when: tor_alpha == True
+  when: tor_alpha
 
 # Background:
 # https://github.com/nusenu/ansible-relayor/issues/72

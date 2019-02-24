@@ -37,7 +37,7 @@
       - "tor_IPv6Exit == True"
       - "tor_IPv6 == True"
     msg: "You have to few public IPv4 and IPv6 addresses for the tor_dedicatedExitIP feature (or you did not enable exiting)"
-  when: tor_dedicatedExitIP == True
+  when: tor_dedicatedExitIP
   tags:
     - always
 
@@ -46,7 +46,7 @@
   register: tor_dns_check
   failed_when: tor_dns_check.rc == 0
   changed_when: False
-  when: tor_ExitRelay == True
+  when: tor_ExitRelay
 
 - name: Set OS specific variables
   include_vars: "os_{{ ansible_os_family }}.yml"

@@ -57,7 +57,7 @@
   fail: msg="
 
             Ed25519 MASTER KEY detected on the relay - it is NOT supposed to be there! Aborting."
-  when: item.stat.exists == True
+  when: item.stat.exists
   with_items: "{{ tor_masterkeyonline.results }}"
 
 # not relying on the datadir/fingerprint file is more robust
@@ -94,7 +94,7 @@
     state: directory
     owner: root
     mode: 0755
-  when: ansible_system == 'FreeBSD' or (tor_enableControlSocket == True and (ansible_system == 'OpenBSD' or ansible_os_family == 'RedHat'))
+  when: ansible_system == 'FreeBSD' or (tor_enableControlSocket and (ansible_system == 'OpenBSD' or ansible_os_family == 'RedHat'))
 
 - name: Ensure PID/ControlSocket directory is owned by per-instance tor user
   become: yes
@@ -107,7 +107,7 @@
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
-  when: ansible_system == 'FreeBSD' or (tor_enableControlSocket == True and (ansible_system == 'OpenBSD' or ansible_os_family == 'RedHat'))
+  when: ansible_system == 'FreeBSD' or (tor_enableControlSocket and (ansible_system == 'OpenBSD' or ansible_os_family == 'RedHat'))
 
 - name: Ensure per-instance config folders exist (Debian only)
   become: yes
@@ -228,7 +228,7 @@
     src: "{{ tor_exit_notice_file }}"
     dest: "{{ tor_ConfDir }}/tor-exit-notice.html"
     mode: 0444
-  when: tor_ExitRelay == True and tor_ExitNoticePage == True
+  when: tor_ExitRelay and tor_ExitNoticePage
 
 - name: Ensure torrc configuration file(s) are in place
   become: yes

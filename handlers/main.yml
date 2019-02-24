@@ -42,4 +42,4 @@
     name: "tor@{{ item.item.0.ipv4 }}_{{ item.item.1.orport }}.service"
     state: reloaded
   with_items: "{{ tor_instances_tmp.results }}"
-  when: item.changed == True and ansible_system == 'Linux'
+  when: item.changed and ansible_system == 'Linux'
