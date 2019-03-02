@@ -75,21 +75,16 @@ tor_distribution_release: "{{ ansible_lsb.codename }}"
 
 # filter potentially malicious input from relay-provided IPv4/v6 addresses
 # https://docs.ansible.com/ansible/playbooks_filters_ipaddr.html
-tor_available_public_ipv4s: "{{ ansible_all_ipv4_addresses| ipv4('address') | ipv4('public') }}"
+tor_available_public_ipv4s: "{{ ansible_all_ipv4_addresses | ipv4('address') | ipv4('public') }}"
 tor_v4ips: "{{ tor_available_public_ipv4s[0:tor_maxPublicIPs] }}"
-tor_ipv4_count: "{{ tor_v4ips | length|int }}"
+tor_ipv4_count: "{{ tor_v4ips | length }}"
 
 # we can not use more IPv6 IPs than we have IPv4 IPs so we truncate (but fewer is ok)
-tor_available_public_ipv6s: "{{ ansible_all_ipv6_addresses|ipv6('public')|ipv6('address') }}"
-
+tor_available_public_ipv6s: "{{ ansible_all_ipv6_addresses | ipv6('address') | ipv6('public') }}"
+tor_v6ips: "{{ tor_available_public_ipv6s[0:tor_ipv4_count|int] | ipwrap }}"
 
 # This var enables autoconfiguration for OutboundBindAddressExit
 tor_dedicatedExitIP: False
-
-# the following line is commented out and handled in ip-list.yml until
-# https://github.com/ansible/ansible/issues/14829
-# gets fixed
-#tor_v6ips: "{{ tor_v6tmp[0:tor_ipv4_count|int]|ipv6('address') }}"
 
 tor_RunAsDaemon: 1
 
