@@ -32,10 +32,10 @@
 - name: Ensure preconditions for tor_dedicatedExitIP are met (enough public IP addresses on the system)
   assert:
     that:
-      - "tor_available_public_ipv4s|length >= tor_maxPublicIPs*2 or tor_available_public_ipv6s|length >= tor_maxPublicIPs*2"
-      - "tor_ExitRelay == True"
-      - "tor_IPv6Exit == True"
-      - "tor_IPv6 == True"
+      - "tor_available_public_ipv4s | length >= tor_maxPublicIPs*2 or tor_available_public_ipv6s | length >= tor_maxPublicIPs*2"
+      - tor_ExitRelay
+      - tor_IPv6Exit
+      - tor_IPv6
     msg: "You have to few public IPv4 and IPv6 addresses for the tor_dedicatedExitIP feature (or you did not enable exiting)"
   when: tor_dedicatedExitIP
   tags:
