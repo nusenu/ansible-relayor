@@ -7,10 +7,10 @@ driver:
 platforms:
   - name: debian-9
   - name: ubuntu-18.04
-  - name: centos-7
-  - name: fedora-29
-    driver:
-      box: roboxes/fedora29
+#  - name: centos-7
+#  - name: fedora-29
+#    driver:
+#      box: roboxes/fedora29
   - name: freebsd-12
     driver:
       box: roboxes/freebsd12
