@@ -9,9 +9,9 @@ SocksPort {{ tor_SocksPort }}
 User _tor-{{ item.0.ipv4 }}_{{ item.1.orport }}
 DataDirectory {{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}
 ORPort {{ item.0.ipv4 }}:{{ item.1.orport }}
-{% if item.0.ipv6 != "" and item.0.ipv6 != "False" and tor_IPv6 == True %}
-ORPort [{{item.0.ipv6}}]:{{item.1.orport}}
-OutboundBindAddress [{{item.0.ipv6}}]
+{% if item.0.ipv6 != "" and tor_IPv6 == True %}
+ORPort {{ item.0.ipv6 }}:{{ item.1.orport }}
+OutboundBindAddress {{ item.0.ipv6 }}
 {% endif %}
 
 {% if item.1.dirport != 0 %}
@@ -59,10 +59,10 @@ NoExec {{ tor_NoExec }}
 {% if ((tor_ExitRelay == True and tor_ExitRelaySetting_file is not defined) or (tor_ExitRelay == True and tor_ExitRelaySetting_file is defined and (lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orport~' file='~tor_ExitRelaySetting_file~' delimiter=,') == "exit"))) %}
 # we are an exit relay!
 ExitRelay 1
-{% if item.0.ipv6 != "" and item.0.ipv6 != "False" and tor_IPv6 == True and tor_IPv6Exit == True %}
+{% if item.0.ipv6 != "" and tor_IPv6 == True and tor_IPv6Exit == True %}
 IPv6Exit 1
 {% if tor_dedicatedExitIP != True %}
-DirPort [{{ item.0.ipv6 }}]:{{ item.1.dirport }} NoAdvertise
+DirPort {{ item.0.ipv6 }}:{{ item.1.dirport }} NoAdvertise
 {% endif %}
 {% endif %}
 {% if tor_ExitNoticePage == True and tor_DirPortFrontPage is not defined %}
@@ -81,11 +81,11 @@ DirPort {{ tor_available_public_ipv4s[loop_idx + tor_maxPublicIPs]}}:{{ item.1.d
 {% endif %}
 {% if tor_available_public_ipv6s|length >= tor_maxPublicIPs*2 and tor_IPv6 == True and tor_IPv6Exit == True %}
 {% if tor_ports|length == 2 %}
-OutboundBindAddressExit [{{ tor_available_public_ipv6s[(loop_idx/2)|round(0,'floor')|int + tor_maxPublicIPs]}}]
-DirPort [{{ tor_available_public_ipv6s[(loop_idx/2)|round(0,'floor')|int + tor_maxPublicIPs]}}]:{{ item.1.dirport }} NoAdvertise
+OutboundBindAddressExit {{ tor_available_public_ipv6s[(loop_idx/2)|round(0,'floor')|int + tor_maxPublicIPs] }}
+DirPort {{ tor_available_public_ipv6s[(loop_idx/2)|round(0,'floor')|int + tor_maxPublicIPs] }}:{{ item.1.dirport }} NoAdvertise
 {% elif tor_ports|length == 1 %}
-OutboundBindAddressExit [{{ tor_available_public_ipv6s[loop_idx + tor_maxPublicIPs]}}]
-DirPort [{{ tor_available_public_ipv6s[loop_idx + tor_maxPublicIPs]}}]:{{ item.1.dirport }} NoAdvertise
+OutboundBindAddressExit {{ tor_available_public_ipv6s[loop_idx + tor_maxPublicIPs] }}
+DirPort {{ tor_available_public_ipv6s[loop_idx + tor_maxPublicIPs] }}:{{ item.1.dirport }} NoAdvertise
 {% endif %}
 {% endif %}
 {% endif %}
@@ -96,6 +96,7 @@ ExitPolicy {{entry}}
 {% else %}
 ExitRelay 0
 ExitPolicy reject *:*
+ExitPolicy reject6 *:*
 {% endif %}
 
 {% if tor_PublishServerDescriptor is defined %}
