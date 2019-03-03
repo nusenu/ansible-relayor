@@ -41,7 +41,9 @@
 
 - name: Detect duplicate relay keys across relays (LOCAL)
   become: no
-  shell: openssl sha256 -r {{ tor_offline_masterkey_dir }}/*/keys/secret_id_key {{ tor_offline_masterkey_dir }}/*/keys/ed25519_master_id_secret_key|cut -d' ' -f1|sort|uniq -d|wc -l
+  shell: >
+        openssl sha256 -r {{ tor_offline_masterkey_dir }}/*/keys/secret_id_key {{ tor_offline_masterkey_dir }}/*/keys/ed25519_master_id_secret_key |
+        cut -d' ' -f1|sort|uniq -d|wc -l
   delegate_to: 127.0.0.1
   run_once: true
   register: tor_dupkeycount
@@ -175,7 +177,10 @@
 
 - name: Compare local vs. remote RSA key (secret_id_key)
   become: no
-  local_action: shell openssl sha256 -r {{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-"{{ item.0.ipv4 }}_{{ item.1.orport }}"/keys/secret_id_key*|cut -d' ' -f1|uniq -d|wc -l
+  shell: >
+        openssl sha256 -r {{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-"{{ item.0.ipv4 }}_{{ item.1.orport }}"/keys/secret_id_key*
+        | cut -d' ' -f1|uniq -d|wc -l
+  delegate_to: 127.0.0.1
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
@@ -186,7 +191,9 @@
   assert:
     that:
       - "item.stdout|int == 1"
-    msg: "Key mismatch detected! Solution: http://bit.ly/2j6wc70 Affected instance: {{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.item.0.ipv4 }}_{{ item.item.1.orport }}/keys"
+    msg: >
+         "Key mismatch detected! Solution: http://bit.ly/2j6wc70 Affected instance:
+         {{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.item.0.ipv4 }}_{{ item.item.1.orport }}/keys"
   with_items: "{{ tor_rsakey_match.results }}"
 
 # this task is separated from the task named "Ensure RSA key is in place" because it is not run with 'force=no'
