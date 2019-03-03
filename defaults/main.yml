@@ -113,13 +113,22 @@ tor_exit_notice_file: tor-exit-notice.html
 
 # List of blacklisted DNS resolvers
 #
-# Google DNS servers taken from:
-#  https://developers.google.com/speed/public-dns/docs/using
+# Google DNS IPs:
+#  8.8.8.8
+#  8.8.4.4
+#  2001:4860:4860::8888
+#  2001:4860:4860::8844
+#  taken from: https://developers.google.com/speed/public-dns/docs/using#google_public_dns_ip_addresses
 #
 # OpenDNS IPs:
 #  208.67.222.123
 #  208.67.220.123
+#  208.67.222.222
+#  208.67.220.220
+#  2620:119:35::35
+#  2620:119:53::53
 #  taken from: https://www.opendns.com/setupguide/
+#  taken from: https://www.opendns.com/about/innovations/ipv6/
 #
 # CloudFlare DNS IPs:
 #  1.1.1.1
@@ -133,7 +142,11 @@ tor_exit_notice_file: tor-exit-notice.html
 #  9.9.9.10
 #  149.112.112.10
 #  149.112.112.112
-#  taken from: https://quad9.com/microsoft/
+#  2620:fe::fe
+#  2620:fe::9
+#  2620:fe::10
+#  2620:fe::fe:10
+#  taken from: https://www.quad9.com/faq/
 #
 # Level 3
 #  4.2.2.1-6
@@ -150,20 +163,26 @@ tor_exit_notice_file: tor-exit-notice.html
 tor_dnsresolver_blacklist:
   - 8\.8\.8\.8
   - 8\.8\.4\.4
-  - 2001:4860:4860::8888
-  - 2001:4860:4860::8844
-  - 2001:4860:4860:0:0:0:0:8888
-  - 2001:4860:4860:0:0:0:0:8844
+  - 2001:4860:4860:.*:8888
+  - 2001:4860:4860:.*:8844
   - 208\.67\.222\.123
   - 208\.67\.220\.123
+  - 208\.67\.222\.222
+  - 208\.67\.220\.220
+  - 2620:119:35:.*:35
+  - 2620:119:53:.*:53
   - 1\.1\.1\.1
   - 1\.0\.0\.1
-  - 2606:4700:4700::1111
-  - 2606:4700:4700::1001
+  - 2606:4700:4700:.*:1111
+  - 2606:4700:4700:.*:1001
   - 9\.9\.9\.9
   - 9\.9\.9\.10
   - 149\.112\.112\.10
   - 149\.112\.112\.112
+  - 2620:fe:.*:fe
+  - 2620:fe:.*:9
+  - 2620:fe:.*:10
+  - 2620:fe:.*:fe:10
   - 4\.2\.2\.[1-6]
 
 # Construction of grep command to
