@@ -28,7 +28,7 @@
 - name: Generate new Ed25519 signing keys (LOCAL)
   become: no
   command: >
-        tor --keygen --SigningKeyLifetime {{ tor_signingkeylifetime_days}}\ days --ignore-missing-torrc -f /dev/null
+        tor --keygen --SigningKeyLifetime {{ tor_signingkeylifetime_days }}\ days --ignore-missing-torrc -f /dev/null
         --defaults-torrc /dev/null --Log "err stdout"
         --datadirectory "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}"
   delegate_to: 127.0.0.1

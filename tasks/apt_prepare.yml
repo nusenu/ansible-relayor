@@ -32,7 +32,9 @@
 - name: Ensure torproject.org alpha/nightly repo is present if enabled (APT)
   become: yes
   apt_repository:
-    repo: 'deb https://deb.torproject.org/torproject.org tor-{{ tor_alpha_version }}-{{ tor_distribution_release }} main'
+    repo: >
+        'deb https://deb.torproject.org/torproject.org
+        tor-{{ tor_alpha_version }}-{{ tor_distribution_release }} main'
     state: present
     update_cache: yes
   when: tor_alpha
