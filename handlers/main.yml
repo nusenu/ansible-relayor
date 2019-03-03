@@ -15,7 +15,8 @@
 
 - name: systemctl daemon-reload
   become: yes
-  command: systemctl daemon-reload
+  systemd:
+    daemon_reload: True
 
 - name: re-gather facts
   setup:
