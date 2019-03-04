@@ -50,7 +50,8 @@
   changed_when: False
 
 - name: Abort on duplicate relay keys
-  fail: msg="Duplicate relay key detected! Aborting."
+  fail:
+    msg: "Duplicate relay key detected! Aborting."
   run_once: true
   when: tor_dupkeycount.stdout|int(1) != 0
 
@@ -64,7 +65,8 @@
    - "{{ tor_ports }}"
 
 - name: Abort if Ed25519 master keys are on the relay
-  fail: msg="
+  fail:
+    msg: "
 
             Ed25519 MASTER KEY detected on the relay - it is NOT supposed to be there! Aborting."
   when: item.stat.exists
