@@ -42,8 +42,11 @@
 - name: Detect duplicate relay keys across relays (LOCAL)
   become: no
   shell: >
-        openssl sha256 -r {{ tor_offline_masterkey_dir }}/*/keys/secret_id_key {{ tor_offline_masterkey_dir }}/*/keys/ed25519_master_id_secret_key |
+        set -o pipefail && openssl sha256 -r
+        {{ tor_offline_masterkey_dir }}/*/keys/secret_id_key {{ tor_offline_masterkey_dir }}/*/keys/ed25519_master_id_secret_key |
         cut -d' ' -f1|sort|uniq -d|wc -l
+  args:
+    executable: /bin/bash
   delegate_to: 127.0.0.1
   run_once: true
   register: tor_dupkeycount
@@ -75,7 +78,12 @@
 # not relying on the datadir/fingerprint file is more robust
 - name: Collect fingerprints for MyFamily (LOCAL)
   become: no
-  shell: for key in {{ tor_offline_masterkey_dir }}/*/keys/secret_id_key; do openssl rsa -in $key -outform DER -RSAPublicKey_out 2> /dev/null| openssl sha1 -r; done|cut -d" " -f1|sort|xargs|sed -e 's/ /,/g'
+  shell: >
+        set -o pipefail && for key in {{ tor_offline_masterkey_dir }}/*/keys/secret_id_key;
+            do openssl rsa -in $key -outform DER -RSAPublicKey_out 2> /dev/null| openssl sha1 -r;
+        done|cut -d" " -f1|sort|xargs|sed -e 's/ /,/g'
+  args:
+    executable: /bin/bash
   delegate_to: 127.0.0.1
   run_once: true
   register: tor_family
@@ -180,8 +188,11 @@
 - name: Compare local vs. remote RSA key (secret_id_key)
   become: no
   shell: >
-        openssl sha256 -r {{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-"{{ item.0.ipv4 }}_{{ item.1.orport }}"/keys/secret_id_key*
+        set -o pipefail && openssl sha256 -r
+        {{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-"{{ item.0.ipv4 }}_{{ item.1.orport }}"/keys/secret_id_key*
         | cut -d' ' -f1|uniq -d|wc -l
+  args:
+    executable: /bin/bash
   delegate_to: 127.0.0.1
   with_nested:
    - "{{ tor_ips }}"

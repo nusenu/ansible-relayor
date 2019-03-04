@@ -48,6 +48,7 @@ Control Machine Requirements
 - required commands: sort, uniq, wc, cut, sed, xargs
 - openssl >= 1.0.0
 - ansible >= 2.7.8
+- bash under /bin/bash
 
 Managed Node Requirements
 
