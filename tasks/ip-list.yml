@@ -14,7 +14,7 @@
 
 - name: workaround for ansible bug 14829 (2/3)
   set_fact:
-    tor_v6ips: "{{ tor_available_public_ipv6s[0:tor_ipv4_count|int]|ipv6('address') }}"
+    tor_v6ips: "{{ tor_available_public_ipv6s[0:tor_ipv4_count|int] | ipv6('address') }}"
 
 - name: workaround for ansible bug 14829 (3/3)
   set_fact:
@@ -33,4 +33,4 @@
 
 - name: setup IP list (2/2)
   set_fact:
-    tor_ips: "{{ tor_ipsinterm.results | map(attribute='ansible_facts.ips')|list}}"
+    tor_ips: "{{ tor_ipsinterm.results | map(attribute='ansible_facts.ips') | list }}"
