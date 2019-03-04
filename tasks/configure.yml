@@ -69,9 +69,7 @@
 
 - name: Abort if Ed25519 master keys are on the relay
   fail:
-    msg: "
-
-            Ed25519 MASTER KEY detected on the relay - it is NOT supposed to be there! Aborting."
+    msg: "Ed25519 MASTER KEY detected on the relay - it is NOT supposed to be there! Aborting."
   when: item.stat.exists
   with_items: "{{ tor_masterkeyonline.results }}"
 
