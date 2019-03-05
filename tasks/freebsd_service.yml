@@ -9,7 +9,10 @@
   become: yes
   lineinfile:
     dest: /etc/rc.conf
-    line: "tor_instances=\"${tor_instances} {{ item.0.ipv4 }}_{{ item.1.orport }}:{{ tor_ConfDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}.torrc:root:root:{{ tor_PidDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/pid:{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}\""
+    line: "tor_instances=\"${tor_instances} {{ item.0.ipv4 }}_{{ item.1.orport }}:\
+        {{ tor_ConfDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}.torrc:root:root:\
+        {{ tor_PidDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/pid:{{ tor_DataDir }}\
+        /{{ item.0.ipv4 }}_{{ item.1.orport }}\""
     create: yes
   with_nested:
    - "{{ tor_ips }}"
