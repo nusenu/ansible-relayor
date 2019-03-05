@@ -260,7 +260,8 @@
   become: yes
   template:
     src: torrc
-    dest: "{{ (ansible_pkg_mgr != 'apt')| ternary(tor_ConfDir ~ '/' ~ item.0.ipv4 ~ '_' ~ item.1.orport ~ '.torrc', tor_ConfDir ~ '/' ~ item.0.ipv4 ~ '_' ~ item.1.orport ~ '/torrc') }}"
+    dest: "{{ (ansible_pkg_mgr != 'apt')| ternary(tor_ConfDir ~ '/' ~ item.0.ipv4 ~ '_' ~ item.1.orport\
+         ~ '.torrc', tor_ConfDir ~ '/' ~ item.0.ipv4 ~ '_' ~ item.1.orport ~ '/torrc') }}"
     owner: root
     mode: 0644
     backup: "{{ tor_backup_torrc }}"
