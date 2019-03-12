@@ -1,7 +1,7 @@
 ---
 
 - name: Gather current system-wide file descriptor limits (OpenBSD)
-  shell: "sysctl kern.maxfiles|cut -d= -f2"
+  command: "sysctl -n kern.maxfiles"
   become: no
   register: tor_openbsd_maxfiles
   changed_when: False
