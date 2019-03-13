@@ -1,0 +1,3 @@
+.kitchen
+*.retry
+Gemfile.lock
