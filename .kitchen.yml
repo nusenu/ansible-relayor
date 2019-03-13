@@ -26,7 +26,6 @@ platforms:
 
 provisioner:
   name: ansible_push
-  ansible_config: test/ansible.cfg
   chef_bootstrap_url: nil
   idempotency_test: true
   fail_non_idempotent: true
