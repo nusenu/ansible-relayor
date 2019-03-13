@@ -6,4 +6,4 @@
     - tor_maxPublicIPs: 2
     - tor_ExitRelay: True
   roles:
-    - ansible-relayor
+    - "{{ playbook_dir | regex_replace('test/integration/default$') }}"

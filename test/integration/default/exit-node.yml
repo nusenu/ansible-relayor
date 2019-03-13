@@ -5,4 +5,4 @@
   vars:
     tor_ExitRelay: True
   roles:
-    - ansible-relayor
+    - "{{ playbook_dir | regex_replace('test/integration/default$') }}"

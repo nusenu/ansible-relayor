@@ -2,7 +2,7 @@
 - hosts: all
   vars_files:
     - vars/dry-run-vars.yml
-  roles:
-    - ansible-relayor
   vars:
     - tor_alpha: True
+  roles:
+    - "{{ playbook_dir | regex_replace('test/integration/default$') }}"

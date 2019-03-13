@@ -3,4 +3,4 @@
   vars_files:
     - vars/dry-run-vars.yml
   roles:
-    - ansible-relayor
+    - "{{ playbook_dir | regex_replace('test/integration/default$') }}"
