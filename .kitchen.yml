@@ -30,6 +30,7 @@ provisioner:
   chef_bootstrap_url: nil
   idempotency_test: true
   fail_non_idempotent: true
+  diff: true
 
 transport:
   max_ssh_sessions: 6
