@@ -10,4 +10,4 @@
        - orport: 9000
          dirport: 9001
   roles:
-    - ansible-relayor
+    - "{{ playbook_dir | regex_replace('test/integration/default$') }}"
