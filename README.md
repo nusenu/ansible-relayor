@@ -47,7 +47,7 @@ Control Machine Requirements
 - python-netaddr package must be installed
 - required commands: sort, uniq, wc, cut, sed, xargs
 - openssl >= 1.0.0
-- ansible >= 2.7.8
+- ansible >= 2.8.4
 - bash under /bin/bash
 
 Managed Node Requirements
