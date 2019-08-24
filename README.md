@@ -244,6 +244,12 @@ All variables mentioned here are optional.
     - Note: The repository metadata is not updated, so setting this to latest does not give you any guarantees if it actually is the latest version.
     - default: present
 
+* `tor_additional_MyFamily`
+    - this variable is not needed if you manage all your relays with this ansible role.
+    - if you have relays not managed with this role you must specify the comma separated list of unmanaged relay fingerprints in this variable so they get included in the generated torrc configuration
+    - Note: You also need to manually add the list of fingerprints of your relayor managed relays to the unmanaged relay.
+    - default: not set
+
 This role supports most torrc options documented in the 'SERVER OPTIONS'
 section of tor's manual. Set them via 'tor_OptionName'.
 Have a look at templates/torrc if you want to have list of supported
