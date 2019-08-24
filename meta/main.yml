@@ -14,7 +14,7 @@ galaxy_info:
     - 12.0
   - name: OpenBSD
     versions:
-    - 6.4
+    - 6.5
   - name: EL
     versions:
     - 7

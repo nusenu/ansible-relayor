@@ -63,7 +63,7 @@ Supported Operating Systems
 ---------------------------
 
 - Debian 9 and 10
-- OpenBSD 6.4
+- OpenBSD 6.5
 - FreeBSD 11.3, 12.0
 - Ubuntu 18.04
 - CentOS 7 (upstream currently broken #185)
