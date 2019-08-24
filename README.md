@@ -71,9 +71,7 @@ Supported Operating Systems
 
 Supported Tor Releases
 -----------------------
-- tor >= 0.2.9.x
-- some specific but optional features might require newer tor versions (i.e. `tor_dedicatedExitIP`)
-
+- tor >= 0.3.5.x
 
 Role Variables
 --------------
@@ -218,7 +216,6 @@ All variables mentioned here are optional.
     - to make use of this feature you need more public IPv4 or IPv6 addresses than `tor_maxPublicIPs`
     - if this condition is not met we will abort
     - manually specifying the IP address used by `OutboundBindAddressExit` is not supported
-    - this feature **requires** tor version >= v0.3.0.3-alpha (on the target system)
     - default: False
 
 * `tor_enableControlSocket` boolean
