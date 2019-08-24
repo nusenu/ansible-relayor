@@ -322,12 +322,6 @@ Then you can run all tests or just select specific instances, for example: `kitc
 
 Note that to run tests, you also need Vagrant and VirtualBox.
 
-Reporting Security Bugs
------------------------
-
-Feel free to submit them in the public issue tracker,
-or if you like via GPG encrypted email.
-
 Origins
 -------
 https://github.com/david415/ansible-tor (changed significantly since then)
