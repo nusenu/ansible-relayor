@@ -259,3 +259,7 @@ tor_ExitPolicy:
   - accept *:50002
   - accept *:64738
   - reject *:*
+
+# If you want to change behavior of the handler if torrc is changed. Default is "reloaded". If this causes errors when 
+# running your playbook add "tor_restart_behavior: restarted" to your playbook.
+tor_restart_behavior: reloaded
