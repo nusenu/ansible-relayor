@@ -259,3 +259,7 @@ tor_ExitPolicy:
   - accept *:50002
   - accept *:64738
   - reject *:*
+
+# The default state of handler for reloading the tor instance after making changes to the torrc. 
+# If this causes problems when running a playbook change the variable to "restarted"
+tor_restart_behavior: reloaded
