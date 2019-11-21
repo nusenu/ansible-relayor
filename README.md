@@ -249,6 +249,11 @@ All variables mentioned here are optional.
     - if you have relays not managed with this role you must specify the comma separated list of unmanaged relay fingerprints in this variable so they get included in the generated torrc configuration
     - Note: You also need to manually add the list of fingerprints of your relayor managed relays to the unmanaged relay.
     - default: not set
+    
+* `tor_restart_behavior`
+    - Tor instances are reloaded when the tor configuration file is changed (default option).
+    - This can cause errors on the and long runtimes of the playbook on the controll machine because the instance is not reloaded correctly on the server.
+    - Add the variable "tor_restart_behavior: restarted" to the playbook if you are experiencing errors.
 
 This role supports most torrc options documented in the 'SERVER OPTIONS'
 section of tor's manual. Set them via 'tor_OptionName'.
