@@ -34,14 +34,14 @@
   become: yes
   service:
     name: tor
-    state: reloaded
+    state: "{{ tor_restart_behavior }}"
   when: ansible_system == 'FreeBSD'
 
 - name: Ensure Tor instances are reloaded if its torrc changed (Linux)
   become: yes
   service:
     name: "tor@{{ item.item.0.ipv4 }}_{{ item.item.1.orport }}.service"
-    state: reloaded
+    state: "{{ tor_restart_behavior }}"
   with_items: "{{ tor_instances_tmp.results }}"
   when: item.changed and ansible_system == 'Linux'
 
@@ -49,7 +49,7 @@
   become: yes
   service:
     name: "tor{{ item.item.0.ipv4|replace('.','_') }}_{{ item.item.1.orport }}"
-    state: reloaded
+    state: "{{ tor_restart_behavior }}"
   with_items: "{{ tor_instances_tmp.results }}"
   when: item.changed and ansible_system == 'OpenBSD'
   tags:
