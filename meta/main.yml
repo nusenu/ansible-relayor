@@ -15,15 +15,9 @@ galaxy_info:
   - name: OpenBSD
     versions:
     - 6.5
-  - name: EL
-    versions:
-    - 7
   - name: Ubuntu
     versions:
     - bionic
-  - name: Fedora
-    versions:
-    - 29
   galaxy_tags:
     - tor
     - ipv6
