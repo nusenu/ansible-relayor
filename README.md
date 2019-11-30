@@ -63,8 +63,8 @@ Supported Operating Systems
 ---------------------------
 
 - Debian 9 and 10
-- OpenBSD 6.5
-- FreeBSD 11.3, 12.0
+- OpenBSD 6.6
+- FreeBSD 11.3, 12.1
 - Ubuntu 18.04
 
 Supported Tor Releases
