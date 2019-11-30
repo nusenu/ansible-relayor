@@ -95,7 +95,7 @@
     name: "_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
     system: yes
     shell: /bin/false
-    createhome: no
+    create_home: yes
     home: "{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}"
   with_nested:
    - "{{ tor_ips }}"
