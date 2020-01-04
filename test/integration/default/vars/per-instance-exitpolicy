@@ -1,0 +1,4 @@
+exit-per-instance-exitpolicy-debian-10-10.0.2.15_9100;reject *4:25,reject *6:12
+exit-per-instance-exitpolicy-ubuntu-1804-10.0.2.15_9100;reject *4:25,reject *6:123
+exit-per-instance-exitpolicy-freebsd-12-10.0.2.15_9100;reject *4:25,reject *6:123
+exit-per-instance-exitpolicy-openbsd-10.0.2.15_9100;reject *4:25,reject *6:123

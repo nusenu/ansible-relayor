@@ -1,0 +1,9 @@
+---
+- hosts: all
+  vars_files:
+    - vars/dry-run-vars.yml
+  vars:
+    - tor_ExitRelay: True
+    - tor_ExitPolicy_file: vars/per-instance-exitpolicy
+  roles:
+    - "{{ playbook_dir | regex_replace('test/integration/default$') }}"
