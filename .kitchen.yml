@@ -48,6 +48,9 @@ suites:
   - name: t-mixed
     provisioner:
       playbook: "test/integration/default/mixed-node.yml"
+  - name: t-exit-per-instance-exitpolicy
+    provisioner:
+      playbook: "test/integration/default/exit-per-instance-exitpolicy.yml"
   - name: t-guard-2publicIPs
     driver:
       network:

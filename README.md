@@ -191,6 +191,16 @@ All variables mentioned here are optional.
     - see defaults/main.yml for an example on how to set it
     - default: reduced exit policy (https://trac.torproject.org/projects/tor/wiki/doc/ReducedExitPolicy)
 
+* `tor_ExitPolicy_file` /path/to/file
+    - this is a simple semicolon separated csv file stored on the ansible control machine defining the `ExitPolicy` torrc setting for each tor instance (instead of server-wide)
+    - first column: instance identifier (inventory_hostname-ip_orport)
+    - second column: value as accepted by `ExitPolicy` (see tor manpage)
+    - example content: "myrelay-192.168.1.1_443;reject *:25,reject *:123"
+    - only relevant if `tor_ExitRelay` is True
+    - this can be combined with the `tor_ExitPolicy` setting and will override it (this is more specific)
+    - only tor instances that you want to have a specific exit policy for are required to be listed in the file (others can be omitted)
+    - default: not set
+
 * `tor_maxPublicIPs`
     - Limits the amount of public IPs we will use to generate instances on a single host.
     - Indirectly limits the amount of instances we generate per host.

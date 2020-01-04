@@ -90,9 +90,13 @@ DirPort [{{ tor_available_public_ipv6s[loop_idx + tor_maxPublicIPs]}}]:{{ item.1
 {% endif %}
 {% endif %}
 
+{% if tor_ExitPolicy_file is defined and (lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orport~' file='~tor_ExitPolicy_file~' delimiter=;') != [])  %}
+ExitPolicy {{ lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orport~' file='~tor_ExitPolicy_file~' delimiter=;') }}
+{% else %}
 {% for entry in tor_ExitPolicy %}
 ExitPolicy {{entry}}
 {% endfor %}
+{% endif %}
 {% else %}
 ExitRelay 0
 ExitPolicy reject *:*
