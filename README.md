@@ -71,6 +71,22 @@ Supported Tor Releases
 -----------------------
 - tor >= 0.3.5.x
 
+Example Playbook
+--------------
+Variables are set in playbook to override ones in `defaults/main.yml`
+
+```yaml
+- hosts: tor-servers
+  roles:
+    - nusenu.relayor
+  vars:
+    tor_ContactInfo: "contact [AT] domain.com"
+    tor_nicknamefile: files/nicknames.csv
+    tor_AbuseEmailAddress: abuse@domain.com
+    tor_package_state: latest
+    tor_signingkeylifetime_days: 30
+```
+
 Role Variables
 --------------
 All variables mentioned here are optional.
