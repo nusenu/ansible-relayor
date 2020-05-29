@@ -83,7 +83,7 @@ A minimal playbook using ansible-relayor to setup non-exit relays could look lik
   vars:
     tor_ContactInfo: relay-operator@example.com
   roles:
-   - nusenu.relayor
+    - nusenu.relayor
 ```
 
 For more examples see the playbook-examples folder.
