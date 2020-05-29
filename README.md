@@ -71,6 +71,23 @@ Supported Tor Releases
 -----------------------
 - tor >= 0.3.5.x
 
+Example Playbook
+----------------
+
+A minimal playbook using ansible-relayor to setup non-exit relays could look like this:
+
+```yaml
+---
+
+- hosts: relays
+  vars:
+    tor_ContactInfo: relay-operator@example.com
+  roles:
+   - nusenu.relayor
+```
+
+For more examples see the playbook-examples folder.
+
 Role Variables
 --------------
 All variables mentioned here are optional.
