@@ -53,6 +53,7 @@ Control Machine Requirements
 Managed Node Requirements
 
 - a non-root user with sudo permissions
+- python
 - static IPv4 address(es)
     - we can use multiple public IPs
     - if you have no public IP we will use a single private IP (and assume NAT)
