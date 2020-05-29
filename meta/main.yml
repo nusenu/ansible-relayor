@@ -17,7 +17,7 @@ galaxy_info:
     - 6.6
   - name: Ubuntu
     versions:
-    - bionic
+    - focal
   galaxy_tags:
     - tor
     - ipv6
