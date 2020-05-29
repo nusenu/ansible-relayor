@@ -14,7 +14,7 @@ galaxy_info:
     - 12.1
   - name: OpenBSD
     versions:
-    - 6.6
+    - 6.7
   - name: Ubuntu
     versions:
     - focal

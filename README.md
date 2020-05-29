@@ -63,7 +63,7 @@ Supported Operating Systems
 ---------------------------
 
 - Debian 9 and 10
-- OpenBSD 6.6
+- OpenBSD 6.7
 - FreeBSD 11.3, 12.1
 - Ubuntu 20.04
 
