@@ -94,6 +94,8 @@ All variables mentioned here are optional.
 
 * `tor_ContactInfo` string
     - Sets the relay's ContactInfo field.
+    - This setting is mandatory.
+    - Operators are encouraged to use the [ContactInfo Information Sharing Specification](https://nusenu.github.io/ContactInfo-Information-Sharing-Specification/) to publish useful contact information.
 
 * `tor_signingkeylifetime_days` integer
     - all tor instances created by relayor run in [OfflineMasterKey](https://www.torproject.org/docs/tor-manual.html.en#OfflineMasterKey) mode

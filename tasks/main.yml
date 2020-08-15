@@ -22,6 +22,14 @@
     - always
   changed_when: False
 
+- name: Ensure tor_ContactInfo is set
+  assert:
+    that:
+      - tor_ContactInfo is defined
+    msg: "tor_ContactInfo is not configured but mandatory, please set it."
+  tags:
+    - always
+
 - name: Ensure we do not create more than two instances per IP
   assert:
     that:
