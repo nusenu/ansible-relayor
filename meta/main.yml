@@ -10,7 +10,7 @@ galaxy_info:
     - buster
   - name: FreeBSD
     versions:
-    - 11.3
+    - 11.4
     - 12.1
   - name: OpenBSD
     versions:
