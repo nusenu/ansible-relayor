@@ -273,8 +273,8 @@
   loop_control:
     index_var: loop_idx
   notify:
-    - Ensure Tor instances are reloaded if its torrc changed (FreeBSD)
-    - Ensure Tor instances are reloaded if its torrc changed (Linux)
-    - Ensure Tor instances are reloaded if its torrc changed (OpenBSD)
+    - Ensure Tor instances are restarted if its torrc changed (FreeBSD)
+    - Ensure Tor instances are restarted if its torrc changed (Linux)
+    - Ensure Tor instances are restarted if its torrc changed (OpenBSD)
   tags:
    - reconfigure

@@ -29,27 +29,27 @@
     create: yes
   when: ansible_system == 'FreeBSD'
 
-# TODO: this reloads all instances on a FreeBSD host even if just one torrc changed
-- name: Ensure Tor instances are reloaded if its torrc changed (FreeBSD)
+# TODO: this restarts all instances on a FreeBSD host even if just one torrc changed
+- name: Ensure Tor instances are restarted if its torrc changed (FreeBSD)
   become: yes
   service:
     name: tor
-    state: reloaded
+    state: restarted
   when: ansible_system == 'FreeBSD'
 
-- name: Ensure Tor instances are reloaded if its torrc changed (Linux)
+- name: Ensure Tor instances are restarted if its torrc changed (Linux)
   become: yes
   service:
     name: "tor@{{ item.item.0.ipv4 }}_{{ item.item.1.orport }}.service"
-    state: reloaded
+    state: restarted
   with_items: "{{ tor_instances_tmp.results }}"
   when: item.changed and ansible_system == 'Linux'
 
-- name: Ensure Tor instances are reloaded if its torrc changed (OpenBSD)
+- name: Ensure Tor instances are restarted if its torrc changed (OpenBSD)
   become: yes
   service:
     name: "tor{{ item.item.0.ipv4|replace('.','_') }}_{{ item.item.1.orport }}"
-    state: reloaded
+    state: restarted
   with_items: "{{ tor_instances_tmp.results }}"
   when: item.changed and ansible_system == 'OpenBSD'
   tags:
