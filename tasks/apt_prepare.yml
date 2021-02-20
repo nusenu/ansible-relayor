@@ -12,7 +12,7 @@
 - name: Ensure torproject gpg key is installed (A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89)
   become: yes
   apt_key:
-    data: "{{ lookup('file', 'deb.torproject.org_A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.pub') }}"
+    url: https://deb.torproject.org/torproject.org/A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc
     id: A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89
     state: present
 
