@@ -1,9 +1,9 @@
 ---
 
-- name: Ensure lsb-release and apt-transport-https packages are installed
+- name: Ensure lsb-release, apt-transport-https and gpg packages are installed
   become: yes
   apt:
-    name: lsb-release,apt-transport-https
+    name: lsb-release,apt-transport-https,gpg
   notify:
     - re-gather facts
 
