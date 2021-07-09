@@ -255,6 +255,10 @@
     dest: "{{ tor_ConfDir }}/tor-exit-notice.html"
     mode: 0444
   when: tor_ExitRelay and tor_ExitNoticePage
+  notify:
+    - Ensure Tor instances are reloaded if tor-exit-notice.html changed (FreeBSD)
+    - Ensure Tor instances are reloaded if tor-exit-notice.html changed (Linux)
+    - Ensure Tor instances are reloaded if tor-exit-notice.html changed (OpenBSD)
 
 - name: Ensure torrc configuration file(s) are in place
   become: yes

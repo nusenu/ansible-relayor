@@ -54,3 +54,27 @@
   when: item.changed and ansible_system == 'OpenBSD'
   tags:
     - reconfigure
+
+# TODO: this reloads all instances on a FreeBSD host even if just one torrc changed
+- name: Ensure Tor instances are reloaded if tor-exit-notice.html changed (FreeBSD)
+  become: yes
+  service:
+    name: tor
+    state: reloaded
+  when: ansible_system == 'FreeBSD'
+
+- name: Ensure Tor instances are reloaded if tor-exit-notice.html changed (Linux)
+  become: yes
+  service:
+    name: "tor@{{ item.item.0.ipv4 }}_{{ item.item.1.orport }}.service"
+    state: reloaded
+  with_items: "{{ tor_instances_tmp.results }}"
+  when: ansible_system == 'Linux'
+
+- name: Ensure Tor instances are reloaded if tor-exit-notice.html changed (OpenBSD)
+  become: yes
+  service:
+    name: "tor{{ item.item.0.ipv4|replace('.','_') }}_{{ item.item.1.orport }}"
+    state: reloaded
+  with_items: "{{ tor_instances_tmp.results }}"
+  when: ansible_system == 'OpenBSD'
