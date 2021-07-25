@@ -55,7 +55,6 @@
   tags:
     - reconfigure
 
-# TODO: this reloads all instances on a FreeBSD host even if just one torrc changed
 - name: Ensure Tor instances are reloaded if tor-exit-notice.html changed (FreeBSD)
   become: yes
   service:
