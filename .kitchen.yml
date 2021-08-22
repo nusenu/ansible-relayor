@@ -11,6 +11,11 @@ platforms:
 #  - name: fedora-29
 #    driver:
 #      box: roboxes/fedora29
+  - name: freebsd-13
+    driver:
+      provision: True
+      vagrantfiles:
+        - test/vagrant_provisions/freebsd_vagrant_provision.rb
   - name: freebsd-12
     driver:
       provision: True
