@@ -62,9 +62,11 @@ Managed Node Requirements
 Supported Operating Systems
 ---------------------------
 
-- Debian 9 and 10
-- OpenBSD 6.8
-- FreeBSD 11.4, 12.2
+- Debian 11
+- Debian 10
+- Debian 9 (deprecated, support will be removed before 2021-12-01)
+- OpenBSD 6.9
+- FreeBSD 11.4, 12.2, 13.0
 - Ubuntu 20.04
 
 Supported Tor Releases

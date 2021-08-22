@@ -12,9 +12,10 @@ galaxy_info:
     versions:
     - 11.4
     - 12.2
+    - 13.0
   - name: OpenBSD
     versions:
-    - 6.8
+    - 6.9
   - name: Ubuntu
     versions:
     - focal
