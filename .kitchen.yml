@@ -7,10 +7,6 @@ driver:
 platforms:
   - name: debian-10
   - name: ubuntu-20.04
-#  - name: centos-7
-#  - name: fedora-29
-#    driver:
-#      box: roboxes/fedora29
   - name: freebsd-13
     driver:
       provision: True
