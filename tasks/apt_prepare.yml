@@ -4,6 +4,7 @@
   become: yes
   apt:
     name: lsb-release,apt-transport-https,gpg
+    update_cache: yes
   notify:
     - re-gather facts
 
