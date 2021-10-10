@@ -160,3 +160,17 @@
   when: tor_gen_ciiss_proof_files
   tags:
     - always
+
+- name: Generate CIISS ed25519-master-pubkey.txt proof file
+  become: no
+  shell: >
+        set -o pipefail && cut -d" " -f2 {{ tor_offline_masterkey_dir }}/*/fingerprint-ed25519|
+        sort > {{ tor_ciiss_proof_folder }}/ed25519-master-pubkey.txt
+  args:
+    executable: /bin/bash
+  delegate_to: 127.0.0.1
+  run_once: true
+  changed_when: False
+  when: tor_gen_ciiss_proof_files
+  tags:
+    - always

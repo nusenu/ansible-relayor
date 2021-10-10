@@ -146,10 +146,11 @@ All variables mentioned here are optional.
     - default: not set
 
 * `tor_gen_ciiss_proof_files` boolean
-    - generate the rsa-fingerprint.txt proof file on the control machine only for publishing according to the [ContactInfo v2 spec](https://nusenu.github.io/ContactInfo-Information-Sharing-Specification/#proof)
-    - by default the file is written to ~/.tor/rsa-fingerprint.txt
-    - the file is overwritten if it exists
+    - generate the rsa-fingerprint.txt / ed25519-master-pubkey.txt proof filase on the control machine only for publishing according to this [ContactInfo spec](https://nusenu.github.io/ContactInfo-Information-Sharing-Specification/#proof)
+    - by default paths are ~/.tor/rsa-fingerprint.txt and ~/.tor/ed25519-master-pubkey.txt
+    - the files are overwritten if they exist
     - the location of the output folder can be configured using the variable `tor_ciiss_proof_folder`
+    - the filename is hardcoded to the one required by the specification and can not be configured
     - default: False
 
 * `tor_ciiss_proof_folder`
