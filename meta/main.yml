@@ -8,9 +8,9 @@ galaxy_info:
     versions:
     - stretch
     - buster
+    - bullseye
   - name: FreeBSD
     versions:
-    - 11.4
     - 12.2
     - 13.0
   - name: OpenBSD
