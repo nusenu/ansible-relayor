@@ -44,7 +44,7 @@ Requirements
 Control Machine Requirements
 
 - do **not** run this role with `become: yes`
-- tor >= 0.3.5
+- tor >= 0.4.5
 - python-netaddr package must be installed
 - required commands: sort, uniq, wc, cut, sed, xargs
 - openssl >= 1.0.0
