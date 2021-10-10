@@ -4,6 +4,9 @@ tor_user: _tor
 tor_packages: tor
 tor_package_state: present
 
+tor_gen_ciiss_proof_files: False
+tor_ciiss_proof_folder: '~/.tor'
+
 # The tor_ports dictionary defines how many instances are created per
 # available IP address and what ports are used.
 # min entries: 1

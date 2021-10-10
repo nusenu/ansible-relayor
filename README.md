@@ -145,6 +145,17 @@ All variables mentioned here are optional.
     - non-alphanum chars are automatically removed and nicknames longer than 19 characters are truncated to meet tor's nickname requirements
     - default: not set
 
+* `tor_gen_ciiss_proof_files` boolean
+    - generate the rsa-fingerprint.txt proof file for publishing according to the [ContactInfo v2 spec](https://nusenu.github.io/ContactInfo-Information-Sharing-Specification/#proof)
+    - by default the file is written to ~/.tor/rsa-fingerprint.txt
+    - the file is overwritten if it exists
+    - the location of the output folder can be configured using the variable `tor_ciiss_proof_folder`
+    - default: False
+
+* `tor_ciiss_proof_folder`
+    - defines the output folder for generated proof files
+    - default: ~/.tor
+
 * `tor_Sandbox`
     - enables (1) or disables (0) tor's syscall sandbox feature
     - this setting is ignored on non-Linux systems
