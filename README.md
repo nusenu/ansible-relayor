@@ -72,7 +72,7 @@ Supported Operating Systems
 
 Supported Tor Releases
 -----------------------
-- tor >= 0.3.5.x
+- tor >= 0.4.5.x
 
 Example Playbook
 ----------------
