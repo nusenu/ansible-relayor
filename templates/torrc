@@ -28,6 +28,12 @@ SyslogIdentityTag {{ item.0.ipv4 }}_{{ item.1.orport }}
 PidFile {{ tor_PidDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/pid
 {% endif %}
 
+{% if tor_enableMetricsPort == True %}
+MetricsPort 127.0.0.1:{{tor_MetricsPort_offset + loop_idx}}
+MetricsPortPolicy accept 127.0.0.1
+OverloadStatistics 0
+{% endif %}
+
 {% if tor_enableControlSocket == True %}
 ControlSocket {{ tor_PidDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/control GroupWritable RelaxDirModeCheck
 {% elif tor_enableControlSocket == False and ansible_pkg_mgr == 'apt' %}

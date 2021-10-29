@@ -111,6 +111,10 @@ tor_nightly_builds: False
 # known problem: requires manual adjustment with every major tor release
 tor_alpha_version: experimental-0.4.6.x
 
+# MetricsPort variables
+tor_enableMetricsPort: False
+tor_MetricsPort_offset: 33300
+
 # Path to the tor-exit-notice HTML file
 tor_exit_notice_file: tor-exit-notice.html
 

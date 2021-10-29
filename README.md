@@ -260,6 +260,18 @@ All variables mentioned here are optional.
     - manually specifying the IP address used by `OutboundBindAddressExit` is not supported
     - default: False
 
+* `tor_enableMetricsPort` boolean
+    - if True enable tor's MetricsPort on the localhost IP address 127.0.0.1 and allow the same IP to access it (MetricsPortPolicy)
+    - it is recommended to enable this setting only with tor versions >= 0.4.7.2-alpha
+    - enabling this setting automatically disables `OverloadStatistics` (so tor will not publish/upload the data to directory authorities because we use MetricsPort locally)
+    - default: False
+
+* `tor_MetricsPort_offset` integer
+    - defines the TCP MetricsPort used on the first tor instance running on a host
+    - additional tor instances will use an incremented port number 33301, 33302, ...
+    - so if you run N instances on a host, the next N-1 ports after this port have to be unused on 127.0.0.1 so tor can use them for MetricsPort
+    - default: 33300
+
 * `tor_enableControlSocket` boolean
     - if True create a ControlSocket file for every tor instance (i.e. to be used for nyx)
     - access control relies on filesystem permissions
