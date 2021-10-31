@@ -56,6 +56,13 @@ suites:
   - name: t-exit-per-instance-exitpolicy
     provisioner:
       playbook: "test/integration/default/exit-per-instance-exitpolicy.yml"
+  - name: t-guard-2publicIPs-metricsport
+    driver:
+      network:
+      - ["private_network", {ip: "192.0.2.10"}]
+      - ["private_network", {ip: "198.51.100.10"}]
+    provisioner:
+      playbook: "test/integration/default/2publicIPs-guard-metricsport.yml"
   - name: t-guard-2publicIPs
     driver:
       network:

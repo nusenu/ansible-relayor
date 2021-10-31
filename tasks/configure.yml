@@ -282,3 +282,18 @@
     - Ensure Tor instances are restarted if its torrc changed (OpenBSD)
   tags:
    - reconfigure
+
+- name: Generate nginx reverse proxy configuration snipped for MetricsPort
+  template:
+    src: metrics-nginx
+    dest: /tmp/{{inventory_hostname}}-nginx_config
+  delegate_to: 127.0.0.1
+  when: tor_enableMetricsPort
+
+- name: Generate prometheus scrape configs
+  template:
+    src: prometheus-scrape-configs
+    dest: /tmp/tor-prometheus-scrape-configs
+  delegate_to: 127.0.0.1
+  run_once: true
+  when: tor_enableMetricsPort

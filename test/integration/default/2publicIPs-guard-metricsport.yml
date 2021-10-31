@@ -1,0 +1,10 @@
+---
+- hosts: all
+  vars_files:
+    - vars/dry-run-vars.yml
+  vars:
+    - tor_maxPublicIPs: 2
+    - tor_nightly_builds: True
+    - tor_enableMetricsPort: True
+  roles:
+    - "{{ playbook_dir | regex_replace('test/integration/default$') }}"

@@ -1,0 +1,17 @@
+{% for host in ansible_play_hosts %}
+{% set c = namespace(i=0) %}
+{% for ip in tor_ips %}
+{% for port in tor_ports %}
+  - job_name: '{{inventory_hostname}}-tor-{{c.i}}'
+    metrics_path: '/tor/{{c.i}}'
+    scheme: 'https'
+    basic_auth:
+      username: "metrics"
+      password: "{{ lookup('password', 'credentials/tor/exporter/'+inventory_hostname ) }}"
+    static_configs:
+      - targets:
+        - '{{ansible_fqdn}}'
+{% set c.i = c.i + 1 %}
+{% endfor %}
+{% endfor %}
+{% endfor %}
