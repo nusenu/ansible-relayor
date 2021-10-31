@@ -31,6 +31,7 @@ Main benefits for a tor relay operator
 - easily choose between exit relay/non-exit relay mode using a single boolean
 - automatic deployment of a [tor exit notice html](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) page via tor's DirPort (on exits only)
 - **automatic MyFamily management**
+- prometheus scrape and nginx reverse proxy config autogeneration for tor's prometheus exporter (when enabled)
 
 Installation
 ------------
