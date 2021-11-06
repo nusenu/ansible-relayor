@@ -12,7 +12,7 @@ no further manual configuration is required.
 
 Keeping the tor package updated (an important task of running a relay) is not in scope of this ansible role.
 We recommend you enable automatic updates to keep your relay well maintained if your OS supports that.
-The Tor Relay Guide contains instructions on how to enable automatic software updates for [Debian/Ubuntu](https://community.torproject.org/relay/setup/guard/debianubuntu/updates/)
+The Tor Relay Guide contains instructions on how to enable automatic software updates for [Debian/Ubuntu](https://community.torproject.org/relay/setup/guard/debian-ubuntu/updates/)
 and [FreeBSD](https://community.torproject.org/relay/setup/guard/freebsd/updates/).
 
 This ansible role does not aim to support tor bridges.
