@@ -5,7 +5,6 @@ driver:
     memory: 512
 
 platforms:
-  - name: debian-10
   - name: debian-11
   - name: ubuntu-20.04
   - name: freebsd-13
