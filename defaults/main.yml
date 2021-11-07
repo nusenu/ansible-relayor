@@ -17,6 +17,7 @@ tor_ports:
   - orport: 9100
     dirport: 9101
 
+
 # Limit the amount of used IP addresses
 # by default to 1, this limits the amount
 # of generated Tor instances to 2 per host.
@@ -114,6 +115,17 @@ tor_alpha_version: experimental-0.4.6.x
 # MetricsPort variables
 tor_enableMetricsPort: False
 tor_MetricsPort_offset: 33300
+
+# prometheus (tor MetricsPort) related vars
+# On which host should we generate the prometheus scrape config? (delegate_to)
+tor_prometheus_host: 127.0.0.1
+# file path to the scrape config
+tor_prometheus_scrape_file: "~/.tor/tor-prometheus-scrape-configs"
+
+# where on the control node should nginx configurations be generated?
+# the content of these files need to be included or pasted into nginx configuraton
+# to make metricsports available via nginx acting as a reverse proxy for authentication and TLS
+tor_metricsport_nginx_config_file: "~/.tor/{{inventory_hostname}}-nginx_config"
 
 # Path to the tor-exit-notice HTML file
 tor_exit_notice_file: tor-exit-notice.html

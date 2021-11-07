@@ -273,6 +273,25 @@ All variables mentioned here are optional.
     - so if you run N instances on a host, the next N-1 ports after this port have to be unused on 127.0.0.1 so tor can use them for MetricsPort
     - default: 33300
 
+* `tor_prometheus_host` hostname
+    - this variable is only relevant when `tor_enableMetricsPort` is True
+    - it defines on which host ansible should generate the prometheus scrape configuration snipped to scrape tor's MetricsPort
+    - this host must be available in ansible's inventory file
+    - default: 127.0.0.1
+
+* `tor_prometheus_scrape_file` filepath
+    - this variable is only relevant if `tor_enableMetricsPort` is True
+    - it defines the absolute filename where ansible will place the generated prometheus scrape config
+    - the contents of this file need to be pasted into your prometheus scrape configuration to scrape the tor MetricsPorts
+    - default: ~/.tor/tor-prometheus-scrape-configs
+
+* `tor_metricsport_nginx_config_file` filepath
+    - this variable is only relevant if `tor_enableMetricsPort` is True
+    - it defines the absulte filename where ansible will place the generated nginx configuration snipped
+    - the contents of this file/these files need to be included or pasted into the nginx running on the relay to make MetricsPort accessible for prometheus scraping
+    - this filename has to contain a host specific part (like inventory_hostname) since it will write one config per host
+    - default: ~/.tor/{{inventory_hostname}}-nginx_config
+
 * `tor_enableControlSocket` boolean
     - if True create a ControlSocket file for every tor instance (i.e. to be used for nyx)
     - access control relies on filesystem permissions
