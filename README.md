@@ -66,7 +66,6 @@ Supported Operating Systems
 
 - Debian 11
 - Debian 10
-- Debian 9 (deprecated, support will be removed before 2021-12-01)
 - OpenBSD 6.9
 - FreeBSD 12.2, 13.0
 - Ubuntu 20.04

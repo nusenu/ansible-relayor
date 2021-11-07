@@ -6,7 +6,6 @@ galaxy_info:
   platforms:
   - name: Debian
     versions:
-    - stretch
     - buster
     - bullseye
   - name: FreeBSD
