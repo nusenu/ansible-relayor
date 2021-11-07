@@ -92,6 +92,14 @@ A minimal playbook using ansible-relayor to setup non-exit relays could look lik
 
 For more examples see the playbook-examples folder.
 
+Changed torrc defaults
+----------------------
+
+This role changes the defaults of the following torrc options but you can still explicitly configure them via `tor_config`:
+
+* `NoExec` 0 -> 1
+* `Sandbox` 0 -> 1 (on Debian only)
+
 Role Variables
 --------------
 All variables mentioned here are optional.
@@ -101,13 +109,10 @@ All variables mentioned here are optional.
     - This setting is mandatory.
     - Operators are encouraged to use the [ContactInfo Information Sharing Specification](https://nusenu.github.io/ContactInfo-Information-Sharing-Specification/) to publish useful contact information.
 
-* `tor_signingkeylifetime_days` integer
-    - all tor instances created by relayor run in [OfflineMasterKey](https://www.torproject.org/docs/tor-manual.html.en#OfflineMasterKey) mode
-    - this setting defines the lifetime of Ed25519 signing keys in days
-    - indirectly defines **how often you have to run your ansible playbook to ensure your relay keys do not expire**
-    - **a tor instance in OfflineMasterKey mode automatically stops when his key/cert expires, so this is a crucial setting!**
-    - lower values (eg. 7) are better from a security point of view but require more frequent playbook runs
-    - default: 30
+* `tor_config` dictionary
+    - this dictionary contains torrc settings and their value, for available options see the 'SERVER OPTIONS' section in tor's manual.
+    - each setting can only be set once (regardless what tor's manpage says)
+    - this dictionary can be used to set any torrc option but NOT the following: `OfflineMasterKey`, `RunAsDaemon`, `Log`, `SocksPort`, `OutboundBindAddress`, `User`, `DataDirectory`, `ORPort`, `OutboundBindAddress`, `OutboundBindAddressExit`, `DirPort`, `SyslogIdentityTag`, `PidFile`, `MetricsPort`, `MetricsPortPolicy`, `ControlSocket`, `CookieAuthentication`, `Nickname`, `ExitRelay`, `IPv6Exit`, `ExitPolicy`, `RelayBandwidthRate`, `RelayBandwidthBurst`
 
 * `tor_ports`
     - This var allows you to
@@ -158,17 +163,9 @@ All variables mentioned here are optional.
     - defines the output folder for generated proof files
     - default: ~/.tor
 
-* `tor_Sandbox`
-    - enables (1) or disables (0) tor's syscall sandbox feature
-    - this setting is ignored on non-Linux systems
-    - unlike upstream tor we enable this by default on Debian-based systems which have a Linux kernel (>=3.5) that supports it.
-    - default on Debian-based systems: 1 (others: 0)
-
-* `tor_NoExec`
-    - enables (1) or disables (0) tor's NoExec feature
-    - unlike upstream we enable this by default (except on CentOS)
-    - this option is not supported on CentOS
-    - default: 1
+* `tor_LogLevel`
+    - sets tor's LogLevel
+    - default: notice
 
 * `tor_alpha` boolean
     - Set to True if you want to use Tor alpha version releases.
@@ -264,7 +261,7 @@ All variables mentioned here are optional.
 * `tor_enableMetricsPort` boolean
     - if True enable tor's MetricsPort on the localhost IP address 127.0.0.1 and allow the same IP to access it (MetricsPortPolicy)
     - it is recommended to enable this setting only with tor versions >= 0.4.7.2-alpha
-    - enabling this setting automatically disables `OverloadStatistics` (so tor will not publish/upload the data to directory authorities because we use MetricsPort locally)
+    - enabling this setting automatically disables `OverloadStatistics` if it is not enabled explicitly (so tor will not publish/upload the data to directory authorities because we use MetricsPort locally)
     - default: False
 
 * `tor_MetricsPort_offset` integer
@@ -331,16 +328,6 @@ All variables mentioned here are optional.
     - Note: The repository metadata is not updated, so setting this to latest does not give you any guarantees if it actually is the latest version.
     - default: present
 
-* `tor_additional_MyFamily`
-    - this variable is not needed if you manage all your relays with this ansible role.
-    - if you have relays not managed with this role you must specify the comma separated list of unmanaged relay fingerprints in this variable so they get included in the generated torrc configuration
-    - Note: You also need to manually add the list of fingerprints of your relayor managed relays to the unmanaged relay.
-    - default: not set
-
-This role supports most torrc options documented in the 'SERVER OPTIONS'
-section of tor's manual. Set them via 'tor_OptionName'.
-Have a look at templates/torrc if you want to have list of supported
-options.
 
 Available Role Tags
 --------------------
@@ -351,8 +338,6 @@ you are managing many servers.
 There are OS specific tags:
 
 * debian (includes ubuntu)
-* centos
-* fedora
 * freebsd
 * openbsd
 

@@ -4,6 +4,8 @@ tor_user: _tor
 tor_packages: tor
 tor_package_state: present
 
+tor_config: {}
+
 tor_gen_ciiss_proof_files: False
 tor_ciiss_proof_folder: '~/.tor'
 
@@ -28,8 +30,6 @@ tor_maxPublicIPs: 1
 # we can not reliably tell whether we are NATed
 # to more than a single public IP address
 tor_maxPrivateIPs: 1
-
-tor_NoExec: 1
 
 # we are a non-exit by default
 # setting this to true will enable reduced exit policy
@@ -96,10 +96,6 @@ tor_dedicatedExitIP: False
 #tor_v6ips: "{{ tor_v6tmp[0:tor_ipv4_count|int]|ipv6('address') }}"
 
 tor_RunAsDaemon: 1
-
-# we do not support non-zero SocksPorts
-# setting it to everything but 0 will break things
-tor_SocksPort: 0
 
 tor_enableControlSocket: False
 

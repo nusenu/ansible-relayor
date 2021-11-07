@@ -5,7 +5,7 @@ OfflineMasterKey 1
 RunAsDaemon {{ tor_RunAsDaemon }}
 Log {{ tor_LogLevel }} syslog
 OutboundBindAddress {{ item.0.ipv4 }}
-SocksPort {{ tor_SocksPort }}
+SocksPort 0
 User _tor-{{ item.0.ipv4 }}_{{ item.1.orport }}
 DataDirectory {{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}
 ORPort {{ item.0.ipv4 }}:{{ item.1.orport }}
@@ -31,7 +31,9 @@ PidFile {{ tor_PidDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/pid
 {% if tor_enableMetricsPort == True %}
 MetricsPort 127.0.0.1:{{tor_MetricsPort_offset + loop_idx}}
 MetricsPortPolicy accept 127.0.0.1
+{% if tor_config.OverloadStatistics is not defined %}
 OverloadStatistics 0
+{% endif %}
 {% endif %}
 
 {% if tor_enableControlSocket == True %}
@@ -49,18 +51,6 @@ Nickname {{ tor_nickname |regex_replace('[^a-zA-Z0-9]', '') |truncate(19, True, 
 {% if tor_ContactInfo is defined %}
 ContactInfo {{ tor_ContactInfo }}
 {% endif %}
-{% if tor_DirPortFrontPage is defined %}
-DirPortFrontPage {{ tor_DirPortFrontPage }}
-{% endif %}
-
-{% if tor_Sandbox is defined and ansible_system == 'Linux' %}
-Sandbox {{ tor_Sandbox }}
-{% elif ansible_os_family == 'Debian' and ansible_kernel is version_compare('3.5', '>=') %}
-Sandbox 1
-{% endif %}
-{% if tor_NoExec is defined and ansible_pkg_mgr != 'yum' %}
-NoExec {{ tor_NoExec }}
-{% endif %}
 
 {% if ((tor_ExitRelay == True and tor_ExitRelaySetting_file is not defined) or (tor_ExitRelay == True and tor_ExitRelaySetting_file is defined and (lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orport~' file='~tor_ExitRelaySetting_file~' delimiter=,') == "exit"))) %}
 # we are an exit relay!
@@ -71,7 +61,7 @@ IPv6Exit 1
 DirPort [{{ item.0.ipv6 }}]:{{ item.1.dirport }} NoAdvertise
 {% endif %}
 {% endif %}
-{% if tor_ExitNoticePage == True and tor_DirPortFrontPage is not defined %}
+{% if tor_ExitNoticePage == True and tor_config.DirPortFrontPage is not defined %}
 DirPortFrontPage {{ tor_ConfDir }}/tor-exit-notice.html
 {% endif %}
 
@@ -108,21 +98,6 @@ ExitRelay 0
 ExitPolicy reject *:*
 {% endif %}
 
-{% if tor_PublishServerDescriptor is defined %}
-PublishServerDescriptor {{ tor_PublishServerDescriptor }}
-{% endif %}
-{% if tor_DisableNetwork is defined %}
-DisableNetwork {{ tor_DisableNetwork }}
-{% endif %}
-{% if tor_HeartbeatPeriod is defined %}
-HeartbeatPeriod {{ tor_HeartbeatPeriod }}
-{% endif %}
-{% if tor_SafeLogging is defined %}
-SafeLogging {{ tor_SafeLogging }}
-{% endif %}
-{% if tor_MaxAdvertisedBandwidth is defined %}
-MaxAdvertisedBandwidth {{ tor_MaxAdvertisedBandwidth }}
-{% endif %}
 {% if tor_RelayBandwidthRate_file is defined and (lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orport~' file='~tor_RelayBandwidthRate_file~' delimiter=,') != "") %}
 RelayBandwidthRate {{ lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orport~' file='~tor_RelayBandwidthRate_file~' delimiter=,') }}
 {% elif tor_RelayBandwidthRate is defined %}
@@ -133,177 +108,20 @@ RelayBandwidthBurst {{ lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~
 {% elif tor_RelayBandwidthBurst is defined %}
 RelayBandwidthBurst {{ tor_RelayBandwidthBurst }}
 {% endif %}
-{% if tor_PerConnBWRate is defined %}
-PerConnBWRate {{ tor_PerConnBWRate }}
+
+# Override tor's defaults for stricter security settings
+{% if ansible_os_family == 'Debian' and tor_config.Sandbox is not defined %}
+Sandbox 1
 {% endif %}
-{% if tor_PerConnBWBurst is defined %}
-PerConnBWBurst {{ tor_PerConnBWBurst }}
-{% endif %}
-{% if tor_ConnLimit is defined %}
-ConnLimit {{ tor_ConnLimit }}
-{% endif %}
-{% if tor_CellStatistics is defined %}
-CellStatistics {{ tor_CellStatistics }}
-{% endif %}
-{% if tor_EntryStatistics is defined %}
-EntryStatistics {{ tor_EntryStatistics }}
-{% endif %}
-{% if tor_ExitPortStatistics is defined %}
-ExitPortStatistics {{ tor_ExitPortStatistics }}
-{% endif %}
-{% if tor_DirReqStatistics is defined %}
-DirReqStatistics {{ tor_DirReqStatistics }}
-{% endif %}
-{% if tor_ConnDirectionStatistics is defined %}
-ConnDirectionStatistics {{ tor_ConnDirectionStatistics }}
-{% endif %}
-{% if tor_HiddenServiceStatistics is defined %}
-HiddenServiceStatistics {{ tor_HiddenServiceStatistics }}
-{% endif %}
-{% if tor_ExtraInfoStatistics is defined %}
-ExtraInfoStatistics {{ tor_ExtraInfoStatistics }}
-{% endif %}
-{% if tor_MaxOnionQueueDelay is defined %}
-MaxOnionQueueDelay {{ tor_MaxOnionQueueDelay }}
-{% endif %}
-{% if tor_NumCPUs is defined %}
-NumCPUs {{ tor_NumCPUs }}
-{% endif %}
-{% if tor_PortForwarding is defined %}
-PortForwarding {{ tor_PortForwarding }}
-{% endif %}
-{% if tor_AccountingMax is defined %}
-AccountingMax {{ tor_AccountingMax }}
-{% endif %}
-{% if tor_AccountingRule is defined %}
-AccountingRule {{ tor_AccountingRule }}
-{% endif %}
-{% if tor_AccountingStart is defined %}
-AccountingStart {{ tor_AccountingStart }}
-{% endif %}
-{% if tor_MaxMemInQueues is defined %}
-MaxMemInQueues {{ tor_MaxMemInQueues }}
-{% endif %}
-{% if tor_ExtendAllowPrivateAddresses is defined %}
-ExtendAllowPrivateAddresses {{ tor_ExtendAllowPrivateAddresses }}
-{% endif %}
-{% if tor_DirPolicy is defined %}
-DirPolicy {{ tor_DirPolicy }}
-{% endif %}
-{% if tor_DirCache is defined %}
-DirCache {{ tor_DirCache }}
-{% endif %}
-{% if tor_ConstrainedSockets is defined %}
-ConstrainedSockets {{ tor_ConstrainedSockets }}
-{% endif %}
-{% if tor_ConstrainedSockSize is defined %}
-ConstrainedSockSize {{ tor_ConstrainedSockSize }}
-{% endif %}
-{% if tor_DisableAllSwap is defined %}
-DisableAllSwap {{ tor_DisableAllSwap }}
-{% endif %}
-{% if tor_DisableDebuggerAttachment is defined %}
-DisableDebuggerAttachment {{ tor_DisableDebuggerAttachment }}
-{% endif %}
-{% if tor_KeepalivePeriod is defined %}
-KeepalivePeriod {{ tor_KeepalivePeriod }}
-{% endif %}
-{% if tor_ProtocolWarnings is defined %}
-ProtocolWarnings {{ tor_ProtocolWarnings }}
-{% endif %}
-{% if tor_LogTimeGranularity is defined %}
-LogTimeGranularity {{ tor_LogTimeGranularity }}
-{% endif %}
-{% if tor_KeepBindCapabilities is defined %}
-KeepBindCapabilities {{ tor_KeepBindCapabilities }}
-{% endif %}
-{% if tor_HardwareAccel is defined %}
-HardwareAccel {{ tor_HardwareAccel }}
-{% endif %}
-{% if tor_AccelName is defined %}
-AccelName {{ tor_AccelName }}
-{% endif %}
-{% if tor_AccelDir is defined %}
-AccelDir {{ tor_AccelDir }}
-{% endif %}
-{% if tor_AvoidDiskWrites is defined %}
-AvoidDiskWrites {{ tor_AvoidDiskWrites }}
-{% endif %}
-{% if tor_ExitPolicyRejectPrivate is defined %}
-ExitPolicyRejectPrivate {{ tor_ExitPolicyRejectPrivate }}
-{% endif %}
-{% if tor_PortForwardingHelper is defined %}
-PortForwardingHelper {{ tor_PortForwardingHelper }}
-{% endif %}
-{% if tor_RefuseUnknownExits is defined %}
-RefuseUnknownExits {{ tor_RefuseUnknownExits }}
-{% endif %}
-{% if tor_ServerDNSResolvConfFile is defined %}
-ServerDNSResolvConfFile {{ tor_ServerDNSResolvConfFile }}
-{% endif %}
-{% if tor_ServerDNSAllowBrokenConfig is defined %}
-ServerDNSAllowBrokenConfig {{ tor_ServerDNSAllowBrokenConfig }}
-{% endif %}
-{% if tor_ServerDNSSearchDomains is defined %}
-ServerDNSSearchDomains {{ tor_ServerDNSSearchDomains }}
-{% endif %}
-{% if tor_ServerDNSDetectHijacking is defined %}
-ServerDNSDetectHijacking {{ tor_ServerDNSDetectHijacking }}
-{% endif %}
-{% if tor_ServerDNSTestAddresses is defined %}
-ServerDNSTestAddresses {{ tor_ServerDNSTestAddresses }}
-{% endif %}
-{% if tor_ServerDNSAllowNonRFC953Hostnames is defined %}
-ServerDNSAllowNonRFC953Hostnames {{ tor_ServerDNSAllowNonRFC953Hostnames }}
-{% endif %}
-{% if tor_ServerDNSRandomizeCase is defined %}
-ServerDNSRandomizeCase {{ tor_ServerDNSRandomizeCase }}
-{% endif %}
-{% if tor_GeoIPFile is defined %}
-GeoIPFile {{ tor_GeoIPFile }}
-{% endif %}
-{% if tor_GeoIPv6File is defined %}
-GeoIPv6File {{ tor_GeoIPv6File }}
-{% endif %}
-{% if tor_TLSECGroup is defined %}
-TLSECGroup {{ tor_TLSECGroup }}
-{% endif %}
-{% if tor_ShutdownWaitLength is defined %}
-ShutdownWaitLength {{ tor_ShutdownWaitLength }}
-{% endif %}
-{% if tor_DoSCircuitCreationEnabled is defined %}
-DoSCircuitCreationEnabled {{ tor_DoSCircuitCreationEnabled }}
-{% endif %}
-{% if tor_DoSCircuitCreationMinConnections is defined %}
-DoSCircuitCreationMinConnections {{ tor_DoSCircuitCreationMinConnections }}
-{% endif %}
-{% if tor_DoSCircuitCreationRate is defined %}
-DoSCircuitCreationRate {{ tor_DoSCircuitCreationRate }}
-{% endif %}
-{% if tor_DoSCircuitCreationBurst is defined %}
-DoSCircuitCreationBurst {{ tor_DoSCircuitCreationBurst }}
-{% endif %}
-{% if tor_DoSCircuitCreationDefenseType is defined %}
-DoSCircuitCreationDefenseType {{ tor_DoSCircuitCreationDefenseType }}
-{% endif %}
-{% if tor_DoSCircuitCreationDefenseTimePeriod is defined %}
-DoSCircuitCreationDefenseTimePeriod {{ tor_DoSCircuitCreationDefenseTimePeriod }}
-{% endif %}
-{% if tor_DoSConnectionEnabled is defined %}
-DoSConnectionEnabled {{ tor_DoSConnectionEnabled }}
-{% endif %}
-{% if tor_DoSConnectionMaxConcurrentCount is defined %}
-DoSConnectionMaxConcurrentCount {{ tor_DoSConnectionMaxConcurrentCount }}
-{% endif %}
-{% if tor_DoSConnectionDefenseType is defined %}
-DoSConnectionDefenseType {{ tor_DoSConnectionDefenseType }}
-{% endif %}
-{% if tor_DoSRefuseSingleHopClientRendezvous is defined %}
-DoSRefuseSingleHopClientRendezvous {{ tor_DoSRefuseSingleHopClientRendezvous }}
+{% if tor_config.NoExec is not defined %}
+NoExec 1
 {% endif %}
 
-MyFamily {{ tor_family.stdout }}
-{% if tor_additional_MyFamily is defined %}
-MyFamily {{ tor_additional_MyFamily }}
+{% for config_item, value in tor_config.items() | sort() %}
+{% if config_item not in ["OfflineMasterKey","RunAsDaemon","Log","SocksPort","OutboundBindAddress","User","DataDirectory","ORPort","OutboundBindAddress","OutboundBindAddressExit","DirPort","SyslogIdentityTag","PidFile","MetricsPort","MetricsPortPolicy","ControlSocket","CookieAuthentication","Nickname","ExitRelay","IPv6Exit","ExitPolicy","RelayBandwidthRate","RelayBandwidthBurst"] %}
+{{ config_item }} {{ value }}
 {% endif %}
+{% endfor %}
+
+MyFamily {{ tor_family.stdout }}
 # end of torrc
