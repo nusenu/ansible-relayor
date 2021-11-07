@@ -6,8 +6,8 @@
     metrics_path: '/tor/{{c.i}}'
     scheme: 'https'
     basic_auth:
-      username: "metrics"
-      password: "{{ lookup('password', 'credentials/tor/exporter/'+inventory_hostname ) }}"
+      username: "{{ tor_prometheus_scrape_username }}"
+      password: "{{ lookup('password', tor_prometheus_scrape_password_folder+inventory_hostname ) }}"
     static_configs:
       - targets:
         - '{{ansible_fqdn}}'

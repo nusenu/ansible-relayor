@@ -292,6 +292,19 @@ All variables mentioned here are optional.
     - this filename has to contain a host specific part (like inventory_hostname) since it will write one config per host
     - default: ~/.tor/{{inventory_hostname}}-nginx_config
 
+* `tor_prometheus_scrape_username` string
+    - this variable is only relevant if `tor_enableMetricsPort` is True
+    - username used to protect the MetricsPort via nginx http auth
+    - default: tormetrics
+
+* `tor_prometheus_scrape_password_folder` path
+    - this variable is only relevant if `tor_enableMetricsPort` is True
+    - ansible will automatically generate one unique and random 20 character password per host (not per tor instance) to protect the MetricsPort via nginx (http auth)
+    - this variable defines the folder where ansible will store the passwords in plaintext (password lookup)
+    - the filenames within that folder match the hostname (inventory_hostname) and can not be configured
+    - the variable must contain a trailing /
+    - default: ~/.tor/prometheus-scrape-passwords/
+
 * `tor_enableControlSocket` boolean
     - if True create a ControlSocket file for every tor instance (i.e. to be used for nyx)
     - access control relies on filesystem permissions
