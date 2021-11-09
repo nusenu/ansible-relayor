@@ -283,6 +283,14 @@
   tags:
    - reconfigure
 
+- name: Generate prometheus scrape configs
+  template:
+    src: prometheus-scrape-configs
+    dest: "{{ tor_prometheus_scrape_file }}"
+  delegate_to: "{{ tor_prometheus_host }}"
+  run_once: true
+  when: tor_enableMetricsPort
+
 - name: Generate nginx reverse proxy configuration snipped for MetricsPort
   template:
     src: metrics-nginx
@@ -290,10 +298,12 @@
   delegate_to: 127.0.0.1
   when: tor_enableMetricsPort
 
-- name: Generate prometheus scrape configs
-  template:
-    src: prometheus-scrape-configs
-    dest: "{{ tor_prometheus_scrape_file }}"
-  delegate_to: "{{ tor_prometheus_host }}"
-  run_once: true
+- name: generate nginx htpasswd file
+  htpasswd:
+    create: yes
+    path: "/tmp/{{inventory_hostname}}-nginx_htpasswd"
+    name: "{{ tor_prometheus_scrape_username }}"
+    password: "{{ lookup('password', tor_prometheus_scrape_password_folder+inventory_hostname ) }}"
+    mode: 0600
+  delegate_to: 127.0.0.1
   when: tor_enableMetricsPort

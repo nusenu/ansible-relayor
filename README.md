@@ -47,6 +47,7 @@ Control Machine Requirements
 - do **not** run this role with `become: yes`
 - tor >= 0.4.5
 - python-netaddr package must be installed
+- python passlib package must be installed (only when `tor_enableMetricsPort` is True)
 - required commands: sort, uniq, wc, cut, sed, xargs
 - openssl >= 1.0.0
 - ansible >= 2.9.27
@@ -270,7 +271,7 @@ All variables mentioned here are optional.
     - default: 33300
 
 * `tor_prometheus_host` hostname
-    - this variable is only relevant when `tor_enableMetricsPort` is True
+    - this variable is only relevant if `tor_enableMetricsPort` is True
     - it defines on which host ansible should generate the prometheus scrape configuration snipped to scrape tor's MetricsPort
     - this host must be available in ansible's inventory file
     - default: 127.0.0.1
