@@ -95,7 +95,8 @@ For more examples see the playbook-examples folder.
 Changed torrc defaults
 ----------------------
 
-This role changes the defaults of the following torrc options but you can still explicitly configure them via `tor_config`:
+This role changes the defaults of the following torrc options to use safer options by default
+but you can still explicitly configure them via `tor_config`:
 
 * `NoExec` 0 -> 1
 * `Sandbox` 0 -> 1 (on Debian only)
