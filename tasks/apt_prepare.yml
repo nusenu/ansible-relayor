@@ -4,7 +4,7 @@
   become: yes
   apt:
     name: lsb-release,apt-transport-https,gpg
-    update_cache: yes
+    update_cache: "{{ tor_apt_update_cache }}"
     cache_valid_time: 86400
   notify:
     - re-gather facts
