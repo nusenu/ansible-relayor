@@ -59,6 +59,8 @@
   failed_when: tor_dns_check.rc == 0
   changed_when: False
   when: tor_ExitRelay
+  tags:
+   - always
 
 - name: Set OS specific variables
   include_vars: "os_{{ ansible_os_family }}.yml"
@@ -73,8 +75,8 @@
   include_tasks: apt_prepare.yml
   when: ansible_pkg_mgr == 'apt'
   tags:
-   - debian
-   - install
+    - debian
+    - install
 
 - name: Preparation for RPM based systems
   include_tasks: rpm_prepare.yml
