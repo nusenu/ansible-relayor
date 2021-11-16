@@ -14,7 +14,7 @@ This role only manages tor instances as per the current settings and variables.
 If you change the configuration after a complete playbook run, to reduce the number of tor instances, for example by
 reducing the value of `tor_maxPublicIPs`, this role will not remove the previously configured tor instances
 from your server. Tor instances on a server are identified by their IPv4 and ORPort combination.
-Changing the ORPort (using the `tor_ports`) variable after initial rollout, effectively means creating new
+Changing the ORPort (using the `tor_ports` variable) after initial rollout, effectively means creating new
 tor instances (not changing them), this is the reason why changing the `tor_ports` variable should be avoided after the initial rollout.
 
 Keeping the tor package updated (an important task of running a relay) is not in scope of this ansible role.
@@ -268,7 +268,8 @@ All variables mentioned here are optional.
 
 * `tor_enableMetricsPort` boolean
     - if True enable tor's MetricsPort on the localhost IP address 127.0.0.1 and allow the same IP to access it (MetricsPortPolicy)
-    - it is recommended to enable this setting only with tor versions >= 0.4.7.2-alpha
+    - requires tor versions >= 0.4.7.2-alpha
+    - this is a relayor beta feature and will change in the future to use the safer [unix socket](https://gitlab.torproject.org/tpo/core/tor/-/issues/40192) option once that becomes available
     - enabling this setting automatically disables `OverloadStatistics` if it is not enabled explicitly (so tor will not publish/upload the data to directory authorities because we use MetricsPort locally)
     - default: False
 
