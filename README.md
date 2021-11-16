@@ -10,6 +10,13 @@ operator including key management (OfflineMasterKey).
 Deploying a new tor server is as easy as adding a new host to the inventory,
 no further manual configuration is required.
 
+This role only manages tor instances as per the current settings and variables.
+If you change the configuration after a complete playbook run, to reduce the number of tor instances, for example by
+reducing the value of `tor_maxPublicIPs`, this role will not remove the previously configured tor instances
+from your server. Tor instances on a server are identified by their IPv4 and ORPort combination.
+Changing the ORPort (using the `tor_ports`) variable after initial rollout, effectively means creating new
+tor instances (not changing them), this is the reason why changing the `tor_ports` variable should be avoided after the initial rollout.
+
 Keeping the tor package updated (an important task of running a relay) is not in scope of this ansible role.
 We recommend you enable automatic updates to keep your relay well maintained if your OS supports that.
 The Tor Relay Guide contains instructions on how to enable automatic software updates for [Debian/Ubuntu](https://community.torproject.org/relay/setup/guard/debian-ubuntu/updates/)
