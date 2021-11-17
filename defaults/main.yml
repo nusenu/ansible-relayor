@@ -126,6 +126,7 @@ tor_prometheus_scrape_file: "~/.tor/tor-prometheus-scrape-configs"
 tor_metricsport_nginx_config_file: "~/.tor/nginx/{{inventory_hostname}}-nginx_config"
 tor_prometheus_scrape_password_folder: "~/.tor/prometheus-scrape-passwords/"
 tor_prometheus_scrape_username: "tormetrics"
+tor_prometheus_scrape_port: 443
 
 # Path to the tor-exit-notice HTML file
 tor_exit_notice_file: tor-exit-notice.html

@@ -10,7 +10,9 @@
       password: "{{ lookup('password', tor_prometheus_scrape_password_folder+inventory_hostname ) }}"
     static_configs:
       - targets:
-        - '{{ansible_fqdn}}'
+        - "{{ansible_fqdn}}:{{ tor_prometheus_scrape_port }}"
+        labels:
+          id: "{{ ip.ipv4 }}_{{ port.orport }}"
 {% set c.i = c.i + 1 %}
 {% endfor %}
 {% endfor %}

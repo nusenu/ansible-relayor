@@ -311,6 +311,10 @@ All variables mentioned here are optional.
     - the variable must contain a trailing /
     - default: ~/.tor/prometheus-scrape-passwords/
 
+* `tor_prometheus_scrape_port`
+    - defines what destination port is used to reach the scrape target (`MetricsPort`) via nginx
+    - default: 443
+
 * `tor_enableControlSocket` boolean
     - if True create a ControlSocket file for every tor instance (i.e. to be used for nyx)
     - access control relies on filesystem permissions
