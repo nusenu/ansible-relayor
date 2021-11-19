@@ -118,7 +118,7 @@ NoExec 1
 {% endif %}
 
 {% for config_item, value in tor_config.items() | sort() %}
-{% if config_item not in ["OfflineMasterKey","RunAsDaemon","Log","SocksPort","OutboundBindAddress","User","DataDirectory","ORPort","OutboundBindAddress","OutboundBindAddressExit","DirPort","SyslogIdentityTag","PidFile","MetricsPort","MetricsPortPolicy","ControlSocket","CookieAuthentication","Nickname","ExitRelay","IPv6Exit","ExitPolicy","RelayBandwidthRate","RelayBandwidthBurst"] %}
+{% if config_item not in ["OfflineMasterKey","RunAsDaemon","Log","SocksPort","OutboundBindAddress","User","DataDirectory","ORPort","OutboundBindAddress","OutboundBindAddressExit","DirPort","SyslogIdentityTag","PidFile","MetricsPort","MetricsPortPolicy","ControlSocket","CookieAuthentication","Nickname","ExitRelay","IPv6Exit","ExitPolicy","RelayBandwidthRate","RelayBandwidthBurst","SigningKeyLifetime"] %}
 {{ config_item }} {{ value }}
 {% endif %}
 {% endfor %}

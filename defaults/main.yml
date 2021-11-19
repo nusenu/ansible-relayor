@@ -71,6 +71,9 @@ tor_LogLevel: notice
 # ansible control machine?
 tor_offline_masterkey_dir: ~/.tor/offlinemasterkeys
 
+# How long should online keys/certs be valid before expiring?
+tor_signingkeylifetime_days: 30
+
 # this var is used for apt sources.list entries
 tor_distribution_release: "{{ ansible_lsb.codename }}"
 

@@ -117,10 +117,18 @@ All variables mentioned here are optional.
     - This setting is mandatory.
     - Operators are encouraged to use the [ContactInfo Information Sharing Specification](https://nusenu.github.io/ContactInfo-Information-Sharing-Specification/) to publish useful contact information.
 
+* `tor_signingkeylifetime_days` integer
+    - all tor instances created by relayor run in [OfflineMasterKey](https://www.torproject.org/docs/tor-manual.html.en#OfflineMasterKey) mode
+    - this setting defines the lifetime of Ed25519 signing keys in days
+    - indirectly defines **how often you have to run your ansible playbook to ensure your relay keys do not expire**
+    - **a tor instance in OfflineMasterKey mode automatically stops when his key/cert expires, so this is a crucial setting!**
+    - lower values (eg. 7) are better from a security point of view but require more frequent playbook runs
+    - default: 30
+
 * `tor_config` dictionary
     - this dictionary contains torrc settings and their value, for available options see the 'SERVER OPTIONS' section in tor's manual.
     - each setting can only be set once (regardless what tor's manpage says)
-    - this dictionary can be used to set any torrc option but NOT the following: `OfflineMasterKey`, `RunAsDaemon`, `Log`, `SocksPort`, `OutboundBindAddress`, `User`, `DataDirectory`, `ORPort`, `OutboundBindAddress`, `OutboundBindAddressExit`, `DirPort`, `SyslogIdentityTag`, `PidFile`, `MetricsPort`, `MetricsPortPolicy`, `ControlSocket`, `CookieAuthentication`, `Nickname`, `ExitRelay`, `IPv6Exit`, `ExitPolicy`, `RelayBandwidthRate`, `RelayBandwidthBurst`
+    - this dictionary can be used to set any torrc option but NOT the following: `OfflineMasterKey`, `RunAsDaemon`, `Log`, `SocksPort`, `OutboundBindAddress`, `User`, `DataDirectory`, `ORPort`, `OutboundBindAddress`, `OutboundBindAddressExit`, `DirPort`, `SyslogIdentityTag`, `PidFile`, `MetricsPort`, `MetricsPortPolicy`, `ControlSocket`, `CookieAuthentication`, `Nickname`, `ExitRelay`, `IPv6Exit`, `ExitPolicy`, `RelayBandwidthRate`, `RelayBandwidthBurst`, `SigningKeyLifetime`
 
 * `tor_ports`
     - This var allows you to
