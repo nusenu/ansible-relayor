@@ -109,7 +109,6 @@ RelayBandwidthBurst {{ lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~
 RelayBandwidthBurst {{ tor_RelayBandwidthBurst }}
 {% endif %}
 
-# Override tor's defaults for stricter security settings
 {% if ansible_os_family == 'Debian' and tor_config.Sandbox is not defined %}
 Sandbox 1
 {% endif %}
