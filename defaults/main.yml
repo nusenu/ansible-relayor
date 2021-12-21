@@ -108,7 +108,7 @@ tor_alpha: False
 tor_nightly_builds: False
 
 # known problem: requires manual adjustment with every major tor release
-tor_alpha_version: experimental-0.4.6.x
+tor_alpha_version: experimental
 
 # MetricsPort variables
 tor_enableMetricsPort: False
