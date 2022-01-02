@@ -291,14 +291,14 @@
   run_once: true
   when: tor_enableMetricsPort
 
-- name: Generate nginx reverse proxy configuration snipped for MetricsPort
+- name: Generate nginx reverse proxy configuration snipped for MetricsPort (LOCAL)
   template:
     src: metrics-nginx
     dest: "{{ tor_metricsport_nginx_config_file }}"
   delegate_to: 127.0.0.1
   when: tor_enableMetricsPort
 
-- name: generate nginx htpasswd file
+- name: generate nginx htpasswd file (LOCAL)
   htpasswd:
     create: yes
     path: "/tmp/{{inventory_hostname}}-nginx_htpasswd"
