@@ -50,9 +50,9 @@ suites:
   - name: t-guard-alpha
     provisioner:
       playbook: "test/integration/default/guard-alpha-node.yml"
-  - name: t-guard-nightly-metricsport
+  - name: t-guard-alpha-metricsport
     provisioner:
-      playbook: "test/integration/default/guard-nightly-metricsport-node.yml"
+      playbook: "test/integration/default/guard-alpha-metricsport-node.yml"
 # test for the tor_ExitRelaySetting_file feature to run
 # exit and non-exit tor instances on a single machine
   - name: t-mixed
