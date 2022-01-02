@@ -10,7 +10,7 @@ galaxy_info:
     - bullseye
   - name: FreeBSD
     versions:
-    - 12.2
+    - 12.3
     - 13.0
   - name: OpenBSD
     versions:

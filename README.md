@@ -75,7 +75,7 @@ Supported Operating Systems
 - Debian 11
 - Debian 10
 - OpenBSD 6.9
-- FreeBSD 12.2, 13.0
+- FreeBSD 12.3, 13.0
 - Ubuntu 20.04
 
 Supported Tor Releases
