@@ -143,7 +143,7 @@ All variables mentioned here are optional.
         - instance 1: ORPort 9000, DirPort 9001
         - instance 2: ORPort 9100, DirPort 9101
 
-* `tor_offline_masterkey_dir`
+* `tor_offline_masterkey_dir` folderpath
     - default: ~/.tor/offlinemasterkeys
     - Defines the location where on the ansible control machine we store relay keys (Ed25519 and RSA)
     - Within that folder ansible will create a subfolder for every tor instance.
@@ -158,7 +158,7 @@ All variables mentioned here are optional.
     - tor_nicknamefile overrules this setting
     - default: none
 
-* `tor_nicknamefile` /path/to/file.csv
+* `tor_nicknamefile` filepath
     - this is a simple comma separated csv file stored on the ansible control machine specifying nicknames
     - first column: instance identifier (inventory_hostname-ip_orport)
     - second column: nickname
@@ -175,11 +175,11 @@ All variables mentioned here are optional.
     - the filename is hardcoded to the one required by the specification and can not be configured
     - default: False
 
-* `tor_ciiss_proof_folder`
+* `tor_ciiss_proof_folder` folderpath
     - defines the output folder for generated proof files
     - default: ~/.tor
 
-* `tor_LogLevel`
+* `tor_LogLevel` string
     - sets tor's LogLevel
     - default: notice
 
@@ -201,18 +201,18 @@ All variables mentioned here are optional.
     - If you want to run a mixed server (exit and non-exit tor instances) use `tor_ExitRelaySetting_file` for per-instance configuration in additon to this var
     - default: False
 
-* `tor_ExitRelaySetting_file` /path/to/file
+* `tor_ExitRelaySetting_file` filepath
     - this is a simple comma separated csv file stored on the ansible control machine defining the `ExitRelay` torrc setting for each tor instance (instead of server-wide)
     - first column: instance identifier (inventory_hostname-ip_orport)
     - second column: "exit" for exit tor instances, any other value (including empty) for non-exit tor instances
     - this var is ignored if tor_ExitRelay is False
 
-* `tor_RelayBandwidthRate_file` /path/to/file
+* `tor_RelayBandwidthRate_file` filepath
     - this is a simple comma separated csv file stored on the ansible control machine defining the `RelayBandwidthRate` torrc setting for each tor instance (instead of server-wide)
     - first column: instance identifier (inventory_hostname-ip_orport)
     - second column: value as accepted by `RelayBandwidthRate` (see tor manpage)
 
-* `tor_RelayBandwidthBurst_file` /path/to/file
+* `tor_RelayBandwidthBurst_file` filepath
     - this is a simple comma separated csv file stored on the ansible control machine defining the `RelayBandwidthBurst` torrc setting for each tor instance (instead of server-wide)
     - first column: instance identifier (inventory_hostname-ip_orport)
     - second column: value as accepted by `RelayBandwidthBurst` (see tor manpage)
@@ -222,7 +222,7 @@ All variables mentioned here are optional.
     - only relevant if we are an exit relay
     - default: True
 
-* `tor_exit_notice_file` /path/to/file
+* `tor_exit_notice_file` filepath
     - path to a HTML file on the control machine that you would like to display (via the DirPort) instead of the default [tor-exit-notice.html](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) provided by the Tor Project
     - only relevant if we are an exit relay and if tor_ExitNoticePage is True
 
@@ -239,7 +239,7 @@ All variables mentioned here are optional.
     - see defaults/main.yml for an example on how to set it
     - default: reduced exit policy (https://trac.torproject.org/projects/tor/wiki/doc/ReducedExitPolicy)
 
-* `tor_ExitPolicy_file` /path/to/file
+* `tor_ExitPolicy_file` filepath
     - this is a simple semicolon separated csv file stored on the ansible control machine defining the `ExitPolicy` torrc setting for each tor instance (instead of server-wide)
     - first column: instance identifier (inventory_hostname-ip_orport)
     - second column: value as accepted by `ExitPolicy` (see tor manpage)
@@ -249,7 +249,7 @@ All variables mentioned here are optional.
     - only tor instances that you want to have a specific exit policy for are required to be listed in the file (others can be omitted)
     - default: not set
 
-* `tor_maxPublicIPs`
+* `tor_maxPublicIPs` integer
     - Limits the amount of public IPs we will use to generate instances on a single host.
     - Indirectly limits the amount of instances we generate per host.
     - default: 1
@@ -325,15 +325,15 @@ All variables mentioned here are optional.
     - username used to protect the MetricsPort via nginx http auth
     - default: tormetrics
 
-* `tor_prometheus_scrape_password_folder` path
+* `tor_prometheus_scrape_password_folder` folderpath
     - this variable is only relevant if `tor_enableMetricsPort` is True
     - ansible will automatically generate one unique and random 20 character password per host (not per tor instance) to protect the MetricsPort via nginx (http auth)
     - this variable defines the folder where ansible will store the passwords in plaintext (password lookup)
     - the filenames within that folder match the hostname (inventory_hostname) and can not be configured
-    - the variable must contain a trailing /
-    - default: ~/.tor/prometheus-scrape-passwords/
+    - the variable must contain a trailing `/`
+    - default: `~/.tor/prometheus-scrape-passwords/`
 
-* `tor_prometheus_scrape_port`
+* `tor_prometheus_scrape_port` integer
     - defines what destination port is used to reach the scrape target (`MetricsPort`) via nginx
     - default: 443
 
@@ -347,17 +347,17 @@ All variables mentioned here are optional.
     - per instance configuration is not supported
     - default: False
 
-* `tor_freebsd_somaxconn`
+* `tor_freebsd_somaxconn` integer
     - configure kern.ipc.somaxconn on FreeBSD
     - by default we increase this value to at least 1024
     - if the value is higher than that we do not touch it
 
-* `tor_freebsd_nmbclusters`
+* `tor_freebsd_nmbclusters` integer
     - configure kern.ipc.nmbclusters on FreeBSD
     - by default we increase this value to at least 30000
     - if the value is higher than that we do not touch it
 
-* `tor_package_state`
+* `tor_package_state` string
     - specify what package state the tor package should have
     - possible values: present, latest (not supported on BSDs)
     - Note: The repository metadata is not updated, so setting this to latest does not give you any guarantees if it actually is the latest version.
