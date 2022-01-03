@@ -306,6 +306,21 @@ All variables mentioned here are optional.
     - this filename has to contain a host specific part (like inventory_hostname) since it will write one config per host
     - default: ~/.tor/{{inventory_hostname}}-nginx_config
 
+* `tor_gen_metricsport_htpasswd` boolean
+    - this variable is only relevant if `tor_enableMetricsPort` is True
+    - when this var is set to True, we create the htpasswd file that can be used by a webserver on the relay to protect tor's MetricsPort with HTTP basic auth
+    - the file will be owned by root and readable by the webserver's group (www-data/www - depending on the OS)
+    - we do NOT install the webserver, use another role for that.
+    - the password is [automatically generated](https://docs.ansible.com/ansible/2.9/plugins/lookup/password.html) and 20 characters long (each server gets a distinct password)
+    - the path to the file on the relay is defined in `tor_metricsport_nginx_htpasswd_file`
+    - the plaintext password is written to a file on the ansible control machine (see `tor_prometheus_scrape_password_folder`)
+    - default: False
+
+* `tor_metricsport_htpasswd_file` filepath
+    - this variable is only relevant if `tor_enableMetricsPort` and `tor_gen_nginx_htpasswd` are set to True
+    - it defines the filepath to the htpasswd file (containing username and password hash) on the relay
+    - default: `/etc/nginx/tor_metricsport_htpasswd`
+
 * `tor_prometheus_scrape_username` string
     - this variable is only relevant if `tor_enableMetricsPort` is True
     - username used to protect the MetricsPort via nginx http auth

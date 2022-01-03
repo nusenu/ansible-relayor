@@ -298,12 +298,21 @@
   delegate_to: 127.0.0.1
   when: tor_enableMetricsPort
 
-- name: generate nginx htpasswd file (LOCAL)
+# The htpasswd ansible module requires python passlib to be on the remote host
+- name: Ensure htpasswd Ansible dependencies are installed
+  become: yes
+  package:
+    name: "{{ tor_htpasswd_dependency }}"
+    state: present
+  when: tor_gen_metricsport_htpasswd and tor_enableMetricsPort
+
+- name: generate htpasswd file for MetricsPort protection
+  become: yes
   htpasswd:
     create: yes
-    path: "/tmp/{{inventory_hostname}}-nginx_htpasswd"
+    path: "{{ tor_metricsport_htpasswd_file }}"
     name: "{{ tor_prometheus_scrape_username }}"
     password: "{{ lookup('password', tor_prometheus_scrape_password_folder+inventory_hostname ) }}"
-    mode: 0600
-  delegate_to: 127.0.0.1
-  when: tor_enableMetricsPort
+    mode: 0640
+    group: "{{ tor_metricsport_htpasswd_file_owner }}"
+  when: tor_gen_metricsport_htpasswd and tor_enableMetricsPort

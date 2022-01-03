@@ -6,5 +6,6 @@
     - tor_maxPublicIPs: 2
     - tor_alpha: True
     - tor_enableMetricsPort: True
+    - tor_gen_metricsport_htpasswd: True
   roles:
     - "{{ playbook_dir | regex_replace('test/integration/default$') }}"

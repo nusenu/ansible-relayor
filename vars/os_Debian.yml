@@ -8,3 +8,4 @@ tor_packages:
     - deb.torproject.org-keyring
     - tor
     - tor-geoipdb
+tor_htpasswd_dependency: python3-passlib

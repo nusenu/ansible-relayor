@@ -127,6 +127,9 @@ tor_metricsport_nginx_config_file: "~/.tor/nginx/{{inventory_hostname}}-nginx_co
 tor_prometheus_scrape_password_folder: "~/.tor/prometheus-scrape-passwords/"
 tor_prometheus_scrape_username: "tormetrics"
 tor_prometheus_scrape_port: 443
+tor_gen_metricsport_htpasswd: False
+tor_metricsport_htpasswd_file: "/etc/nginx/tor_metricsport_htpasswd"
+tor_metricsport_htpasswd_file_owner: "www-data"
 
 # Path to the tor-exit-notice HTML file
 tor_exit_notice_file: tor-exit-notice.html

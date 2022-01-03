@@ -1,7 +1,7 @@
-## enable http basic auth here
+## HTTP basic auth
 ## https://docs.nginx.com/nginx/admin-guide/security-controls/configuring-http-basic-authentication/
-auth_basic "tor";
-auth_basic_user_file /etc/nginx/tor_htpasswd;
+auth_basic "";
+auth_basic_user_file {{ tor_metricsport_htpasswd_file }};
 {% set c = namespace(i=0) %}
 {% for ip in tor_ips %}
 {% for port in tor_ports %}
