@@ -276,7 +276,7 @@ All variables mentioned here are optional.
 
 * `tor_enableMetricsPort` boolean
     - if True enable tor's MetricsPort on the localhost IP address 127.0.0.1 and allow the same IP to access it (MetricsPortPolicy)
-    - requires tor versions >= 0.4.7.2-alpha
+    - requires tor versions >= 0.4.7.3-alpha (currently not supported on OpenBSD)
     - this is a relayor beta feature and will change in the future to use the safer [unix socket](https://gitlab.torproject.org/tpo/core/tor/-/issues/40192) option once that becomes available
     - enabling this setting automatically disables `OverloadStatistics` if it is not enabled explicitly (so tor will not publish/upload the data to directory authorities because we use MetricsPort locally)
     - default: False
@@ -301,10 +301,9 @@ All variables mentioned here are optional.
 
 * `tor_metricsport_nginx_config_file` filepath
     - this variable is only relevant if `tor_enableMetricsPort` is True
-    - it defines the absulte filename where ansible will place the generated nginx configuration snipped
-    - the contents of this file/these files need to be included or pasted into the nginx running on the relay to make MetricsPort accessible for prometheus scraping
-    - this filename has to contain a host specific part (like inventory_hostname) since it will write one config per host
-    - default: ~/.tor/{{inventory_hostname}}-nginx_config
+    - it defines the filepath where the nginx reverse proxy configuration for MetricsPort will be stored on the relay
+    - this file has to be included in your webserver configuration on the relay to make MetricsPort accessible for remote prometheus scraping
+    - default: undefined (no file is generated)
 
 * `tor_gen_metricsport_htpasswd` boolean
     - this variable is only relevant if `tor_enableMetricsPort` is True

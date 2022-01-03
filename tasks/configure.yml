@@ -291,12 +291,14 @@
   run_once: true
   when: tor_enableMetricsPort
 
-- name: Generate nginx reverse proxy configuration snipped for MetricsPort (LOCAL)
+- name: Generate nginx reverse proxy configuration for MetricsPort
+  become: yes
   template:
-    src: metrics-nginx
+    src: nginx-reverse-proxy-for-metricsport
     dest: "{{ tor_metricsport_nginx_config_file }}"
-  delegate_to: 127.0.0.1
-  when: tor_enableMetricsPort
+    mode: 0644
+    owner: root
+  when: tor_enableMetricsPort and tor_metricsport_nginx_config_file is defined
 
 # The htpasswd ansible module requires python passlib to be on the remote host
 - name: Ensure htpasswd Ansible dependencies are installed

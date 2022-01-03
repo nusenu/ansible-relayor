@@ -120,10 +120,6 @@ tor_prometheus_host: 127.0.0.1
 # file path to the scrape config
 tor_prometheus_scrape_file: "~/.tor/tor-prometheus-scrape-configs"
 
-# where on the control node should nginx configurations be generated?
-# the content of these files need to be included or pasted into nginx configuraton
-# to make metricsports available via nginx acting as a reverse proxy for authentication and TLS
-tor_metricsport_nginx_config_file: "~/.tor/nginx/{{inventory_hostname}}-nginx_config"
 tor_prometheus_scrape_password_folder: "~/.tor/prometheus-scrape-passwords/"
 tor_prometheus_scrape_username: "tormetrics"
 tor_prometheus_scrape_port: 443
