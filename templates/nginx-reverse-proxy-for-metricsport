@@ -1,7 +1,6 @@
-## HTTP basic auth
-## https://docs.nginx.com/nginx/admin-guide/security-controls/configuring-http-basic-authentication/
-auth_basic "";
-auth_basic_user_file {{ tor_metricsport_htpasswd_file }};
+location /tor {
+    auth_basic "";
+    auth_basic_user_file {{ tor_metricsport_htpasswd_file }};
 {% set c = namespace(i=0) %}
 {% for ip in tor_ips %}
 {% for port in tor_ports %}
@@ -11,3 +10,4 @@ location /tor/{{c.i}} {
 {% set c.i = c.i + 1 %}
 {% endfor %}
 {% endfor %}
+}
