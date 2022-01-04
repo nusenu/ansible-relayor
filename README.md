@@ -54,7 +54,6 @@ Control Machine Requirements
 - do **not** run this role with `become: yes`
 - tor >= 0.4.5
 - python-netaddr package must be installed
-- python passlib package must be installed (only when `tor_enableMetricsPort` is True)
 - required commands: sort, uniq, wc, cut, sed, xargs
 - openssl >= 1.0.0
 - ansible >= 2.9.27
