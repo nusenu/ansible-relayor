@@ -324,13 +324,20 @@ All variables mentioned here are optional.
     - username used to protect the MetricsPort via nginx http auth
     - default: tormetrics
 
+* `tor_prometheus_scrape_metrics_path` string
+    - this variable is only relevant if `tor_enableMetricsPort` is True
+    - this variable defines the prometheus metrics_path. It is used in the nginx and prometheus scrape template.
+    - there should be NO need to change the default value.
+    - the default generates a 10 character random lowercase string using the Ansible password lookup
+    - default: `"{{ lookup('password', '~/.tor/prometheus/metrics_path/'+inventory_hostname + ' length=10 chars=ascii_lowercase') }}"`
+
 * `tor_prometheus_scrape_password_folder` folderpath
     - this variable is only relevant if `tor_enableMetricsPort` is True
     - ansible will automatically generate one unique and random 20 character password per host (not per tor instance) to protect the MetricsPort via nginx (http auth)
     - this variable defines the folder where ansible will store the passwords in plaintext (password lookup)
     - the filenames within that folder match the hostname (inventory_hostname) and can not be configured
     - the variable must contain a trailing `/`
-    - default: `~/.tor/prometheus-scrape-passwords/`
+    - default: `~/.tor/prometheus/scrape-passwords/`
 
 * `tor_prometheus_scrape_port` integer
     - defines what destination port is used to reach the scrape target (`MetricsPort`) via nginx

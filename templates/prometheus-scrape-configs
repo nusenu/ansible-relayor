@@ -3,7 +3,7 @@
 {% for ip in tor_ips %}
 {% for port in tor_ports %}
   - job_name: '{{inventory_hostname}}-tor-{{c.i}}'
-    metrics_path: '/tor/{{c.i}}'
+    metrics_path: '/{{tor_prometheus_scrape_metrics_path}}/{{c.i}}'
     scheme: 'https'
     basic_auth:
       username: "{{ tor_prometheus_scrape_username }}"
