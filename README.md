@@ -321,8 +321,10 @@ All variables mentioned here are optional.
 
 * `tor_prometheus_scrape_username` string
     - this variable is only relevant if `tor_enableMetricsPort` is True
-    - username used to protect the MetricsPort via nginx http auth
-    - default: tormetrics
+    - username used to protect the MetricsPort via HTTP basic auth
+    - there should be NO need to change the default value.
+    - the default generates a 6 character random lowercase string using the Ansible password lookup
+    - default: `"{{ lookup('password', '~/.tor/prometheus/scrape-usernames/'+inventory_hostname + ' length=6 chars=ascii_lowercase') }}"`
 
 * `tor_prometheus_scrape_metrics_path` string
     - this variable is only relevant if `tor_enableMetricsPort` is True
