@@ -120,6 +120,8 @@ tor_prometheus_host: 127.0.0.1
 # file path to the scrape config
 tor_prometheus_scrape_file: "~/.tor/tor-prometheus-scrape-configs"
 tor_prometheus_scrape_metrics_path: "{{ lookup('password', '~/.tor/prometheus/metrics_path/'+inventory_hostname + ' length=10 chars=ascii_lowercase') }}"
+tor_blackbox_exporter_host: localhost:9115
+tor_gen_blackbox_scrape_config: False
 
 tor_prometheus_scrape_password_folder: "~/.tor/prometheus/scrape-passwords/"
 tor_prometheus_scrape_username: "{{ lookup('password', '~/.tor/prometheus/scrape-usernames/'+inventory_hostname + ' length=6 chars=ascii_lowercase') }}"

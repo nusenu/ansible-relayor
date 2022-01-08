@@ -298,6 +298,16 @@ All variables mentioned here are optional.
     - the contents of this file need to be pasted into your prometheus scrape configuration to scrape the tor MetricsPorts
     - default: ~/.tor/tor-prometheus-scrape-configs
 
+* `tor_gen_blackbox_scrape_config` boolean
+    - this variable is only relevant if `tor_enableMetricsPort` is True and `tor_prometheus_scrape_file` is set
+    - when set to True we add the necessary prometheus scrape config for blackbox exporter TCP propes in the file defined by `tor_prometheus_scrape_file`
+    - we monitor all relay ORPorts and when set DirPorts on IPv4 and when detected IPv6
+    - default: False
+
+* `tor_blackbox_exporter_host` IP:port
+    - defines where prometheus finds the blackbox exporter
+    - default: localhost:9115
+
 * `tor_metricsport_nginx_config_file` filepath
     - this variable is only relevant if `tor_enableMetricsPort` is True
     - it defines the filepath where the nginx reverse proxy configuration for MetricsPort will be stored on the relay

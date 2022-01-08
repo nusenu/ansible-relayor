@@ -17,3 +17,34 @@
 {% endfor %}
 {% endfor %}
 {% endfor %}
+{% if tor_gen_blackbox_scrape_config %}
+  - job_name: 'blackbox_tcp_connect_tor'
+    metrics_path: /probe
+    params:
+      module: [tcp_connect]
+    static_configs:
+      - targets:
+{% for host in ansible_play_hosts %}
+{% for ip in tor_ips %}
+{% for port in tor_ports %}
+        - {{ ip.ipv4 }}:{{ port.orport }}
+{% if port.dirport != 0 %}
+        - {{ ip.ipv4 }}:{{ port.dirport }}
+{% endif %}
+{% if ip.ipv6 != '' and tor_IPv6 %}
+        - [{{ ip.ipv6 }}]:{{ port.orport }}
+{% if port.dirport != 0 %}
+        - [{{ ip.ipv6 }}]:{{ port.dirport }}
+{% endif %}
+{% endif %}
+{% endfor %}
+{% endfor %}
+{% endfor %}
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: {{tor_blackbox_exporter_host}}
+{% endif %}
