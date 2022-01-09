@@ -1,3 +1,4 @@
+{% if tor_enableMetricsPort %}
 {% for host in ansible_play_hosts %}
 {% set c = namespace(i=0) %}
 {% for ip in tor_ips %}
@@ -17,9 +18,16 @@
 {% endfor %}
 {% endfor %}
 {% endfor %}
+{% endif %}
 {% if tor_gen_blackbox_scrape_config %}
   - job_name: 'blackbox_tcp_connect_tor'
     metrics_path: /probe
+    scheme: '{{ tor_blackbox_exporter_scheme }}'
+{% if tor_blackbox_exporter_username is defined %}
+    basic_auth:
+      username: "{{ tor_blackbox_exporter_username }}"
+      password: "{{ tor_blackbox_exporter_password }}"
+{% endif %}
     params:
       module: [tcp_connect]
     static_configs:

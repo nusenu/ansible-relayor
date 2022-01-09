@@ -289,7 +289,7 @@
     dest: "{{ tor_prometheus_scrape_file }}"
   delegate_to: "{{ tor_prometheus_host }}"
   run_once: true
-  when: tor_enableMetricsPort
+  when: tor_enableMetricsPort or tor_gen_blackbox_scrape_config
 
 - name: Generate nginx reverse proxy configuration for MetricsPort
   become: yes

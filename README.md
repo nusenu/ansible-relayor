@@ -39,6 +39,7 @@ Main benefits for a tor relay operator
 - automatic deployment of a [tor exit notice html](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) page via tor's DirPort (on exits only)
 - **automatic MyFamily management**
 - prometheus scrape and nginx reverse proxy config autogeneration for tor's prometheus exporter (when enabled)
+- automatically generates prometheus blackbox-exporter scrape configuration to monitor reachability of ORPorts and DirPorts (when enabled)
 
 Installation
 ------------
@@ -299,14 +300,30 @@ All variables mentioned here are optional.
     - default: ~/.tor/tor-prometheus-scrape-configs
 
 * `tor_gen_blackbox_scrape_config` boolean
-    - this variable is only relevant if `tor_enableMetricsPort` is True and `tor_prometheus_scrape_file` is set
     - when set to True we add the necessary prometheus scrape config for blackbox exporter TCP propes in the file defined by `tor_prometheus_scrape_file`
     - we monitor all relay ORPorts and when set DirPorts on IPv4 and when detected IPv6
     - default: False
 
-* `tor_blackbox_exporter_host` IP:port
+* `tor_blackbox_exporter_host` hostname:port
+    - only relevant when `tor_gen_blackbox_scrape_config` is True
     - defines where prometheus finds the blackbox exporter
+    - the host is written into the resulting prometheus scrape config
     - default: localhost:9115
+
+* `tor_blackbox_exporter_scheme` string
+    - defines the protocol prometheus uses to connect to the blackbox exporter (http or https)
+    - default: http
+
+* `tor_blackbox_exporter_username` string
+    - allows you to define the username if your blackbox exporter requires HTTP basic authentication
+    - if you do not set a username the scrape config will not include HTTP basic auth credentials
+    - default: undefined (no HTTP basic auth)
+
+* `tor_blackbox_exporter_password` string
+    - only relevant when `tor_gen_blackbox_scrape_config` is True
+    - allows you to the the username if your blackbox exporter requires HTTP basic auth
+    - the default generates a 20 character random string using the Ansible password lookup
+    - default: `"{{ lookup('password', '~/.tor/prometheus/blackbox_exporter_password') }}"`
 
 * `tor_metricsport_nginx_config_file` filepath
     - this variable is only relevant if `tor_enableMetricsPort` is True
@@ -320,31 +337,31 @@ All variables mentioned here are optional.
     - the file will be owned by root and readable by the webserver's group (www-data/www - depending on the OS)
     - we do NOT install the webserver, use another role for that.
     - the password is [automatically generated](https://docs.ansible.com/ansible/2.9/plugins/lookup/password.html) and 20 characters long (each server gets a distinct password)
-    - the path to the file on the relay is defined in `tor_metricsport_nginx_htpasswd_file`
+    - the path to the file on the relay is defined in `tor_metricsport_htpasswd_file`
     - the plaintext password is written to a file on the ansible control machine (see `tor_prometheus_scrape_password_folder`)
     - default: False
 
 * `tor_metricsport_htpasswd_file` filepath
-    - this variable is only relevant if `tor_enableMetricsPort` and `tor_gen_nginx_htpasswd` are set to True
+    - only relevant if `tor_enableMetricsPort` and `tor_gen_metricsport_htpasswd` are set to True
     - it defines the filepath to the htpasswd file (containing username and password hash) on the relay
     - default: `/etc/nginx/tor_metricsport_htpasswd`
 
 * `tor_prometheus_scrape_username` string
-    - this variable is only relevant if `tor_enableMetricsPort` is True
+    - only relevant if `tor_enableMetricsPort` is True
     - username used to protect the MetricsPort via HTTP basic auth
     - there should be NO need to change the default value.
     - the default generates a 6 character random lowercase string using the Ansible password lookup
     - default: `"{{ lookup('password', '~/.tor/prometheus/scrape-usernames/'+inventory_hostname + ' length=6 chars=ascii_lowercase') }}"`
 
 * `tor_prometheus_scrape_metrics_path` string
-    - this variable is only relevant if `tor_enableMetricsPort` is True
+    - only relevant if `tor_enableMetricsPort` is True
     - this variable defines the prometheus metrics_path. It is used in the nginx and prometheus scrape template.
     - there should be NO need to change the default value.
     - the default generates a 10 character random lowercase string using the Ansible password lookup
     - default: `"{{ lookup('password', '~/.tor/prometheus/metrics_path/'+inventory_hostname + ' length=10 chars=ascii_lowercase') }}"`
 
 * `tor_prometheus_scrape_password_folder` folderpath
-    - this variable is only relevant if `tor_enableMetricsPort` is True
+    - only relevant if `tor_enableMetricsPort` is True
     - ansible will automatically generate one unique and random 20 character password per host (not per tor instance) to protect the MetricsPort via nginx (http auth)
     - this variable defines the folder where ansible will store the passwords in plaintext (password lookup)
     - the filenames within that folder match the hostname (inventory_hostname) and can not be configured

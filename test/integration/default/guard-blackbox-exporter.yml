@@ -1,0 +1,9 @@
+---
+- hosts: all
+  vars_files:
+    - vars/dry-run-vars.yml
+  vars:
+    - tor_gen_blackbox_scrape_config: True
+    - tor_blackbox_exporter_username: testuser
+  roles:
+    - "{{ playbook_dir | regex_replace('test/integration/default$') }}"
