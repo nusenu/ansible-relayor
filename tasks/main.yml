@@ -13,7 +13,7 @@
 
 - name: Check for local requirements
   shell: >
-        command -V /bin/bash && command -V tor && command -V openssl && command -V sort
+        command -V /bin/bash && command -V "{{ tor_binary }}" && command -V openssl && command -V sort
         && command -V uniq && command -V wc && command -V cut && command -V xargs && command -V sed
   run_once: true
   become: no

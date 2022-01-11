@@ -398,6 +398,11 @@ All variables mentioned here are optional.
     - Note: The repository metadata is not updated, so setting this to latest does not give you any guarantees if it actually is the latest version.
     - default: present
 
+* `tor_binary` string
+    - name of the tor binary on the control machine used to generate the offline keys
+    - if the tor binary is not named "tor" on your control machine, you have to change the default (for example on Whonix workstations)
+    - default: tor
+
 
 Available Role Tags
 --------------------
