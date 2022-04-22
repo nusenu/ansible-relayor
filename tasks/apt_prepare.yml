@@ -27,7 +27,7 @@
 
 - name: Override tor_alpha_version if nightly builds repo is enabled (APT)
   set_fact:
-    tor_alpha_version: nightly-master
+    tor_alpha_version: nightly-main
     tor_alpha: True
   when: tor_nightly_builds
 

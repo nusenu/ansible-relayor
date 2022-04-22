@@ -190,7 +190,7 @@ All variables mentioned here are optional.
 
 * `tor_nightly_builds` boolean
     - Set to True if you want to use Tor nightly builds repo from deb.torproject.org.
-    - nightly builds follow the tor git master branch.
+    - nightly builds follow the tor git main branch.
     - Only supported on Debian and Ubuntu (ignored on other platforms).
     - default: False
 
