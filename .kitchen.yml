@@ -50,6 +50,9 @@ suites:
   - name: t-guard-alpha
     provisioner:
       playbook: "test/integration/default/guard-alpha-node.yml"
+  - name: t-guard-nightly
+    provisioner:
+      playbook: "test/integration/default/guard-nightly-node.yml"
   - name: t-guard-alpha-metricsport-blackbox-exporter
     provisioner:
       playbook: "test/integration/default/guard-alpha-metricsport-blackbox.yml"
