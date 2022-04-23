@@ -290,6 +290,8 @@
   delegate_to: "{{ tor_prometheus_host }}"
   run_once: true
   when: tor_enableMetricsPort or tor_gen_blackbox_scrape_config
+  tags:
+   - reconfigure
 
 - name: Generate nginx reverse proxy configuration for MetricsPort
   become: yes
@@ -299,6 +301,8 @@
     mode: 0644
     owner: root
   when: tor_enableMetricsPort and tor_metricsport_nginx_config_file is defined
+  tags:
+   - reconfigure
 
 # The htpasswd ansible module requires python passlib to be on the remote host
 - name: Ensure htpasswd Ansible dependencies are installed
@@ -318,3 +322,5 @@
     mode: 0640
     group: "{{ tor_metricsport_htpasswd_file_owner }}"
   when: tor_gen_metricsport_htpasswd and tor_enableMetricsPort
+  tags:
+   - reconfigure
