@@ -16,7 +16,7 @@ galaxy_info:
     - 6.9
   - name: Ubuntu
     versions:
-    - focal
+    - jammy
   galaxy_tags:
     - tor
     - ipv6
