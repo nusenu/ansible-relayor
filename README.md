@@ -73,7 +73,7 @@ Supported Operating Systems
 ---------------------------
 
 - Debian 11
-- OpenBSD 6.9
+- OpenBSD 7.1
 - FreeBSD 12.3, 13.0
 - Ubuntu 22.04
 
