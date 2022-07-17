@@ -1,10 +1,4 @@
 ---
 
-# filter potentially malicious input from relay-provided IPv4/v6 addresses
-# https://docs.ansible.com/ansible/playbooks_filters_ipaddr.html
-tor_v4ips: "{{ ansible_all_ipv4_addresses[0:tor_maxPrivateIPs] | ipv4('address') }}"
-tor_ipv4_count: "{{ tor_v4ips | length|int }}"
-
-
-# we can not use more IPv6 IPs than we have IPv4 IPs so we truncate (but fewer is ok)
-tor_v6tmp: "{{ ansible_all_ipv6_addresses|ipv6('public') }}"
+tor_v4ips: "{{ ansible_all_ipv4_addresses[0:tor_maxPrivateIPs] | ansible.utils.ipv4('address') }}"
+tor_ipv4_count: "{{ tor_v4ips | length | int }}"
