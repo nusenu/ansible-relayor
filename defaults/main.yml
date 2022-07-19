@@ -78,14 +78,11 @@ tor_signingkeylifetime_days: 30
 # this var is used for apt sources.list entries
 tor_distribution_release: "{{ ansible_lsb.codename }}"
 
-# filter potentially malicious input from relay-provided IPv4/v6 addresses
-# https://docs.ansible.com/ansible/playbooks_filters_ipaddr.html
 tor_available_public_ipv4s: "{{ ansible_all_ipv4_addresses |  ansible.utils.ipv4('address') | ansible.utils.ipaddr('public') }}"
 tor_v4ips: "{{ tor_available_public_ipv4s[0:tor_maxPublicIPs] }}"
 tor_ipv4_count: "{{ tor_v4ips | length | int }}"
 
 tor_available_public_ipv6s: "{{ ansible_all_ipv6_addresses| ansible.utils.ipv6('address') | ansible.utils.ipaddr('public') }}"
-
 # we can not use more IPv6 IPs than we have IPv4 IPs so we truncate (but fewer is ok)
 tor_v6ips: "{{ tor_available_public_ipv6s[0:tor_ipv4_count|int] }}"
 
@@ -98,13 +95,9 @@ tor_RunAsDaemon: 1
 
 tor_enableControlSocket: False
 
-# setting tor_alpha to True
-# will install tor alpha repos.
-# This is only supported for Debian/Ubuntu
 tor_alpha: False
 tor_nightly_builds: False
 
-# known problem: requires manual adjustment with every major tor release
 tor_alpha_version: experimental
 
 # MetricsPort variables
