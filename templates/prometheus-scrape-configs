@@ -2,7 +2,7 @@
 {% for host in ansible_play_hosts %}
 {% set c = namespace(i=0) %}
 {% for ip in hostvars[host]['tor_ips'] %}
-{% for port in hostvars[host]['tor_ports']|default(vars['tor_ports']) %}
+{% for port in hostvars[host]['tor_ports']|default([{ 'orport': 9000, 'dirport': 9001}, { 'orport': 9100, 'dirport': 9101}]) %}
   - job_name: '{{host}}-tor-{{c.i}}'
     metrics_path: '/{{ lookup('password', '~/.tor/prometheus/metrics_path/' + host + ' length=10 chars=ascii_lowercase') }}/{{c.i}}'
     scheme: 'https'
@@ -11,7 +11,7 @@
       password: "{{ lookup('password', tor_prometheus_scrape_password_folder + host ) }}"
     static_configs:
       - targets:
-        - "{{hostvars[host].ansible_fqdn}}:{{ hostvars[host]['tor_prometheus_scrape_port'] | default(vars['tor_prometheus_scrape_port']) }}"
+        - "{{hostvars[host].ansible_fqdn}}:{{ hostvars[host]['tor_prometheus_scrape_port'] | default(443) }}"
         labels:
           id: "{{ ip.ipv4 }}_{{ port.orport }}"
 {% set c.i = c.i + 1 %}
