@@ -1,17 +1,17 @@
 {% if tor_enableMetricsPort %}
 {% for host in ansible_play_hosts %}
 {% set c = namespace(i=0) %}
-{% for ip in tor_ips %}
-{% for port in tor_ports %}
-  - job_name: '{{inventory_hostname}}-tor-{{c.i}}'
-    metrics_path: '/{{tor_prometheus_scrape_metrics_path}}/{{c.i}}'
+{% for ip in hostvars[host]['tor_ips'] %}
+{% for port in hostvars[host]['tor_ports']|default(vars['tor_ports']) %}
+  - job_name: '{{host}}-tor-{{c.i}}'
+    metrics_path: '/{{ lookup('password', '~/.tor/prometheus/metrics_path/' + host + ' length=10 chars=ascii_lowercase') }}/{{c.i}}'
     scheme: 'https'
     basic_auth:
-      username: "{{ tor_prometheus_scrape_username }}"
-      password: "{{ lookup('password', tor_prometheus_scrape_password_folder+inventory_hostname ) }}"
+      username: "{{ lookup('password', '~/.tor/prometheus/scrape-usernames/' + host + ' length=6 chars=ascii_lowercase') }}"
+      password: "{{ lookup('password', tor_prometheus_scrape_password_folder + host ) }}"
     static_configs:
       - targets:
-        - "{{ansible_fqdn}}:{{ tor_prometheus_scrape_port }}"
+        - "{{hostvars[host].ansible_fqdn}}:{{ hostvars[host]['tor_prometheus_scrape_port'] | default(vars['tor_prometheus_scrape_port']) }}"
         labels:
           id: "{{ ip.ipv4 }}_{{ port.orport }}"
 {% set c.i = c.i + 1 %}
@@ -33,8 +33,8 @@
     static_configs:
       - targets:
 {% for host in ansible_play_hosts %}
-{% for ip in tor_ips %}
-{% for port in tor_ports %}
+{% for ip in hostvars[host]['tor_ips'] %}
+{% for port in hostvars[host]['tor_ports']|default(vars['tor_ports']) %}
         - {{ ip.ipv4 }}:{{ port.orport }}
 {% if port.dirport != 0 %}
         - {{ ip.ipv4 }}:{{ port.dirport }}

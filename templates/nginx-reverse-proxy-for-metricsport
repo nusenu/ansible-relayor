@@ -1,10 +1,10 @@
-location /{{tor_prometheus_scrape_metrics_path}} {
+location /{{ lookup('password', '~/.tor/prometheus/metrics_path/' + inventory_hostname + ' length=10 chars=ascii_lowercase') }} {
     auth_basic "";
     auth_basic_user_file {{ tor_metricsport_htpasswd_file }};
 {% set c = namespace(i=0) %}
 {% for ip in tor_ips %}
 {% for port in tor_ports %}
-location /{{tor_prometheus_scrape_metrics_path}}/{{c.i}} {
+location /{{ lookup('password', '~/.tor/prometheus/metrics_path/' + inventory_hostname + ' length=10 chars=ascii_lowercase') }}/{{c.i}} {
 	proxy_pass http://127.0.0.1:{{tor_MetricsPort_offset + c.i}}/metrics;
 }
 {% set c.i = c.i + 1 %}

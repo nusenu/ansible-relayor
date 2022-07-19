@@ -344,20 +344,6 @@ All variables mentioned here are optional.
     - it defines the filepath to the htpasswd file (containing username and password hash) on the relay
     - default: `/etc/nginx/tor_metricsport_htpasswd`
 
-* `tor_prometheus_scrape_username` string
-    - only relevant if `tor_enableMetricsPort` is True
-    - username used to protect the MetricsPort via HTTP basic auth
-    - there should be NO need to change the default value.
-    - the default generates a 6 character random lowercase string using the Ansible password lookup
-    - default: `"{{ lookup('password', '~/.tor/prometheus/scrape-usernames/'+inventory_hostname + ' length=6 chars=ascii_lowercase') }}"`
-
-* `tor_prometheus_scrape_metrics_path` string
-    - only relevant if `tor_enableMetricsPort` is True
-    - this variable defines the prometheus metrics_path. It is used in the nginx and prometheus scrape template.
-    - there should be NO need to change the default value.
-    - the default generates a 10 character random lowercase string using the Ansible password lookup
-    - default: `"{{ lookup('password', '~/.tor/prometheus/metrics_path/'+inventory_hostname + ' length=10 chars=ascii_lowercase') }}"`
-
 * `tor_prometheus_scrape_password_folder` folderpath
     - only relevant if `tor_enableMetricsPort` is True
     - ansible will automatically generate one unique and random 20 character password per host (not per tor instance) to protect the MetricsPort via nginx (http auth)
@@ -419,7 +405,8 @@ Task oriented tags:
 * **renewkey** - takes care of renewing online Ed25519 keys only (assumes that tor instances are fully configured and running already)
 * install - installs tor but does not start or enable it
 * createdir - creates (empty) directories on the ansible host only, useful for migration
-* reconfigure - regenerates torrc files and reloads tor (requires previously configured tor instances)
+* promconfig - regenerates prometheus related configs (scrape config, blackbox exporter, nginx)
+* reconfigure - regenerates config files (tor and promconfig) and reloads tor (requires previously configured tor instances)
 
 So if you have a big family and you are about to add an OpenBSD host you typically
 make two steps

@@ -292,6 +292,7 @@
   when: tor_enableMetricsPort or tor_gen_blackbox_scrape_config
   tags:
    - reconfigure
+   - promconfig
 
 - name: Generate nginx reverse proxy configuration for MetricsPort
   become: yes
@@ -303,6 +304,7 @@
   when: tor_enableMetricsPort and tor_metricsport_nginx_config_file is defined
   tags:
    - reconfigure
+   - promconfig
 
 # The htpasswd ansible module requires python passlib to be on the remote host
 - name: Ensure htpasswd Ansible dependencies are installed
@@ -317,10 +319,11 @@
   htpasswd:
     create: yes
     path: "{{ tor_metricsport_htpasswd_file }}"
-    name: "{{ tor_prometheus_scrape_username }}"
+    name: "{{ lookup('password', '~/.tor/prometheus/scrape-usernames/'+inventory_hostname + ' length=6 chars=ascii_lowercase') }}"
     password: "{{ lookup('password', tor_prometheus_scrape_password_folder+inventory_hostname ) }}"
     mode: 0640
     group: "{{ tor_metricsport_htpasswd_file_owner }}"
   when: tor_gen_metricsport_htpasswd and tor_enableMetricsPort
   tags:
    - reconfigure
+   - promconfig
