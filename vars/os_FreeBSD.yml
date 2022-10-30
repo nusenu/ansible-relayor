@@ -2,5 +2,5 @@
 
 tor_DataDir: /var/db/tor-instances
 tor_ConfDir: /usr/local/etc/tor/enabled
-tor_htpasswd_dependency: py38-passlib
+tor_htpasswd_dependency: py39-passlib
 tor_metricsport_htpasswd_file_owner: www
