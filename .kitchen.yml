@@ -99,6 +99,17 @@ suites:
       - ["private_network", {ip: "198.51.100.14"}]
     provisioner:
       playbook: "test/integration/default/6publicIPs-dedicatedExitIP-2instPerIP-exit-node.yml"
+  - name: t-exit-dirport0-6publicIPs-dedicatedExitIP-2instPerIP
+    driver:
+      network:
+      - ["private_network", {ip: "192.0.2.10"}]
+      - ["private_network", {ip: "198.51.100.10"}]
+      - ["private_network", {ip: "198.51.100.11"}]
+      - ["private_network", {ip: "198.51.100.12"}]
+      - ["private_network", {ip: "198.51.100.13"}]
+      - ["private_network", {ip: "198.51.100.14"}]
+    provisioner:
+      playbook: "test/integration/default/dirport0-6publicIPs-dedicatedExitIP-2instPerIP-exit-node.yml"
   - name: t-exit-6publicIPs-dedicatedExitIP-singleInstPerIP
     driver:
       network:

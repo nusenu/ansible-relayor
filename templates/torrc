@@ -58,7 +58,9 @@ ExitRelay 1
 {% if item.0.ipv6 != "" and item.0.ipv6 != "False" and tor_IPv6 == True and tor_IPv6Exit == True %}
 IPv6Exit 1
 {% if tor_dedicatedExitIP != True %}
+{% if item.1.dirport != 0 %}
 DirPort [{{ item.0.ipv6 }}]:{{ item.1.dirport }} NoAdvertise
+{% endif %}
 {% endif %}
 {% endif %}
 {% if tor_ExitNoticePage == True and tor_config.DirPortFrontPage is not defined %}
@@ -69,19 +71,27 @@ DirPortFrontPage {{ tor_ConfDir }}/tor-exit-notice.html
 {% if tor_available_public_ipv4s|length >= tor_maxPublicIPs*2 %}
 {% if tor_ports|length == 2 %}
 OutboundBindAddressExit {{ tor_available_public_ipv4s[(loop_idx/2)|round(0,'floor')|int + tor_maxPublicIPs]}}
+{% if item.1.dirport != 0 %}
 DirPort {{ tor_available_public_ipv4s[(loop_idx/2)|round(0,'floor')|int + tor_maxPublicIPs]}}:{{ item.1.dirport }} NoAdvertise
+{% endif %}
 {% elif tor_ports|length == 1 %}
 OutboundBindAddressExit {{ tor_available_public_ipv4s[loop_idx + tor_maxPublicIPs]}}
+{% if item.1.dirport != 0 %}
 DirPort {{ tor_available_public_ipv4s[loop_idx + tor_maxPublicIPs]}}:{{ item.1.dirport }} NoAdvertise
+{% endif %}
 {% endif %}
 {% endif %}
 {% if tor_available_public_ipv6s|length >= tor_maxPublicIPs*2 and tor_IPv6 == True and tor_IPv6Exit == True %}
 {% if tor_ports|length == 2 %}
 OutboundBindAddressExit [{{ tor_available_public_ipv6s[(loop_idx/2)|round(0,'floor')|int + tor_maxPublicIPs]}}]
+{% if item.1.dirport != 0 %}
 DirPort [{{ tor_available_public_ipv6s[(loop_idx/2)|round(0,'floor')|int + tor_maxPublicIPs]}}]:{{ item.1.dirport }} NoAdvertise
+{% endif %}
 {% elif tor_ports|length == 1 %}
 OutboundBindAddressExit [{{ tor_available_public_ipv6s[loop_idx + tor_maxPublicIPs]}}]
+{% if item.1.dirport != 0 %}
 DirPort [{{ tor_available_public_ipv6s[loop_idx + tor_maxPublicIPs]}}]:{{ item.1.dirport }} NoAdvertise
+{% endif %}
 {% endif %}
 {% endif %}
 {% endif %}

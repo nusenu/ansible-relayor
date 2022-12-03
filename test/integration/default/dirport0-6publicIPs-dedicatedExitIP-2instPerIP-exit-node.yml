@@ -1,0 +1,19 @@
+---
+- hosts: all
+  vars:
+    tor_maxPublicIPs: 3
+    tor_dedicatedExitIP: True
+    tor_ExitRelay: True
+    tor_apt_update_cache: no
+    tor_ContactInfo: "ansible-relayor test-kitchen (you should never see this on a public relay) https://github.com/nusenu/ansible-relayor"
+    tor_ExitRelay: True
+    tor_ports:
+      - orport: 9000
+        dirport: 0
+      - orport: 9100
+        dirport: 0
+    tor_config:
+      DisableNetwork: 1
+      PublishServerDescriptor: 0
+  roles:
+    - "{{ playbook_dir | regex_replace('test/integration/default$') }}"
