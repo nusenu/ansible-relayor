@@ -99,7 +99,7 @@ suites:
       - ["private_network", {ip: "198.51.100.14"}]
     provisioner:
       playbook: "test/integration/default/6publicIPs-dedicatedExitIP-2instPerIP-exit-node.yml"
-  - name: t-exit-dirport0-6publicIPs-dedicatedExitIP-2instPerIP
+  - name: t-exit-dirport0-6IPs-dedicatedExitIP-2PerIP
     driver:
       network:
       - ["private_network", {ip: "192.0.2.10"}]
