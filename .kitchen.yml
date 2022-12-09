@@ -9,10 +9,6 @@ platforms:
   - name: ubuntu-22.04
     driver:
       box: ubuntu/jammy64
-      provision: True
-      vagrantfiles:
-        # temporary workaround for hashicorp/vagrant/pull/12584
-        - test/vagrant_provisions/vagrant_provision_ssh_PubkeyAcceptedAlgorithms.rb
   - name: freebsd-13
     driver:
       provision: True
