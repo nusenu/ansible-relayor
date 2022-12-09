@@ -6,7 +6,6 @@
     tor_ExitRelay: True
     tor_apt_update_cache: no
     tor_ContactInfo: "ansible-relayor test-kitchen (you should never see this on a public relay) https://github.com/nusenu/ansible-relayor"
-    tor_ExitRelay: True
     tor_ports:
       - orport: 9000
         dirport: 0
