@@ -4,3 +4,4 @@ tor_ContactInfo: "ansible-relayor test-kitchen (you should never see this on a p
 tor_config:
   DisableNetwork: 1
   PublishServerDescriptor: 0
+  ShutdownWaitLength: 0
