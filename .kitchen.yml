@@ -56,9 +56,19 @@ suites:
       - freebsd-13
       - freebsd-12
       - openbsd7
+  - name: t-guard-metricsport-blackbox-exporter
+    provisioner:
+      playbook: "test/integration/default/guard-metricsport-blackbox.yml"
   - name: t-guard-alpha-metricsport-blackbox-exporter
     provisioner:
       playbook: "test/integration/default/guard-alpha-metricsport-blackbox.yml"
+    excludes:
+      - freebsd-13
+      - freebsd-12
+      - openbsd7
+  - name: t-guard-nightly-metricsport-blackbox-exporter
+    provisioner:
+      playbook: "test/integration/default/guard-nightly-metricsport-blackbox.yml"
     excludes:
       - freebsd-13
       - freebsd-12
