@@ -4,7 +4,6 @@
     - vars/dry-run-vars.yml
   vars:
     - tor_maxPublicIPs: 2
-    - tor_alpha: True
     - tor_enableMetricsPort: True
     - tor_gen_metricsport_htpasswd: True
     - tor_metricsport_nginx_config_file: /tmp/web-reverse-proxy
