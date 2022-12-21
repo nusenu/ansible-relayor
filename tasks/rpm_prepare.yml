@@ -9,7 +9,7 @@
 - name: Ensure SELinux dependencies are installed
   become: yes
   package:
-    name: libselinux-python,libsemanage-python
+    name: python3-libselinux,python3-libsemanage
     state: present
   notify: re-gather facts
 
