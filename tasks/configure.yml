@@ -283,15 +283,6 @@
   tags:
    - reconfigure
 
-- name: Ensure tor_prometheus_scrape_file is set when needed
-  assert:
-    that:
-      - "tor_prometheus_scrape_file | length > 0"
-    msg: "Please set tor_prometheus_scrape_file, see defaults/main.yml for an example"
-  when: tor_enableMetricsPort or tor_gen_blackbox_scrape_config
-  tags:
-    - always
-
 - name: Generate prometheus scrape configs
   become: yes
   template:
