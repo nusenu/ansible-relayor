@@ -7,6 +7,7 @@
     - tor_enableMetricsPort: True
     - tor_gen_metricsport_htpasswd: True
     - tor_metricsport_nginx_config_file: /tmp/web-reverse-proxy-{{ inventory_hostname }}
+    - tor_prometheus_scrape_file: /tmp/tor-prometheus-{{ inventory_hostname }}
     - tor_gen_blackbox_scrape_config: True
   roles:
     - "{{ playbook_dir | regex_replace('test/integration/default$') }}"

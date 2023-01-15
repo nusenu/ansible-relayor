@@ -292,10 +292,10 @@ All variables mentioned here are optional.
     - default: 127.0.0.1
 
 * `tor_prometheus_scrape_file` filepath
-    - this variable is only relevant if `tor_enableMetricsPort` is True
-    - it defines the absolute filename on `tor_prometheus_host` where ansible will store the prometheus scrape configs
+    - this variable must be set if `tor_enableMetricsPort` is True
+    - it defines the absolute filename on the prometheus server (`tor_prometheus_host`) where ansible will create the prometheus scrape configs
     - the filepath must be host specific, each host has its own scrape config file on the prometheus server
-    - use a hostname variable in the filepath, see `defaults/main.yml` for an example
+    - use a hostname variable in the filepath, this is a reasonable example: `/etc/prometheus/config.d/tor_{{ ansible_fqdn }}.yml`
     - default: ""
 
 * `tor_prom_labels` dictionary
