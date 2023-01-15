@@ -1,26 +1,37 @@
 {% if tor_enableMetricsPort %}
-{% for host in ansible_play_hosts %}
 {% set c = namespace(i=0) %}
-{% for ip in hostvars[host]['tor_ips'] %}
-{% for port in hostvars[host]['tor_ports']|default([{ 'orport': 9000, 'dirport': 9001}, { 'orport': 9100, 'dirport': 9101}]) %}
-  - job_name: '{{host}}-tor-{{c.i}}'
-    metrics_path: '/{{ lookup('password', '~/.tor/prometheus/metrics_path/' + host + ' length=10 chars=ascii_lowercase') }}/{{c.i}}'
+{% for ip in tor_ips %}
+{% for port in tor_ports %}
+  - job_name: 'tor-{{ansible_fqdn}}-{{c.i}}'
+    metrics_path: '/{{ lookup('password', '~/.tor/prometheus/metrics_path/' + inventory_hostname + ' length=10 chars=ascii_lowercase') }}/{{c.i}}'
     scheme: 'https'
     basic_auth:
-      username: "{{ lookup('password', '~/.tor/prometheus/scrape-usernames/' + host + ' length=6 chars=ascii_lowercase') }}"
-      password: "{{ lookup('password', tor_prometheus_scrape_password_folder + host ) }}"
+      username: "{{ lookup('password', '~/.tor/prometheus/scrape-usernames/' + inventory_hostname + ' length=6 chars=ascii_lowercase') }}"
+      password: "{{ lookup('password', tor_prometheus_scrape_password_folder + inventory_hostname ) }}"
     static_configs:
       - targets:
-        - "{{hostvars[host].ansible_fqdn}}:{{ hostvars[host]['tor_prometheus_scrape_port'] | default(443) }}"
+        - "{{ansible_fqdn}}:{{ tor_prometheus_scrape_port }}"
         labels:
           id: "{{ ip.ipv4 }}_{{ port.orport }}"
-{% set c.i = c.i + 1 %}
+{% if tor_nicknamefile is defined %}
+          tor_nickname: "{{ lookup('csvfile', inventory_hostname~'-'~ip.ipv4~'_'~port.orport~' file='~tor_nicknamefile~' delimiter=,') |regex_replace('[^a-zA-Z0-9]', '') |truncate(19, True, '')}}"
+{% elif tor_nickname is defined %}
+          tor_nickname: "{{ tor_nickname |regex_replace('[^a-zA-Z0-9]', '') |truncate(19, True, '') }}"
+{% endif %}
+{% if ((tor_ExitRelay == True and tor_ExitRelaySetting_file is not defined) or (tor_ExitRelay == True and tor_ExitRelaySetting_file is defined and (lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orport~' file='~tor_ExitRelaySetting_file~' delimiter=,') == "exit"))) %}
+          relaytype: "exit"
+{% else %}
+          relaytype: "nonexit"
+{% endif %}
+{% for label, value in tor_prom_labels.items()  %}
+          {{ label }}: "{{ value }}"
 {% endfor %}
+{% set c.i = c.i + 1 %}
 {% endfor %}
 {% endfor %}
 {% endif %}
 {% if tor_gen_blackbox_scrape_config %}
-  - job_name: 'blackbox_tcp_connect_tor'
+  - job_name: 'tor-blackbox_tcp_connect_{{ansible_fqdn}}'
     metrics_path: /probe
     scheme: '{{ tor_blackbox_exporter_scheme }}'
 {% if tor_blackbox_exporter_username is defined %}
@@ -32,9 +43,8 @@
       module: [tcp_connect]
     static_configs:
       - targets:
-{% for host in ansible_play_hosts %}
-{% for ip in hostvars[host]['tor_ips'] %}
-{% for port in hostvars[host]['tor_ports']|default(vars['tor_ports']) %}
+{% for ip in tor_ips %}
+{% for port in tor_ports %}
         - {{ ip.ipv4 }}:{{ port.orport }}
 {% if port.dirport != 0 %}
         - {{ ip.ipv4 }}:{{ port.dirport }}
@@ -45,7 +55,6 @@
         - [{{ ip.ipv6 }}]:{{ port.dirport }}
 {% endif %}
 {% endif %}
-{% endfor %}
 {% endfor %}
 {% endfor %}
     relabel_configs:

@@ -284,11 +284,13 @@
    - reconfigure
 
 - name: Generate prometheus scrape configs
+  become: yes
   template:
     src: prometheus-scrape-configs
     dest: "{{ tor_prometheus_scrape_file }}"
+    owner: root
+    mode: 0640
   delegate_to: "{{ tor_prometheus_host }}"
-  run_once: true
   when: tor_enableMetricsPort or tor_gen_blackbox_scrape_config
   tags:
    - reconfigure

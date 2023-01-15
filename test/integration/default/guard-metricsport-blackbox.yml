@@ -8,5 +8,8 @@
     - tor_metricsport_nginx_config_file: /tmp/web-reverse-proxy-{{ inventory_hostname }}
     - tor_gen_blackbox_scrape_config: True
     - tor_prometheus_scrape_file: /tmp/tor-prometheus-scrape-config_metricsport_and_blackbox_exporter-{{ inventory_hostname }}
+    - tor_prom_labels:
+        label1: "value1"
+        label2: "value2"
   roles:
     - "{{ playbook_dir | regex_replace('test/integration/default$') }}"

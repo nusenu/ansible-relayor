@@ -293,9 +293,16 @@ All variables mentioned here are optional.
 
 * `tor_prometheus_scrape_file` filepath
     - this variable is only relevant if `tor_enableMetricsPort` is True
-    - it defines the absolute filename where ansible will place the generated prometheus scrape config
-    - the contents of this file need to be pasted into your prometheus scrape configuration to scrape the tor MetricsPorts
-    - default: ~/.tor/tor-prometheus-scrape-configs
+    - it defines the absolute filename on `tor_prometheus_host` where ansible will store the prometheus scrape configs
+    - the filepath must be host specific, each host has its own scrape config file on the prometheus server
+    - use a hostname variable in the filepath, see `defaults/main.yml` for an example
+    - default: ""
+
+* `tor_prom_labels` dictionary
+    - arbitrary number of prometheus label value pairs
+    - can be set on a per server level, not on a per instance level
+    - for an example see `defaults/main.yml`
+    - default: empty dictionary
 
 * `tor_gen_blackbox_scrape_config` boolean
     - when set to True we add the necessary prometheus scrape config for blackbox exporter TCP propes in the file defined by `tor_prometheus_scrape_file`
@@ -386,6 +393,17 @@ All variables mentioned here are optional.
     - name of the tor binary on the control machine used to generate the offline keys
     - if the tor binary is not named "tor" on your control machine, you have to change the default (for example on Whonix workstations)
     - default: tor
+
+Prometheus Labels
+-----------------
+
+When `tor_enableMetricsPort` is enabled we also populate the following prometheus labels:
+
+* `id`: identifies the tor instance by IP_ORPort. Example value: 198.51.100.10_9000
+* `relaytype`: value is either "exit" or "nonexit" depending on `tor_ExitRelay`
+* `tor_nickname`: when nicknames are defined (`tor_nicknamefile` or `tor_nickname`) this label is added
+
+You can add additional prometheus labels using `tor_prom_labels`.
 
 
 Available Role Tags

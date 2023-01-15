@@ -5,6 +5,7 @@
   vars:
     - tor_gen_blackbox_scrape_config: True
     - tor_blackbox_exporter_username: testuser
-    - tor_prometheus_scrape_file: ~/.tor/tor-prometheus-scrape-config_blackbox_exporter_only
+    - tor_prometheus_scrape_file: "/tmp/tor-prometheus-scrape-config_blackbox_exporter_only_{{ ansible_fqdn }}.yml"
+    - tor_nickname: "nickname123"
   roles:
     - "{{ playbook_dir | regex_replace('test/integration/default$') }}"
