@@ -50,9 +50,9 @@
         - {{ ip.ipv4 }}:{{ port.dirport }}
 {% endif %}
 {% if ip.ipv6 != '' and tor_IPv6 %}
-        - [{{ ip.ipv6 }}]:{{ port.orport }}
+        - "[{{ ip.ipv6 }}]:{{ port.orport }}"
 {% if port.dirport != 0 %}
-        - [{{ ip.ipv6 }}]:{{ port.dirport }}
+        - "[{{ ip.ipv6 }}]:{{ port.dirport }}"
 {% endif %}
 {% endif %}
 {% endfor %}
