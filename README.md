@@ -294,7 +294,8 @@ All variables mentioned here are optional.
 * `tor_prometheus_scrape_file` filepath
     - when set it will enable the generation of prometheus [scrape configs](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) files (one file per tor server)
       on the prometheus server (defined in `tor_prometheus_host`)
-    - the scrape config files will contain scrape jobs for the tor MetricsPort (behind a reverse proxy for TLS/basic auth) and/or scrape jobs for blackbox exporter (ORPort/DirPort TCP probes)
+    - depending on `tor_enableMetricsPort` and `tor_gen_blackbox_scrape_config`, the scrape config files will contain scrape jobs for the tor
+      MetricsPort (behind a reverse proxy for TLS/basic auth) and/or scrape jobs for ORPort/DirPort TCP probes via blackbox exporter
     - the filepath must be host specific, each host has its own scrape config file on the prometheus server to support the ansible "--limit" cli option
     - use a hostname variable in the filepath, this is a reasonable example: `/etc/prometheus/config.d/tor_{{ ansible_fqdn }}.yml`
     - merging these scrape configs into your global prometheus.yml is outside the scope of this role (for now)
