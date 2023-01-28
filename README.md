@@ -292,11 +292,15 @@ All variables mentioned here are optional.
     - default: 127.0.0.1
 
 * `tor_prometheus_scrape_file` filepath
-    - this variable must be set if `tor_enableMetricsPort` is True
-    - it defines the absolute filename on the prometheus server (`tor_prometheus_host`) where ansible will create the prometheus scrape configs
-    - the filepath must be host specific, each host has its own scrape config file on the prometheus server
+    - when set it will enable the generation of prometheus [scrape configs](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) files (one file per tor server)
+      on the prometheus server (defined in `tor_prometheus_host`)
+    - the scrape config files will contain scrape jobs for the tor MetricsPort (behind a reverse proxy for TLS/basic auth) and/or scrape jobs for blackbox exporter (ORPort/DirPort TCP probes)
+    - the filepath must be host specific, each host has its own scrape config file on the prometheus server to support the ansible "--limit" cli option
     - use a hostname variable in the filepath, this is a reasonable example: `/etc/prometheus/config.d/tor_{{ ansible_fqdn }}.yml`
-    - default: ""
+    - merging these scrape configs into your global prometheus.yml is outside the scope of this role (for now)
+    - the generated scrape config files will also contain a few useful labels automatically, see the "Prometheus Labels" section in this README
+    - the file is sensitive (contains scrape credentials) and gets these file permissions: 0640 (owner: root, group: `tor_prometheus_scrape_file_group`, defaults to root)
+    - default: undefined (no file is generated)
 
 * `tor_prom_labels` dictionary
     - arbitrary number of prometheus label value pairs
@@ -306,7 +310,9 @@ All variables mentioned here are optional.
 
 * `tor_gen_blackbox_scrape_config` boolean
     - when set to True we add the necessary prometheus scrape config for blackbox exporter TCP propes in the file defined by `tor_prometheus_scrape_file`
-    - we monitor all relay ORPorts and when set DirPorts on IPv4 and when detected IPv6
+    - if True you also have to set `tor_prometheus_scrape_file` otherwise no scrape config file is generated
+    - we monitor all relay ORPorts and when set DirPorts on IPv4 and IPv6 (if enabled)
+    - this feature is not supported on relays behind NAT
     - default: False
 
 * `tor_blackbox_exporter_host` hostname:port

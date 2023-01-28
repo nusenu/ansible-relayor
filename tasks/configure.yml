@@ -283,15 +283,16 @@
   tags:
    - reconfigure
 
-- name: Generate prometheus scrape configs
+- name: Generate prometheus scrape configs for MetricsPort and/or blackbox exporter
   become: yes
   template:
     src: prometheus-scrape-configs
     dest: "{{ tor_prometheus_scrape_file }}"
     owner: root
+    group: "{{ tor_prometheus_scrape_file_group }}"
     mode: 0640
   delegate_to: "{{ tor_prometheus_host }}"
-  when: tor_enableMetricsPort or tor_gen_blackbox_scrape_config
+  when: (tor_enableMetricsPort or tor_gen_blackbox_scrape_config) and tor_prometheus_scrape_file is defined
   tags:
    - reconfigure
    - promconfig
