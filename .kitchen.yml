@@ -39,9 +39,15 @@ suites:
   - name: t-guard
     provisioner:
       playbook: "test/integration/default/guard-node.yml"
+  - name: t-guard4
+    provisioner:
+      playbook: "test/integration/default/guard-node4.yml"
   - name: t-exit
     provisioner:
       playbook: "test/integration/default/exit-node.yml"
+  - name: t-exit4
+    provisioner:
+      playbook: "test/integration/default/exit-node4.yml"
   - name: t-guard-alpha
     provisioner:
       playbook: "test/integration/default/guard-alpha-node.yml"
@@ -91,6 +97,13 @@ suites:
       - ["private_network", {ip: "198.51.100.10"}]
     provisioner:
       playbook: "test/integration/default/2publicIPs-guard-metricsport.yml"
+  - name: t-guard4-2publicIPs-metricsport
+    driver:
+      network:
+      - ["private_network", {ip: "192.0.2.10"}]
+      - ["private_network", {ip: "198.51.100.10"}]
+    provisioner:
+      playbook: "test/integration/default/2publicIPs-guard4-metricsport.yml"
   - name: t-guard-2publicIPs
     driver:
       network:
@@ -138,3 +151,14 @@ suites:
       - ["private_network", {ip: "198.51.100.14"}]
     provisioner:
       playbook: "test/integration/default/6publicIPs-dedicatedExitIP-singleInstPerIP-exit-node.yml"
+  - name: t-exit4-6publicIPs-dedicatedExitIP
+    driver:
+      network:
+      - ["private_network", {ip: "192.0.2.10"}]
+      - ["private_network", {ip: "198.51.100.10"}]
+      - ["private_network", {ip: "198.51.100.11"}]
+      - ["private_network", {ip: "198.51.100.12"}]
+      - ["private_network", {ip: "198.51.100.13"}]
+      - ["private_network", {ip: "198.51.100.14"}]
+    provisioner:
+      playbook: "test/integration/default/6publicIPs-dedicatedExitIP-exit4-node.yml"

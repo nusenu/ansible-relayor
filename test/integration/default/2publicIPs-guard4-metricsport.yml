@@ -1,0 +1,22 @@
+---
+- hosts: all
+  vars_files:
+    - vars/dry-run-vars.yml
+  vars:
+    tor_maxPublicIPs: 2
+    tor_enableMetricsPort: True
+    tor_gen_metricsport_htpasswd: True
+    tor_metricsport_nginx_config_file: /tmp/web-reverse-proxy-{{ inventory_hostname }}
+    tor_prometheus_scrape_file: /tmp/tor-prometheus-{{ inventory_hostname }}
+    tor_gen_blackbox_scrape_config: True
+    tor_ports:
+      - orport: 9000
+        dirport: 9001
+      - orport: 9100
+        dirport: 9101
+      - orport: 9200
+        dirport: 9201
+      - orport: 9300
+        dirport: 9301
+  roles:
+    - "{{ playbook_dir | regex_replace('test/integration/default$') }}"

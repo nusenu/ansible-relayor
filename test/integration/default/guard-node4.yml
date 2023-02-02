@@ -1,0 +1,16 @@
+---
+- hosts: all
+  vars_files:
+    - vars/dry-run-vars.yml
+  vars:
+    tor_ports:
+      - orport: 9000
+        dirport: 9001
+      - orport: 9100
+        dirport: 9101
+      - orport: 9200
+        dirport: 9201
+      - orport: 9300
+        dirport: 9301
+  roles:
+    - "{{ playbook_dir | regex_replace('test/integration/default$') }}"

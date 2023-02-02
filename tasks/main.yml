@@ -30,12 +30,12 @@
   tags:
     - always
 
-- name: Ensure we do not create more than two instances per IP
+- name: Ensure we do not create more than 8 instances per IP
   assert:
     that:
       - "tor_ports | length > 0"
-      - "tor_ports | length < 3"
-    msg: "You can not run more than 2 instances per IP address, please update your tor_ports configuration."
+      - "tor_ports | length < 9"
+    msg: "You can not run more than 8 instances per IP address, please update your tor_ports configuration."
   tags:
     - always
 
