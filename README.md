@@ -399,6 +399,7 @@ When `tor_enableMetricsPort` is enabled we also populate the following prometheu
 * `id`: identifies the tor instance by IP_ORPort. Example value: 198.51.100.10_9000
 * `relaytype`: value is either "exit" or "nonexit" depending on `tor_ExitRelay`
 * `tor_nickname`: when nicknames are defined (`tor_nicknamefile` or `tor_nickname`) this label is added
+* `service`: "torrelay"
 
 You can add additional prometheus labels using `tor_prom_labels`.
 

@@ -12,6 +12,7 @@
       - targets:
         - "{{ansible_fqdn}}:{{ tor_prometheus_scrape_port }}"
         labels:
+          service: "torrelay"
           id: "{{ ip.ipv4 }}_{{ port.orport }}"
 {% if tor_nicknamefile is defined %}
           tor_nickname: "{{ lookup('csvfile', inventory_hostname~'-'~ip.ipv4~'_'~port.orport~' file='~tor_nicknamefile~' delimiter=,') |regex_replace('[^a-zA-Z0-9]', '') |truncate(19, True, '')}}"
