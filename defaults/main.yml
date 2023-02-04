@@ -93,9 +93,6 @@ tor_v6ips: "{{ tor_available_public_ipv6s[0:tor_ipv4_count|int] }}"
 
 tor_apt_update_cache: yes
 
-# This var enables autoconfiguration for OutboundBindAddressExit
-tor_dedicatedExitIP: False
-
 tor_RunAsDaemon: 1
 
 tor_enableControlSocket: False

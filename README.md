@@ -127,7 +127,7 @@ All variables mentioned here are optional.
 * `tor_config` dictionary
     - this dictionary contains torrc settings and their value, for available options see the 'SERVER OPTIONS' section in tor's manual.
     - each setting can only be set once (regardless what tor's manpage says)
-    - this dictionary can be used to set any torrc option but NOT the following: `OfflineMasterKey`, `RunAsDaemon`, `Log`, `SocksPort`, `OutboundBindAddress`, `User`, `DataDirectory`, `ORPort`, `OutboundBindAddress`, `OutboundBindAddressExit`, `DirPort`, `SyslogIdentityTag`, `PidFile`, `MetricsPort`, `MetricsPortPolicy`, `ControlSocket`, `CookieAuthentication`, `Nickname`, `ExitRelay`, `IPv6Exit`, `ExitPolicy`, `RelayBandwidthRate`, `RelayBandwidthBurst`, `SigningKeyLifetime`
+    - this dictionary can be used to set any torrc option but NOT the following: `OfflineMasterKey`, `RunAsDaemon`, `Log`, `SocksPort`, `OutboundBindAddress`, `User`, `DataDirectory`, `ORPort`, `OutboundBindAddress`, `DirPort`, `SyslogIdentityTag`, `PidFile`, `MetricsPort`, `MetricsPortPolicy`, `ControlSocket`, `CookieAuthentication`, `Nickname`, `ExitRelay`, `IPv6Exit`, `ExitPolicy`, `RelayBandwidthRate`, `RelayBandwidthBurst`, `SigningKeyLifetime`
 
 * `tor_ports`
     - This var allows you to
@@ -262,16 +262,6 @@ All variables mentioned here are optional.
     - enables IPv6 exit traffic
     - only relevant if `tor_ExitRelay` and `tor_IPv6` are True and we have an IPv6 address
     - default: True (unlike tor's default)
-
-* `tor_dedicatedExitIP` boolean
-    - on exit relays only: use a distinct source IP address for traffic leaving the tor network (exit traffic)
-    - this means tor will establish outbound exit connections on a separate IP(v4/v6) address (different from the IP announced in the consensus)
-    - automatically configures the [OutboundBindAddressExit](https://www.torproject.org/docs/tor-manual.html.en#OutboundBindAddressExit) tor feature (does not require you to manually specify the IP address to use)
-    - we will use the public IPv4/IPv6 address(es) available directly after the IP addresses we use for tor ORPorts for `OutboundBindAddressExit`
-    - to make use of this feature you need more public IPv4 or IPv6 addresses than `tor_maxPublicIPs`
-    - if this condition is not met we will abort
-    - manually specifying the IP address used by `OutboundBindAddressExit` is not supported
-    - default: False
 
 * `tor_enableMetricsPort` boolean
     - if True enable tor's MetricsPort on the localhost IP address 127.0.0.1 and allow the same IP to access it (MetricsPortPolicy)
