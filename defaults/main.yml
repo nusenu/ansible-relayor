@@ -125,7 +125,7 @@ tor_prometheus_rules_file: "/etc/prometheus/rules/ansible-relayor.rules"
 tor_prometheus_alert_rules:
   - alert: TorFlagRunningMissing
     expr: 'tor_relay_flag{type="Running"} != 1'
-    for: 1h
+    for: 3h
     labels:
       severity: critical
   - alert: TorFlagSybilPresent
@@ -136,23 +136,23 @@ tor_prometheus_alert_rules:
     expr: 'rate(tor_relay_load_tcp_exhaustion_total[15m]) > 0'
     labels:
       severity: critical
-  - alert: TorOnionskinsDropped
-    expr: 'rate(tor_relay_load_onionskins_total{action="dropped"}[15m]) > 0'
-    for: 15m
-    labels:
-      severity: warning
-  - alert: TorFlagExitChanged
-    expr: 'changes(tor_relay_flag{type="Exit"}[15m]) > 0'
-    lables:
-      severity: warning
-    annotations:
-      description: "Your exit flag changed. Was that intended?"
-  - alert: TorFlagChanged
-    expr: 'changes(tor_relay_flag{type=~"Guard|Fast|Stable"}[15m]) > 0'
-    lables:
-      severity: informational
-    annotations:
-      description: '{% raw %}The {{ $labels.type }} flag changed on relay {{ $labels.id }}.{% endraw %}'
+#  - alert: TorOnionskinsDropped
+#    expr: 'rate(tor_relay_load_onionskins_total{action="dropped"}[15m]) > 0'
+#    for: 15m
+#    labels:
+#      severity: warning
+#  - alert: TorFlagExitChanged
+#    expr: 'changes(tor_relay_flag{type="Exit"}[15m]) > 0'
+#    lables:
+#      severity: warning
+#    annotations:
+#      description: "Your exit flag changed. Was that intended?"
+#  - alert: TorFlagChanged
+#    expr: 'changes(tor_relay_flag{type=~"Guard|Fast|Stable"}[15m]) > 0'
+#    lables:
+#      severity: informational
+#    annotations:
+#      description: '{% raw %}The {{ $labels.type }} flag changed on relay {{ $labels.id }}.{% endraw %}'
 
 # Path to the tor-exit-notice HTML file
 tor_exit_notice_file: tor-exit-notice.html
