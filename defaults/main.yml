@@ -146,7 +146,7 @@ tor_prometheus_alert_rules:
 #    lables:
 #      severity: warning
 #    annotations:
-#      description: "Your exit flag changed. Was that intended?"
+#      description: "{% raw %}The exit flag changed on relay {{ $labels.id }}. Was that intended?{% endraw %}"
 #  - alert: TorFlagChanged
 #    expr: 'changes(tor_relay_flag{type=~"Guard|Fast|Stable"}[15m]) > 0'
 #    lables:
