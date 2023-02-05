@@ -366,6 +366,7 @@ All variables mentioned here are optional.
 * `tor_prometheus_rules_file` filepath
     - only relevant when `tor_gen_prometheus_alert_rules` is `True`
     - defines where on the prometheus server (`tor_prometheus_host`) we will generate the rules file (the folder has to be present)
+    - the file has to be in the folder that is included by your prometheus config (rule_files) and usually is required to end with .rules
     - we ship a default set of alert rules and you can optionally add your custom alert rules as well.
     - file owner/group: root, file permissions: 0644
     - default: `/etc/prometheus/rules/ansible-relayor.rules`
