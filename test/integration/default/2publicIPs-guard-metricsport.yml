@@ -8,8 +8,6 @@
     - tor_gen_metricsport_htpasswd: True
     - tor_metricsport_nginx_config_file: /tmp/web-reverse-proxy-{{ inventory_hostname }}
     - tor_gen_blackbox_scrape_config: True
-    - tor_prometheus_confd_folder: /tmp/prom-conf.d
     - tor_prometheus_scrape_file: "{{ tor_prometheus_confd_folder}}/tor-prometheus-{{ inventory_hostname }}"
-    - tor_prometheus_config_file: /tmp/tor-global-prometheus-{{ inventory_hostname }}.yml
   roles:
     - "{{ playbook_dir | regex_replace('test/integration/default$') }}"
