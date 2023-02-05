@@ -120,6 +120,39 @@ tor_prometheus_scrape_port: 443
 tor_gen_metricsport_htpasswd: False
 tor_metricsport_htpasswd_file: "/etc/nginx/tor_metricsport_htpasswd"
 tor_metricsport_htpasswd_file_owner: "www-data"
+tor_gen_prometheus_alert_rules: False
+tor_prometheus_rules_file: "/etc/prometheus/rules/ansible-relayor.rules"
+tor_prometheus_alert_rules:
+  - alert: TorFlagRunningMissing
+    expr: 'tor_relay_flag{type="Running"} != 1'
+    for: 1h
+    labels:
+      severity: critical
+  - alert: TorFlagSybilPresent
+    expr: 'tor_relay_flag{type="Sybil"} != 0'
+    labels:
+      severity: critical
+  - alert: TorTCPPortsExhausted
+    expr: 'rate(tor_relay_load_tcp_exhaustion_total[15m]) > 0'
+    labels:
+      severity: critical
+  - alert: TorOnionskinsDropped
+    expr: 'rate(tor_relay_load_onionskins_total{action="dropped"}[15m]) > 0'
+    for: 15m
+    labels:
+      severity: warning
+  - alert: TorFlagExitChanged
+    expr: 'changes(tor_relay_flag{type="Exit"}[15m]) > 0'
+    lables:
+      severity: warning
+    annotations:
+      description: "Your exit flag changed. Was that intended?"
+  - alert: TorFlagChanged
+    expr: 'changes(tor_relay_flag{type=~"Guard|Fast|Stable"}[15m]) > 0'
+    lables:
+      severity: informational
+    annotations:
+      description: '{% raw %}Your {{ $labels.type }} flag changed.{% endraw %}'
 
 # Path to the tor-exit-notice HTML file
 tor_exit_notice_file: tor-exit-notice.html

@@ -65,6 +65,9 @@ suites:
   - name: t-guard-metricsport-blackbox-exporter
     provisioner:
       playbook: "test/integration/default/guard-metricsport-blackbox.yml"
+  - name: t-guard-metricsport-blackbox-alertrules
+    provisioner:
+      playbook: "test/integration/default/guard-metricsport-blackbox-alertrules.yml"
   - name: t-guard-alpha-metricsport-blackbox-exporter
     provisioner:
       playbook: "test/integration/default/guard-alpha-metricsport-blackbox.yml"

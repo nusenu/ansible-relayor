@@ -333,6 +333,23 @@ All variables mentioned here are optional.
     - this file has to be included in your webserver configuration on the relay to make MetricsPort accessible for remote prometheus scraping
     - default: undefined (no file is generated)
 
+* `tor_gen_prometheus_alert_rules` boolean
+    - only relevant when `tor_enableMetricsPort` is enabled
+    - set to `True` if you want to generate [prometheus alert rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) on the prometheus server (`tor_prometheus_host`)
+    - the file location is defined by `tor_prometheus_rules_file`
+    - default: false (no rules are generated)
+
+* `tor_prometheus_rules_file` filepath
+    - only relevant when `tor_gen_prometheus_alert_rules` is `True`
+    - defines where on the prometheus server (`tor_prometheus_host`) we will generate the rules file (the folder has to be present)
+    - we ship a default set of alert rules and you can optionally add your custom alert rules as well.
+    - file owner/group: root, file permissions: 0644
+    - default: `/etc/prometheus/rules/ansible-relayor.rules`
+
+* `tor_prometheus_alert_rules` dictionary
+    - defines the prometheus alert rules
+    - see `defaults/main.yml` for the default rules
+
 * `tor_gen_metricsport_htpasswd` boolean
     - this variable is only relevant if `tor_enableMetricsPort` is True
     - when this var is set to True, we create the htpasswd file that can be used by a webserver on the relay to protect tor's MetricsPort with HTTP basic auth

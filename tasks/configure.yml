@@ -297,6 +297,20 @@
    - reconfigure
    - promconfig
 
+- name: Generate prometheus alert rules
+  become: yes
+  template:
+    src: prometheus-alert-rules
+    dest: "{{ tor_prometheus_rules_file }}"
+    owner: root
+    group: root
+    mode: 0644
+  delegate_to: "{{ tor_prometheus_host }}"
+  when: tor_enableMetricsPort and tor_gen_prometheus_alert_rules
+  tags:
+   - reconfigure
+   - promconfig
+
 - name: Generate nginx reverse proxy configuration for MetricsPort
   become: yes
   template:
