@@ -308,6 +308,7 @@
     owner: root
     group: root
     mode: 0644
+    validate: promtool check rules %s
   delegate_to: "{{ tor_prometheus_host }}"
   run_once: true
   when: tor_enableMetricsPort and tor_gen_prometheus_alert_rules and tor_prometheus_rules_file is defined
