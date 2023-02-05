@@ -120,6 +120,8 @@ tor_prometheus_scrape_port: 443
 tor_gen_metricsport_htpasswd: False
 tor_metricsport_htpasswd_file: "/etc/nginx/tor_metricsport_htpasswd"
 tor_metricsport_htpasswd_file_owner: "www-data"
+tor_prometheus_confd_folder: "/etc/prometheus/conf.d"
+tor_prometheus_config_file: "/etc/prometheus/prometheus.yml"
 tor_gen_prometheus_alert_rules: False
 tor_prometheus_rules_file: "/etc/prometheus/rules/ansible-relayor.rules"
 tor_prometheus_alert_rules:

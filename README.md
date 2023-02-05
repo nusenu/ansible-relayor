@@ -38,8 +38,11 @@ Main benefits for a tor relay operator
 - easily choose between exit relay/non-exit relay mode using a single boolean
 - automatic deployment of a [tor exit notice html](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) page via tor's DirPort (on exits only)
 - **automatic MyFamily management**
-- prometheus scrape and nginx reverse proxy config autogeneration for tor's prometheus exporter (when enabled)
-- automatically generates prometheus blackbox-exporter scrape configuration to monitor reachability of ORPorts and DirPorts (when enabled)
+- prometheus integration (when enabled)
+  - nginx reverse proxy config autogeneration to protect tor's MetricsPort (behind basic auth / HTTPS)
+  - prometheus scrape config autogeneration for MetricsPort
+  - blackbox-exporter scrape config autogeneration to monitor reachability of ORPorts and DirPorts
+  - ship prometheus alert rules for tor
 
 Installation
 ------------
@@ -68,6 +71,11 @@ Managed Node Requirements
     - we can use multiple public IPs
     - if you have no public IP we will use a single private IP (and assume NAT)
 - systemd (all Linux-based systems)
+
+Prometheus Server Requirements (only when using prometheus features of this role)
+
+- promtool must be installed and in the PATH
+- OS group `prometheus` must exist
 
 Supported Operating Systems
 ---------------------------
@@ -281,13 +289,29 @@ All variables mentioned here are optional.
     - this host must be available in ansible's inventory file
     - default: 127.0.0.1
 
+* `tor_prometheus_confd_folder` folderpath
+    - only relevant if you want to use prometheus
+    - this existing folder on `tor_prometheus_host` must contain all prometheus configuration snippets (tor and non-tor)
+    - we assemble all files in that folder in string sorting order into a single prometheus.yml output file since prometheus does not support conf.d style folders out of the box
+    - default: `/etc/prometheus/conf.d`
+
+* `tor_prometheus_config_file` filepath
+    - only relevant if you want to use prometheus
+    - this var defines the path of the global prometheus configuration file
+    - we backup the file in the same folder before generating a new one
+    - this is a security sensitive file as it contains credentials for tor's MetricsPort
+    - file owner/group: root/prometheus, permissions: 0640
+    - default: `/etc/prometheus/prometheus.yml`
+
 * `tor_prometheus_scrape_file` filepath
+    - only relevant if you want to use prometheus
     - when set it will enable the generation of prometheus [scrape_config](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) files (one file per tor server)
       on the prometheus server (defined in `tor_prometheus_host`)
+    - the filepath **MUST** be host specific, each host has its own scrape config file on the prometheus server to support the ansible "--limit" cli option
+    - use a hostname variable in the filepath, this is a reasonable example: `{{ tor_prometheus_confd_folder}}/tor_{{ ansible_fqdn }}.yml`
+    - the filepath must point to a file inside `tor_prometheus_confd_folder`
     - depending on `tor_enableMetricsPort` and `tor_gen_blackbox_scrape_config`, the scrape config files will contain scrape jobs for the tor
       MetricsPort (behind a reverse proxy for TLS/basic auth) and/or scrape jobs for ORPort/DirPort TCP probes via blackbox exporter
-    - the filepath must be host specific, each host has its own scrape config file on the prometheus server to support the ansible "--limit" cli option
-    - use a hostname variable in the filepath, this is a reasonable example: `/etc/prometheus/config.d/tor_{{ ansible_fqdn }}.yml`
     - merging these scrape configs into your global prometheus.yml is outside the scope of this role (for now)
     - the generated scrape config files will automatically be enriched with a few useful prometheus labels depending on your torrc settings, see the "Prometheus Labels" section in this README
     - the file is sensitive (contains scrape credentials) and gets these file permissions: 0640 (owner: root, group: `tor_prometheus_scrape_file_group`, defaults to root)

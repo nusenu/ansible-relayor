@@ -78,6 +78,18 @@
   with_items: "{{ tor_instances_tmp.results }}"
   when: ansible_system == 'OpenBSD'
 
+- name: assemble prometheus configuration
+  become: yes
+  assemble:
+    src: "{{ tor_prometheus_confd_folder }}"
+    dest: "{{ tor_prometheus_config_file }}"
+    owner: root
+    group: prometheus
+    mode: 0640
+    backup: true
+    validate: promtool check config %s
+  delegate_to: "{{ tor_prometheus_host }}"
+
 - name: reload prometheus
   become: yes
   service:

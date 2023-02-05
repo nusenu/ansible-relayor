@@ -293,6 +293,9 @@
     mode: 0640
   delegate_to: "{{ tor_prometheus_host }}"
   when: (tor_enableMetricsPort or tor_gen_blackbox_scrape_config) and tor_prometheus_scrape_file is defined
+  notify:
+    - assemble prometheus configuration
+    - reload prometheus
   tags:
    - reconfigure
    - promconfig
