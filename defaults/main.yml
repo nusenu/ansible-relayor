@@ -152,7 +152,7 @@ tor_prometheus_alert_rules:
     lables:
       severity: informational
     annotations:
-      description: '{% raw %}Your {{ $labels.type }} flag changed.{% endraw %}'
+      description: '{% raw %}The {{ $labels.type }} flag changed on relay {{ $labels.id }}.{% endraw %}'
 
 # Path to the tor-exit-notice HTML file
 tor_exit_notice_file: tor-exit-notice.html

@@ -283,7 +283,7 @@
   tags:
    - reconfigure
 
-- name: Generate prometheus scrape configs for MetricsPort and/or blackbox exporter
+- name: Ensure prometheus scrape configs are in place
   become: yes
   template:
     src: prometheus-scrape-configs
@@ -297,7 +297,7 @@
    - reconfigure
    - promconfig
 
-- name: Generate prometheus alert rules
+- name: Ensure prometheus alert rules are in place
   become: yes
   template:
     src: prometheus-alert-rules
@@ -306,12 +306,15 @@
     group: root
     mode: 0644
   delegate_to: "{{ tor_prometheus_host }}"
-  when: tor_enableMetricsPort and tor_gen_prometheus_alert_rules
+  run_once: true
+  when: tor_enableMetricsPort and tor_gen_prometheus_alert_rules and tor_prometheus_rules_file is defined
+  notify:
+    - reload prometheus
   tags:
    - reconfigure
    - promconfig
 
-- name: Generate nginx reverse proxy configuration for MetricsPort
+- name: Ensure nginx reverse proxy configuration for MetricsPort is in place
   become: yes
   template:
     src: nginx-reverse-proxy-for-metricsport
@@ -331,7 +334,7 @@
     state: present
   when: tor_gen_metricsport_htpasswd and tor_enableMetricsPort
 
-- name: generate htpasswd file for MetricsPort protection
+- name: Ensure htpasswd file for MetricsPort protection is in place
   become: yes
   htpasswd:
     create: yes

@@ -77,3 +77,10 @@
     state: reloaded
   with_items: "{{ tor_instances_tmp.results }}"
   when: ansible_system == 'OpenBSD'
+
+- name: reload prometheus
+  become: yes
+  service:
+    name: prometheus
+    state: reloaded
+  delegate_to: "{{ tor_prometheus_host }}"
