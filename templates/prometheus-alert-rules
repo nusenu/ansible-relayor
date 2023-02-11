@@ -3,3 +3,8 @@ groups:
 - name: ansible-relayor managed alert rules
   rules:
   {{ tor_prometheus_alert_rules | to_nice_yaml(indent=2,sort_keys=False) | indent(2,False) }}
+{% if tor_prometheus_custom_alert_rules is defined %}
+- name: user defined tor alert rules
+  rules:
+  {{ tor_prometheus_custom_alert_rules | to_nice_yaml(indent=2,sort_keys=False) | indent(2,False) }}
+{% endif %}

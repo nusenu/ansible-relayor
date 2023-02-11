@@ -377,7 +377,15 @@ All variables mentioned here are optional.
 
 * `tor_prometheus_alert_rules` dictionary
     - defines the prometheus alert rules
+    - rules are validated using promtool automatically
     - see `defaults/main.yml` for the default rules
+
+* `tor_prometheus_custom_alert_rules` dictionary
+    - if you want to add your user defined rules, add them to this dictinary, it expects the same format as in `tor_prometheus_alert_rules`
+    - rules defined in this dictionary are also written to `tor_prometheus_rules_file`
+    - this allows you to make use of new rules shipped by new relayor versions while still maintaining your user defined rules
+    - rules are validated using promtool automatically
+    - default: undefined
 
 * `tor_gen_metricsport_htpasswd` boolean
     - this variable is only relevant if `tor_enableMetricsPort` is True
