@@ -37,8 +37,8 @@ Main benefits for a tor relay operator
 - easily restore a relay setup (the ansible host becomes a backup location for all keys out of the box)
 - easily choose between exit relay/non-exit relay mode using a single boolean
 - automatic deployment of a [tor exit notice html](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) page via tor's DirPort (on exits only)
-- **automatic MyFamily management**
-- prometheus integration (when enabled)
+- automatic MyFamily management
+- **prometheus integration** (when enabled)
   - nginx reverse proxy config autogeneration to protect tor's MetricsPort (behind basic auth / HTTPS)
   - prometheus scrape config autogeneration for MetricsPort
   - blackbox-exporter scrape config autogeneration to monitor reachability of ORPorts and DirPorts
