@@ -493,6 +493,11 @@ We do not ultimately trust every tor relay we operate (we try to perform input v
 
 **Be aware that the ansible control machine stores ALL your relay keys (RSA and Ed25519) - apply security measures accordingly.**
 
+If you make use of the prometheus integration the ansible control machine will also store all your prometheus scrape credentials under `~/.tor/prometheus/`.
+Rotating these credentials is very easy though: You can simply remove that folder and run ansible-playbook again.
+
+Every tor server host gets its own set of prometheus credentials, so a compromised host should not allow them to scrape all other hosts.
+
 Integration Testing
 -----------------------
 
