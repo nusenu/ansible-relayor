@@ -1,0 +1,22 @@
+---
+- hosts: all
+  vars_files:
+    - vars/dry-run-vars.yml
+  vars:
+    - tor_enableMetricsPort: True
+    - tor_gen_metricsport_htpasswd: True
+    - tor_metricsport_nginx_config_file: /tmp/web-reverse-proxy-{{ inventory_hostname }}
+    - tor_gen_blackbox_scrape_config: True
+    - tor_gen_prometheus_alert_rules: True
+    - tor_prometheus_scrape_file: "{{ tor_prometheus_confd_folder}}/tor-prometheus-{{ inventory_hostname }}"
+    - tor_prom_labels:
+        label1: "value1"
+        label2: "value2"
+    - tor_prometheus_custom_alert_rules:
+        - alert: TorOnionskinsDropped
+          expr: 'rate(tor_relay_load_onionskins_total{action="dropped"}[15m]) > 0'
+          for: 15m
+          labels:
+            severity: warning
+  roles:
+    - "{{ playbook_dir | regex_replace('test/integration/default$') }}"
