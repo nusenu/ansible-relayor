@@ -1,0 +1,16 @@
+---
+
+- hosts: relays
+  vars:
+    #tor_ContactInfo: relayor-example@example.com
+    tor_ExitRelay: True
+    tor_enableMetricsPort: True
+    tor_prometheus_host: 127.0.0.1
+    tor_gen_prometheus_alert_rules: True
+    tor_ports:
+        - { orport: 1, dirport: 0}
+        - { orport: 2, dirport: 0}
+        - { orport: 3, dirport: 0}
+        - { orport: 4, dirport: 0}
+  roles:
+   - nusenu.relayor
