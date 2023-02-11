@@ -283,10 +283,11 @@ All variables mentioned here are optional.
     - default: 33300
 
 * `tor_prometheus_host` hostname
-    - this variable is only relevant if `tor_enableMetricsPort` is True
-    - it defines on which host ansible should generate the prometheus scrape configuration snipped to scrape tor's MetricsPort
+    - this variable is only relevant if `tor_enableMetricsPort` or `tor_gen_blackbox_scrape_config` is True
+    - if you want to enable relayor's prometheus integration you have to set this variable to your prometheus host
+    - it defines on which host ansible should generate the prometheus scrape configuration to scrape tor's MetricsPort
     - this host must be available in ansible's inventory file
-    - default: 127.0.0.1
+    - default: undefined (no scrape config is generated)
 
 * `tor_prometheus_confd_folder` folderpath
     - only relevant if you want to use prometheus
@@ -296,25 +297,22 @@ All variables mentioned here are optional.
 
 * `tor_prometheus_config_file` filepath
     - only relevant if you want to use prometheus
-    - this var defines the path of the global prometheus configuration file
+    - this var defines the path of the global prometheus configuration file on `tor_prometheus_host`
     - we backup the file in the same folder before generating a new one
     - this is a security sensitive file as it contains credentials for tor's MetricsPort
     - file owner: root, group: `tor_prometheus_group`, permissions: 0640
     - default: `/etc/prometheus/prometheus.yml`
 
-* `tor_prometheus_scrape_file` filepath
-    - only relevant if you want to use prometheus
-    - when set it will enable the generation of prometheus [scrape_config](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) files (one file per tor server)
-      on the prometheus server (defined in `tor_prometheus_host`)
-    - the filepath **MUST** be host specific, each host has its own scrape config file on the prometheus server to support the ansible "--limit" cli option
-    - use a hostname variable in the filepath, this is a reasonable example: `{{ tor_prometheus_confd_folder}}/tor_{{ ansible_fqdn }}.yml`
-    - the filepath must point to a file inside `tor_prometheus_confd_folder`
+* `tor_prometheus_scrape_file` filename
+    - only relevant if `tor_prometheus_host` is defined and `tor_enableMetricsPort` or `tor_gen_blackbox_scrape_config` is True
+    - defines the filename for per server [scrape_config](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) files
+      on the prometheus server inside the `tor_prometheus_confd_folder`
+    - the filename MUST be host specific, each host has its own scrape config file on the prometheus server to support the ansible-playbook `--limit` cli option
     - depending on `tor_enableMetricsPort` and `tor_gen_blackbox_scrape_config`, the scrape config files will contain scrape jobs for the tor
       MetricsPort (behind a reverse proxy for TLS/basic auth) and/or scrape jobs for ORPort/DirPort TCP probes via blackbox exporter
-    - merging these scrape configs into your global prometheus.yml is outside the scope of this role (for now)
+    - the file content is sensitive (contains scrape credentials) and gets these file permissions: 0640 (owner: root, group: `tor_prometheus_group`)
     - the generated scrape config files will automatically be enriched with a few useful prometheus labels depending on your torrc settings, see the "Prometheus Labels" section in this README
-    - the file is sensitive (contains scrape credentials) and gets these file permissions: 0640 (owner: root, group: `tor_prometheus_group`)
-    - default: undefined (no file is generated)
+    - default: `tor_{{ ansible_fqdn }}.yml`
 
 * `tor_prometheus_group` string
     - only relevant if you want to use prometheus

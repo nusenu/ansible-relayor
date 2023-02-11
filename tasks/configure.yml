@@ -287,12 +287,12 @@
   become: yes
   template:
     src: prometheus-scrape-configs
-    dest: "{{ tor_prometheus_scrape_file }}"
+    dest: "{{ tor_prometheus_confd_folder}}/{{ tor_prometheus_scrape_file }}"
     owner: root
     group: "{{ tor_prometheus_group }}"
     mode: 0640
   delegate_to: "{{ tor_prometheus_host }}"
-  when: (tor_enableMetricsPort or tor_gen_blackbox_scrape_config) and tor_prometheus_scrape_file is defined
+  when: (tor_enableMetricsPort or tor_gen_blackbox_scrape_config) and tor_prometheus_host is defined
   notify:
     - assemble prometheus configuration
     - reload prometheus
@@ -311,7 +311,7 @@
     validate: promtool check rules %s
   delegate_to: "{{ tor_prometheus_host }}"
   run_once: true
-  when: tor_enableMetricsPort and tor_gen_prometheus_alert_rules and tor_prometheus_rules_file is defined
+  when: tor_enableMetricsPort and tor_gen_prometheus_alert_rules and tor_prometheus_rules_file is defined and tor_prometheus_host is defined
   notify:
     - reload prometheus
   tags:
