@@ -110,7 +110,7 @@ tor_MetricsPort_offset: 33300
 # On which host should we generate the prometheus scrape config? (delegate_to)
 tor_prometheus_host: 127.0.0.1
 tor_blackbox_exporter_host: localhost:9115
-tor_prometheus_scrape_file_group: root
+tor_prometheus_group: prometheus
 tor_gen_blackbox_scrape_config: False
 tor_blackbox_exporter_scheme: http
 tor_blackbox_exporter_password: "{{ lookup('password', '~/.tor/blackbox_exporter_password') }}"

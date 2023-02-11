@@ -283,13 +283,13 @@
   tags:
    - reconfigure
 
-- name: Ensure prometheus scrape configs are in place
+- name: Ensure prometheus per host scrape configs are in place
   become: yes
   template:
     src: prometheus-scrape-configs
     dest: "{{ tor_prometheus_scrape_file }}"
     owner: root
-    group: "{{ tor_prometheus_scrape_file_group }}"
+    group: "{{ tor_prometheus_group }}"
     mode: 0640
   delegate_to: "{{ tor_prometheus_host }}"
   when: (tor_enableMetricsPort or tor_gen_blackbox_scrape_config) and tor_prometheus_scrape_file is defined
@@ -306,8 +306,8 @@
     src: prometheus-alert-rules
     dest: "{{ tor_prometheus_rules_file }}"
     owner: root
-    group: root
-    mode: 0644
+    group: "{{ tor_prometheus_group }}"
+    mode: 0640
     validate: promtool check rules %s
   delegate_to: "{{ tor_prometheus_host }}"
   run_once: true

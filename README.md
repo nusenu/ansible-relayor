@@ -74,8 +74,7 @@ Managed Node Requirements
 
 Prometheus Server Requirements (only when using prometheus features of this role)
 
-- promtool must be installed and in the PATH
-- OS group `prometheus` must exist
+- promtool must be installed on the prometheus server and in the PATH of the root user
 
 Supported Operating Systems
 ---------------------------
@@ -300,7 +299,7 @@ All variables mentioned here are optional.
     - this var defines the path of the global prometheus configuration file
     - we backup the file in the same folder before generating a new one
     - this is a security sensitive file as it contains credentials for tor's MetricsPort
-    - file owner/group: root/prometheus, permissions: 0640
+    - file owner: root, group: `tor_prometheus_group`, permissions: 0640
     - default: `/etc/prometheus/prometheus.yml`
 
 * `tor_prometheus_scrape_file` filepath
@@ -314,8 +313,13 @@ All variables mentioned here are optional.
       MetricsPort (behind a reverse proxy for TLS/basic auth) and/or scrape jobs for ORPort/DirPort TCP probes via blackbox exporter
     - merging these scrape configs into your global prometheus.yml is outside the scope of this role (for now)
     - the generated scrape config files will automatically be enriched with a few useful prometheus labels depending on your torrc settings, see the "Prometheus Labels" section in this README
-    - the file is sensitive (contains scrape credentials) and gets these file permissions: 0640 (owner: root, group: `tor_prometheus_scrape_file_group`, defaults to root)
+    - the file is sensitive (contains scrape credentials) and gets these file permissions: 0640 (owner: root, group: `tor_prometheus_group`)
     - default: undefined (no file is generated)
+
+* `tor_prometheus_group` string
+    - only relevant if you want to use prometheus
+    - defines the group name used for prometheus file permissions (prometheus.yml, scrape config files, alert rules file)
+    - default: prometheus
 
 * `tor_prom_labels` dictionary
     - arbitrary number of prometheus label value pairs

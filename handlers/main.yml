@@ -84,7 +84,7 @@
     src: "{{ tor_prometheus_confd_folder }}"
     dest: "{{ tor_prometheus_config_file }}"
     owner: root
-    group: prometheus
+    group: "{{ tor_prometheus_group }}"
     mode: 0640
     backup: true
     validate: promtool check config %s
