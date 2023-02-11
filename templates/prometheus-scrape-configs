@@ -6,7 +6,7 @@
     metrics_path: '/{{ lookup('password', '~/.tor/prometheus/metrics_path/' + inventory_hostname + ' length=10 chars=ascii_lowercase') }}/{{c.i}}'
     scheme: 'https'
     basic_auth:
-      username: "{{ lookup('password', '~/.tor/prometheus/scrape-usernames/' + inventory_hostname + ' length=6 chars=ascii_lowercase') }}"
+      username: "{{ tor_metricsport_user }}"
       password: "{{ lookup('password', tor_prometheus_scrape_password_folder + inventory_hostname ) }}"
     static_configs:
       - targets:

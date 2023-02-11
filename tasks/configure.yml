@@ -343,7 +343,7 @@
   htpasswd:
     create: yes
     path: "{{ tor_metricsport_htpasswd_file }}"
-    name: "{{ lookup('password', '~/.tor/prometheus/scrape-usernames/'+inventory_hostname + ' length=6 chars=ascii_lowercase') }}"
+    name: "{{ tor_metricsport_user }}"
     password: "{{ lookup('password', tor_prometheus_scrape_password_folder+inventory_hostname ) }}"
     mode: 0640
     group: "{{ tor_metricsport_htpasswd_file_owner }}"
