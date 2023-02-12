@@ -276,13 +276,8 @@ All variables mentioned here are optional.
     - enabling this setting automatically disables `OverloadStatistics` if it is not enabled explicitly (so tor will not publish/upload the data to directory authorities because we use MetricsPort locally)
     - default: False
 
-* `tor_MetricsPort_offset` integer
-    - defines the TCP MetricsPort used on the first tor instance running on a host
-    - additional tor instances will use an incremented port number 33301, 33302, ...
-    - so if you run N instances on a host, the next N-1 ports after this port have to be unused on 127.0.0.1 so tor can use them for MetricsPort
-    - default: 33300
-
 * `tor_prometheus_host` hostname
+    - only relevant if `tor_enableMetricsPort` or `tor_gen_blackbox_scrape_config` is True
     - this variable is only relevant if `tor_enableMetricsPort` or `tor_gen_blackbox_scrape_config` is True
     - if you want to enable relayor's prometheus integration you have to set this variable to your prometheus host
     - it defines on which host ansible should generate the prometheus scrape configuration to scrape tor's MetricsPort
@@ -291,7 +286,9 @@ All variables mentioned here are optional.
 
 * `tor_prometheus_confd_folder` folderpath
     - only relevant if you want to use prometheus
-    - this existing folder on `tor_prometheus_host` must contain all prometheus configuration snippets (tor and non-tor)
+    - this folder most exist on `tor_prometheus_host`
+    - relayor places prometheus scrape_configs in this folder
+    - the prometheus global config section should be in this folder named 1_prometheus.yml
     - we assemble all files in that folder in string sorting order into a single prometheus.yml output file since prometheus does not support conf.d style folders out of the box
     - default: `/etc/prometheus/conf.d`
 
@@ -302,6 +299,12 @@ All variables mentioned here are optional.
     - this is a security sensitive file as it contains credentials for tor's MetricsPort
     - file owner: root, group: `tor_prometheus_group`, permissions: 0640
     - default: `/etc/prometheus/prometheus.yml`
+
+* `tor_MetricsPort_offset` integer
+    - defines the TCP MetricsPort used on the first tor instance running on a host
+    - additional tor instances will use an incremented port number 33301, 33302, ...
+    - so if you run N instances on a host, the next N-1 ports after this port have to be unused on 127.0.0.1 so tor can use them for MetricsPort
+    - default: 33300
 
 * `tor_prometheus_scrape_file` filename
     - only relevant if `tor_prometheus_host` is defined and `tor_enableMetricsPort` or `tor_gen_blackbox_scrape_config` is True
@@ -393,7 +396,7 @@ All variables mentioned here are optional.
     - the password is [automatically generated](https://docs.ansible.com/ansible/2.9/plugins/lookup/password.html) and 20 characters long (each server gets a distinct password)
     - the path to the file on the relay is defined in `tor_metricsport_htpasswd_file`
     - the plaintext password is written to a file on the ansible control machine (see `tor_prometheus_scrape_password_folder`)
-    - default: False
+    - default: True
 
 * `tor_metricsport_htpasswd_file` filepath
     - only relevant if `tor_enableMetricsPort` and `tor_gen_metricsport_htpasswd` are set to True
