@@ -31,7 +31,7 @@
 {% endfor %}
 {% endfor %}
 {% endif %}
-{% if tor_gen_blackbox_scrape_config %}
+{% if tor_blackbox_exporter_host is defined %}
   - job_name: 'tor-blackbox_tcp_connect_{{ansible_fqdn}}'
     metrics_path: /probe
     scheme: '{{ tor_blackbox_exporter_scheme }}'

@@ -275,8 +275,7 @@ All variables mentioned here are optional.
     - default: False
 
 * `tor_prometheus_host` hostname
-    - only relevant if `tor_enableMetricsPort` or `tor_gen_blackbox_scrape_config` is True
-    - this variable is only relevant if `tor_enableMetricsPort` or `tor_gen_blackbox_scrape_config` is True
+    - this variable is only relevant if `tor_enableMetricsPort` or `tor_blackbox_exporter_host` is set
     - if you want to enable relayor's prometheus integration you have to set this variable to your prometheus host
     - it defines on which host ansible should generate the prometheus scrape configuration to scrape tor's MetricsPort
     - this host must be available in ansible's inventory file
@@ -305,11 +304,11 @@ All variables mentioned here are optional.
     - default: 33300
 
 * `tor_prometheus_scrape_file` filename
-    - only relevant if `tor_prometheus_host` is defined and `tor_enableMetricsPort` or `tor_gen_blackbox_scrape_config` is True
+    - only relevant if `tor_prometheus_host` is defined and `tor_enableMetricsPort` or `tor_blackbox_exporter_host` is set
     - defines the filename for per server [scrape_config](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) files
       on the prometheus server inside the `tor_prometheus_confd_folder`
     - the filename MUST be host specific, each host has its own scrape config file on the prometheus server to support the ansible-playbook `--limit` cli option
-    - depending on `tor_enableMetricsPort` and `tor_gen_blackbox_scrape_config`, the scrape config files will contain scrape jobs for the tor
+    - depending on `tor_enableMetricsPort` and `tor_blackbox_exporter_host`, the scrape config files will contain scrape jobs for the tor
       MetricsPort (behind a reverse proxy for TLS/basic auth) and/or scrape jobs for ORPort/DirPort TCP probes via blackbox exporter
     - the file content is sensitive (contains scrape credentials) and gets these file permissions: 0640 (owner: root, group: `tor_prometheus_group`)
     - the generated scrape config files will automatically be enriched with a few useful prometheus labels depending on your torrc settings, see the "Prometheus Labels" section in this README
@@ -326,30 +325,26 @@ All variables mentioned here are optional.
     - for an example see `defaults/main.yml`
     - default: empty dictionary
 
-* `tor_gen_blackbox_scrape_config` boolean
-    - when set to True we add the necessary prometheus scrape config for blackbox exporter TCP propes in the file defined by `tor_prometheus_scrape_file`
-    - if True you also have to set `tor_prometheus_scrape_file` otherwise no scrape config file is generated
+* `tor_blackbox_exporter_host` hostname:port
+    - when set we add the necessary prometheus scrape config for blackbox exporter TCP propes in the file defined by `tor_prometheus_scrape_file`
     - we monitor all relay ORPorts and when set DirPorts on IPv4 and IPv6 (if enabled)
     - this feature is not supported on relays behind NAT
-    - default: False
-
-* `tor_blackbox_exporter_host` hostname:port
-    - only relevant when `tor_gen_blackbox_scrape_config` is True
-    - defines where prometheus finds the blackbox exporter
+    - defines where prometheus finds the blackbox exporter, it can also run on the prometheus server itself, in that case it would be 127.0.0.1:9115
     - the host is written into the resulting prometheus scrape config
-    - default: localhost:9115
+    - default: undefined
 
 * `tor_blackbox_exporter_scheme` string
     - defines the protocol prometheus uses to connect to the blackbox exporter (http or https)
     - default: http
 
 * `tor_blackbox_exporter_username` string
+    - only relevant when `tor_blackbox_exporter_host` is set
     - allows you to define the username if your blackbox exporter requires HTTP basic authentication
     - if you do not set a username the scrape config will not include HTTP basic auth credentials
     - default: undefined (no HTTP basic auth)
 
 * `tor_blackbox_exporter_password` string
-    - only relevant when `tor_gen_blackbox_scrape_config` is True
+    - only relevant when `tor_blackbox_exporter_host` is set
     - allows you to the the username if your blackbox exporter requires HTTP basic auth
     - the default generates a 20 character random string using the Ansible password lookup
     - default: `"{{ lookup('password', '~/.tor/prometheus/blackbox_exporter_password') }}"`

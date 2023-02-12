@@ -6,7 +6,7 @@
     - tor_maxPublicIPs: 2
     - tor_enableMetricsPort: True
     - tor_metricsport_nginx_config_file: /tmp/web-reverse-proxy-{{ inventory_hostname }}
-    - tor_gen_blackbox_scrape_config: True
+    - tor_blackbox_exporter_host: 127.0.0.1:9115
     - tor_prometheus_host: 127.0.0.1
   roles:
     - "{{ playbook_dir | regex_replace('test/integration/default$') }}"

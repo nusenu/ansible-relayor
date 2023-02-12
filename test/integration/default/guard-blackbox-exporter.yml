@@ -3,8 +3,8 @@
   vars_files:
     - vars/dry-run-vars.yml
   vars:
-    - tor_gen_blackbox_scrape_config: True
     - tor_blackbox_exporter_username: testuser
+    - tor_blackbox_exporter_host: 127.0.0.1:9115
     - tor_prometheus_host: 127.0.0.1
   roles:
     - "{{ playbook_dir | regex_replace('test/integration/default$') }}"

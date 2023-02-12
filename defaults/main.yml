@@ -107,12 +107,9 @@ tor_enableMetricsPort: False
 tor_MetricsPort_offset: 33300
 
 # prometheus (tor MetricsPort) related vars
-tor_blackbox_exporter_host: localhost:9115
 tor_prometheus_group: prometheus
-tor_gen_blackbox_scrape_config: False
 tor_blackbox_exporter_scheme: http
 tor_blackbox_exporter_password: "{{ lookup('password', '~/.tor/blackbox_exporter_password') }}"
-
 tor_prometheus_scrape_password_folder: "~/.tor/prometheus/scrape-passwords/"
 tor_prometheus_scrape_port: 443
 tor_gen_metricsport_htpasswd: True
