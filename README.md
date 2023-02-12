@@ -136,15 +136,13 @@ All variables mentioned here are optional.
     - each setting can only be set once (regardless what tor's manpage says)
     - this dictionary can be used to set any torrc option but NOT the following: `OfflineMasterKey`, `RunAsDaemon`, `Log`, `SocksPort`, `OutboundBindAddress`, `User`, `DataDirectory`, `ORPort`, `OutboundBindAddress`, `DirPort`, `SyslogIdentityTag`, `PidFile`, `MetricsPort`, `MetricsPortPolicy`, `ControlSocket`, `CookieAuthentication`, `Nickname`, `ExitRelay`, `IPv6Exit`, `ExitPolicy`, `RelayBandwidthRate`, `RelayBandwidthBurst`, `SigningKeyLifetime`
 
-* `tor_ports`
+* `tor_ports` dictionary
     - This var allows you to
         - select tor's ORPort and DirPort
-        - reduce the number of Tor instances created per IP address
+        - decide how many tor instances you want to run per IP address (default 2) - make sure to not run more than allowed per IP address
     - disable DirPorts by setting them to 0
+    - HINT: choose ORPorts wisely and *never* change them again, at least not those deployed already, adding more without changing deployed once is fine.
     - tor's 'auto' feature is NOT supported
-    - HINT: choose ORPorts wisely and *never* change them again ;)
-    - NOTE: on SELinux-enabled systems you must choose from the following ports:
-    - 80, 81, 443, 488, 6969, 8008, 8009, 8443, 9000, 9001, 9030, 9050, 9051, 9150
     - default:
         - instance 1: ORPort 9000, DirPort 9001
         - instance 2: ORPort 9100, DirPort 9101
