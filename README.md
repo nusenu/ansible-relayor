@@ -326,11 +326,13 @@ All variables mentioned here are optional.
     - default: empty dictionary
 
 * `tor_blackbox_exporter_host` hostname:port
-    - when set we add the necessary prometheus scrape config for blackbox exporter TCP propes in the file defined by `tor_prometheus_scrape_file`
-    - we monitor all relay ORPorts and when set DirPorts on IPv4 and IPv6 (if enabled)
+    - when set, relayor adds the necessary prometheus scrape config for blackbox exporter TCP propes in the file defined by `tor_prometheus_scrape_file`
+    - monitors all relay ORPorts and when set DirPorts on IPv4 and IPv6 (if enabled) using a TCP connect check
     - this feature is not supported on relays behind NAT
     - defines where prometheus finds the blackbox exporter, it can also run on the prometheus server itself, in that case it would be 127.0.0.1:9115
     - the host is written into the resulting prometheus scrape config
+    - blackbox_exporter must have a simple [tcp_probe](https://github.com/prometheus/blackbox_exporter/blob/master/CONFIGURATION.md#tcp_probe) module named "tcp_connect" configured
+    - relayor does not install or configure [blackbox_exporter](https://github.com/prometheus/blackbox_exporter)
     - default: undefined
 
 * `tor_blackbox_exporter_scheme` string
@@ -353,7 +355,7 @@ All variables mentioned here are optional.
     - this variable is only relevant if `tor_enableMetricsPort` is True and `tor_prometheus_host` is set
     - it defines the filepath where the nginx reverse proxy configuration for MetricsPort will be stored on the relay
     - this file has to be included in your webserver configuration on the relay to make MetricsPort accessible for remote prometheus scraping
-    - the folder has to be present on the server already (we do not create it)
+    - the folder has to be present on the server already (relayor does not create it)
     - default: `/etc/nginx/promexporters/tor_metricsports_relayor.conf`
 
 * `tor_gen_prometheus_alert_rules` boolean
@@ -364,9 +366,9 @@ All variables mentioned here are optional.
 
 * `tor_prometheus_rules_file` filepath
     - only relevant when `tor_gen_prometheus_alert_rules` is `True`
-    - defines where on the prometheus server (`tor_prometheus_host`) we will generate the rules file (the folder has to be present)
+    - defines where on the prometheus server (`tor_prometheus_host`) relayor will generate the rules file (the folder has to be present)
     - the file has to be in the folder that is included by your prometheus config (rule_files) and usually is required to end with .rules
-    - we ship a default set of alert rules and you can optionally add your custom alert rules as well.
+    - relayor ships a default set of alert rules and you can optionally add your custom alert rules as well (via `tor_prometheus_custom_alert_rules`)
     - file owner/group: root, file permissions: 0644
     - default: `/etc/prometheus/rules/ansible-relayor.rules`
 
