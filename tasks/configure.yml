@@ -325,7 +325,9 @@
     dest: "{{ tor_metricsport_nginx_config_file }}"
     mode: 0644
     owner: root
-  when: tor_enableMetricsPort and tor_metricsport_nginx_config_file is defined
+  when: tor_enableMetricsPort and tor_prometheus_host is defined
+  notify:
+    - reload nginx
   tags:
    - reconfigure
    - promconfig

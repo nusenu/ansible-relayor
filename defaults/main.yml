@@ -116,6 +116,8 @@ tor_blackbox_exporter_password: "{{ lookup('password', '~/.tor/blackbox_exporter
 tor_prometheus_scrape_password_folder: "~/.tor/prometheus/scrape-passwords/"
 tor_prometheus_scrape_port: 443
 tor_gen_metricsport_htpasswd: True
+# the folder of the following file has to be present on the tor server already
+tor_metricsport_nginx_config_file: "/etc/nginx/promexporters/tor_metricsports_relayor.conf"
 tor_metricsport_htpasswd_file: "/etc/nginx/tor_metricsport_htpasswd"
 tor_metricsport_htpasswd_file_owner: "www-data"
 tor_metricsport_user: TorMetricsPortBehindNginx

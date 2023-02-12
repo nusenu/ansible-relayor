@@ -96,3 +96,9 @@
     name: prometheus
     state: reloaded
   delegate_to: "{{ tor_prometheus_host }}"
+
+- name: reload nginx
+  become: yes
+  service:
+    name: nginx
+    state: reloaded

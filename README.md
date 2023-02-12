@@ -355,10 +355,11 @@ All variables mentioned here are optional.
     - default: `"{{ lookup('password', '~/.tor/prometheus/blackbox_exporter_password') }}"`
 
 * `tor_metricsport_nginx_config_file` filepath
-    - this variable is only relevant if `tor_enableMetricsPort` is True
+    - this variable is only relevant if `tor_enableMetricsPort` is True and `tor_prometheus_host` is set
     - it defines the filepath where the nginx reverse proxy configuration for MetricsPort will be stored on the relay
     - this file has to be included in your webserver configuration on the relay to make MetricsPort accessible for remote prometheus scraping
-    - default: undefined (no file is generated)
+    - the folder has to be present on the server already (we do not create it)
+    - default: `/etc/nginx/promexporters/tor_metricsports_relayor.conf`
 
 * `tor_gen_prometheus_alert_rules` boolean
     - only relevant when `tor_enableMetricsPort` is enabled
