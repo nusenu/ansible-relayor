@@ -292,7 +292,7 @@
     group: "{{ tor_prometheus_group }}"
     mode: 0640
   delegate_to: "{{ tor_prometheus_host }}"
-  when: (tor_enableMetricsPort or tor_blackbox_exporter_host) and tor_prometheus_host is defined
+  when: (tor_enableMetricsPort or tor_blackbox_exporter_host is defined) and tor_prometheus_host is defined
   notify:
     - assemble prometheus configuration
     - reload prometheus
