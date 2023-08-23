@@ -7,10 +7,10 @@ galaxy_info:
   - name: Debian
     versions:
     - bullseye
+    - bookworm
   - name: FreeBSD
     versions:
-    - 12.4
-    - 13.1
+    - 13.2
   - name: OpenBSD
     versions:
     - 7.2

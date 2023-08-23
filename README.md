@@ -79,9 +79,9 @@ Prometheus Server Requirements (only when using prometheus features of this role
 Supported Operating Systems
 ---------------------------
 
-- Debian 11
+- Debian 11, 12
 - OpenBSD 7.2
-- FreeBSD 12.4, 13.1
+- FreeBSD 13.2
 - Ubuntu 22.04
 
 Supported Tor Releases
