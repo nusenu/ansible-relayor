@@ -137,6 +137,18 @@ tor_prometheus_alert_rules:
     expr: 'rate(tor_relay_load_tcp_exhaustion_total[15m]) > 0'
     labels:
       severity: critical
+  - alert: TorCertificateExpiryUnder15Days
+    expr: floor((tor_relay_signing_cert_expiry_timestamp - time())/86400) < 15
+    labels:
+      severity: warning
+    annotations:
+      description: '{% raw %}{{ $labels.id }} key certificate will expire in {{ $value }} days.{% endraw %}'
+  - alert: TorCertificateExpiryUnder1Day
+    expr: floor((tor_relay_signing_cert_expiry_timestamp - time())/3600) < 24
+    labels:
+      severity: critical
+    annotations:
+      description: '{% raw %}{{ $labels.id }} key certificate will expire and auto-shutdown in {{ $value }} hours.{% endraw %}'
 #  - alert: TorOnionskinsDropped
 #    expr: 'rate(tor_relay_load_onionskins_total{action="dropped"}[15m]) > 0'
 #    for: 15m
