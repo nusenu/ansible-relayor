@@ -138,17 +138,25 @@ tor_prometheus_alert_rules:
     labels:
       severity: critical
   - alert: TorCertificateExpiryUnder15Days
-    expr: floor((tor_relay_signing_cert_expiry_timestamp - time())/86400) < 15
+    expr: 'floor((tor_relay_signing_cert_expiry_timestamp - time())/86400) < 15'
     labels:
       severity: warning
     annotations:
       description: '{% raw %}{{ $labels.id }} key certificate will expire in {{ $value }} days.{% endraw %}'
   - alert: TorCertificateExpiryUnder1Day
-    expr: floor((tor_relay_signing_cert_expiry_timestamp - time())/3600) < 24
+    expr: 'floor((tor_relay_signing_cert_expiry_timestamp - time())/3600) < 24'
     labels:
       severity: critical
     annotations:
       description: '{% raw %}{{ $labels.id }} key certificate will expire and auto-shutdown in {{ $value }} hours.{% endraw %}'
+  - alert: TorHighDnsTimeoutRate
+    expr: '(sum by (instance)(rate(tor_relay_exit_dns_error_total{reason="tor_timeout"}[15m])))/(sum by (instance)(rate(tor_relay_exit_dns_query_total[15m])))*100 > 1.5'
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      summary: 'DNS timeout rate is above 1.5% for over 10 minutes'
+      description: '{% raw %}{{ printf "%.3f" $value }}% of tor DNS queries on {{ $labels.instance }} result in a timeout.{% endraw %}'
 #  - alert: TorOnionskinsDropped
 #    expr: 'rate(tor_relay_load_onionskins_total{action="dropped"}[15m]) > 0'
 #    for: 15m
