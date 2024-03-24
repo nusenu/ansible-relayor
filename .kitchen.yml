@@ -5,7 +5,6 @@ driver:
     memory: 512
 
 platforms:
-  - name: debian-11
   - name: debian-12
   - name: ubuntu-22.04
   - name: freebsd-14
