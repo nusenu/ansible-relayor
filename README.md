@@ -80,7 +80,7 @@ Supported Operating Systems
 ---------------------------
 
 - Debian 12
-- OpenBSD 7.2
+- OpenBSD 7.4
 - FreeBSD 14.0
 - Ubuntu 22.04
 
