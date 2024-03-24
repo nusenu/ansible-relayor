@@ -10,7 +10,7 @@ galaxy_info:
     - bookworm
   - name: FreeBSD
     versions:
-    - 13.2
+    - 14.0
   - name: OpenBSD
     versions:
     - 7.2
