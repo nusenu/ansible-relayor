@@ -14,7 +14,7 @@
     sysctl_set: yes
 
 - name: Gather current kern.ipc.somaxconn setting (FreeBSD)
-  command: "sysctl -n kern.ipc.somaxconn"
+  command: "/sbin/sysctl -n kern.ipc.somaxconn"
   become: no
   register: tor_currentsomaxconn
   changed_when: False
@@ -30,7 +30,7 @@
 
 - name: Gather current kern.ipc.nmbclusters setting (FreeBSD)
   become: no
-  command: "sysctl -n kern.ipc.nmbclusters"
+  command: "/sbin/sysctl -n kern.ipc.nmbclusters"
   register: tor_currentnmbc
   changed_when: False
 
