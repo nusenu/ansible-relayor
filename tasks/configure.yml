@@ -283,6 +283,17 @@
   tags:
    - reconfigure
 
+- name: Set fact tor_instances
+  ansible.builtin.set_fact:
+    tor_instances: >-
+      {%- set output = [] -%}
+      {%- for ip in tor_ips -%}
+      {%- for port in tor_ports -%}
+      {%- set _ = output.append(ip.ipv4~'_'~port.orport) -%}
+      {%- endfor -%}
+      {%- endfor -%}
+      {{ output }}
+
 - name: Ensure prometheus per host scrape configs are in place
   become: yes
   template:
