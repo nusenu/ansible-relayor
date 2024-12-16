@@ -6,7 +6,7 @@ driver:
 
 platforms:
   - name: debian-12
-  - name: ubuntu-22.04
+  - name: ubuntu-24.04
   - name: freebsd-14.1
     driver:
       provision: True

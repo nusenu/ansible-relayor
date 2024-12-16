@@ -15,7 +15,7 @@ galaxy_info:
     - 7.4
   - name: Ubuntu
     versions:
-    - jammy
+    - noble
   galaxy_tags:
     - tor
     - ipv6
