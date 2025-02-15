@@ -51,7 +51,7 @@ tor_IPv6: true
 
 # enable IPv6 exiting
 # the following var only matters if
-# tor_ExitRelay and tor_IPv6 is True
+# tor_ExitRelay and tor_IPv6 is true
 tor_IPv6Exit: true
 
 # on FreeBSD we increase the following kernel

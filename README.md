@@ -188,20 +188,20 @@ All variables mentioned here are optional.
     - default: notice
 
 * `tor_alpha` boolean
-    - Set to True if you want to use Tor alpha version releases.
+    - Set to true if you want to use Tor alpha version releases.
     - Note: This setting does not ensure an installed tor is upgraded to the alpha release.
     - This setting is supported on Debian/Ubuntu/FreeBSD only (ignored on other platforms).
     - default: False
 
 * `tor_nightly_builds` boolean
-    - Set to True if you want to use Tor nightly builds repo from deb.torproject.org.
+    - Set to true if you want to use Tor nightly builds repo from deb.torproject.org.
     - nightly builds follow the tor git main branch.
     - Only supported on Debian and Ubuntu (ignored on other platforms).
     - default: False
 
 * `tor_ExitRelay` boolean
-    - You have to set this to True if you want to enable exiting for all or some tor instances on a server
-    - If this var is not True this will be a non-exit relay
+    - You have to set this to true if you want to enable exiting for all or some tor instances on a server
+    - If this var is not true this will be a non-exit relay
     - If you want to run a mixed server (exit and non-exit tor instances) use `tor_ExitRelaySetting_file` for per-instance configuration in additon to this var
     - default: False
 
@@ -224,11 +224,11 @@ All variables mentioned here are optional.
 * `tor_ExitNoticePage` boolean
     - specifies whether we display the default tor exit notice [html page](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) on the DirPort
     - only relevant if we are an exit relay
-    - default: True
+    - default: true
 
 * `tor_exit_notice_file` filepath
     - path to a HTML file on the control machine that you would like to display (via the DirPort) instead of the default [tor-exit-notice.html](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) provided by the Tor Project
-    - only relevant if we are an exit relay and if tor_ExitNoticePage is True
+    - only relevant if we are an exit relay and if tor_ExitNoticePage is true
 
 * `tor_AbuseEmailAddress` email-address
     - if set this email address is used on the tor exit notice [html page](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) published on the DirPort
@@ -239,7 +239,7 @@ All variables mentioned here are optional.
 
 * `tor_ExitPolicy` array
     - specify your custom exit policy
-    - only relevant if `tor_ExitRelay` is True
+    - only relevant if `tor_ExitRelay` is true
     - see defaults/main.yml for an example on how to set it
     - default: reduced exit policy (https://trac.torproject.org/projects/tor/wiki/doc/ReducedExitPolicy)
 
@@ -248,7 +248,7 @@ All variables mentioned here are optional.
     - first column: instance identifier (inventory_hostname-ip_orport)
     - second column: value as accepted by `ExitPolicy` (see tor manpage)
     - example content: "myrelay-192.168.1.1_443;reject *:25,reject *:123"
-    - only relevant if `tor_ExitRelay` is True
+    - only relevant if `tor_ExitRelay` is true
     - this can be combined with the `tor_ExitPolicy` setting and will override it (this is more specific)
     - only tor instances that you want to have a specific exit policy for are required to be listed in the file (others can be omitted)
     - default: not set
@@ -261,15 +261,15 @@ All variables mentioned here are optional.
 * `tor_IPv6` boolean
     - autodetects if you have IPv6 IPs and enables an IPv6 ORPort accordingly
     - you can opt-out by setting it to False
-    - default: True
+    - default: true
 
 * `tor_IPv6Exit` boolean
     - enables IPv6 exit traffic
-    - only relevant if `tor_ExitRelay` and `tor_IPv6` are True and we have an IPv6 address
-    - default: True (unlike tor's default)
+    - only relevant if `tor_ExitRelay` and `tor_IPv6` are true and we have an IPv6 address
+    - default: true (unlike tor's default)
 
 * `tor_enableMetricsPort` boolean
-    - if True enable tor's MetricsPort on the localhost IP address 127.0.0.1 and allow the same IP to access it (MetricsPortPolicy)
+    - if true enable tor's MetricsPort on the localhost IP address 127.0.0.1 and allow the same IP to access it (MetricsPortPolicy)
     - this is a relayor beta feature and will change in the future to use the safer [unix socket](https://gitlab.torproject.org/tpo/core/tor/-/issues/40192) option once that becomes available
     - enabling this setting automatically disables `OverloadStatistics` if it is not enabled explicitly (so tor will not publish/upload the data to directory authorities because we use MetricsPort locally)
     - default: False
@@ -352,7 +352,7 @@ All variables mentioned here are optional.
     - default: `"{{ lookup('password', '~/.tor/prometheus/blackbox_exporter_password') }}"`
 
 * `tor_metricsport_nginx_config_file` filepath
-    - this variable is only relevant if `tor_enableMetricsPort` is True and `tor_prometheus_host` is set
+    - this variable is only relevant if `tor_enableMetricsPort` is true and `tor_prometheus_host` is set
     - it defines the filepath where the nginx reverse proxy configuration for MetricsPort will be stored on the relay
     - this file has to be included in your webserver configuration on the relay to make MetricsPort accessible for remote prometheus scraping
     - the folder has to be present on the server already (relayor does not create it)
@@ -360,12 +360,12 @@ All variables mentioned here are optional.
 
 * `tor_gen_prometheus_alert_rules` boolean
     - only relevant when `tor_enableMetricsPort` is enabled
-    - set to `True` if you want to generate [prometheus alert rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) on the prometheus server (`tor_prometheus_host`)
+    - set to `true` if you want to generate [prometheus alert rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/) on the prometheus server (`tor_prometheus_host`)
     - the file location is defined by `tor_prometheus_rules_file`
     - default: false (no rules are generated)
 
 * `tor_prometheus_rules_file` filepath
-    - only relevant when `tor_gen_prometheus_alert_rules` is `True`
+    - only relevant when `tor_gen_prometheus_alert_rules` is `true`
     - defines where on the prometheus server (`tor_prometheus_host`) relayor will generate the rules file (the folder has to be present)
     - the file has to be in the folder that is included by your prometheus config (rule_files) and usually is required to end with .rules
     - relayor ships a default set of alert rules and you can optionally add your custom alert rules as well (via `tor_prometheus_custom_alert_rules`)
@@ -385,22 +385,22 @@ All variables mentioned here are optional.
     - default: undefined
 
 * `tor_gen_metricsport_htpasswd` boolean
-    - this variable is only relevant if `tor_enableMetricsPort` is True
-    - when this var is set to True, we create the htpasswd file that can be used by a webserver on the relay to protect tor's MetricsPort with HTTP basic auth
+    - this variable is only relevant if `tor_enableMetricsPort` is true
+    - when this var is set to true, we create the htpasswd file that can be used by a webserver on the relay to protect tor's MetricsPort with HTTP basic auth
     - the file will be owned by root and readable by the webserver's group (www-data/www - depending on the OS)
     - we do NOT install the webserver, use another role for that.
     - the password is [automatically generated](https://docs.ansible.com/ansible/2.9/plugins/lookup/password.html) and 20 characters long (each server gets a distinct password)
     - the path to the file on the relay is defined in `tor_metricsport_htpasswd_file`
     - the plaintext password is written to a file on the ansible control machine (see `tor_prometheus_scrape_password_folder`)
-    - default: True
+    - default: true
 
 * `tor_metricsport_htpasswd_file` filepath
-    - only relevant if `tor_enableMetricsPort` and `tor_gen_metricsport_htpasswd` are set to True
+    - only relevant if `tor_enableMetricsPort` and `tor_gen_metricsport_htpasswd` are set to true
     - it defines the filepath to the htpasswd file (containing username and password hash) on the relay
     - default: `/etc/nginx/tor_metricsport_htpasswd`
 
 * `tor_prometheus_scrape_password_folder` folderpath
-    - only relevant if `tor_enableMetricsPort` is True
+    - only relevant if `tor_enableMetricsPort` is true
     - ansible will automatically generate one unique and random 20 character password per host (not per tor instance) to protect the MetricsPort via nginx (http auth)
     - this variable defines the folder where ansible will store the passwords in plaintext (password lookup)
     - the filenames within that folder match the hostname (inventory_hostname) and can not be configured
@@ -412,7 +412,7 @@ All variables mentioned here are optional.
     - default: 443
 
 * `tor_enableControlSocket` boolean
-    - if True create a ControlSocket file for every tor instance (i.e. to be used for nyx)
+    - if true create a ControlSocket file for every tor instance (i.e. to be used for nyx)
     - access control relies on filesystem permissions
     - to give a user access to a specific tor instance's controlsocket file you
     - have to add the user to the primary group of the tor instance
