@@ -3,7 +3,7 @@
   ansible.builtin.include_vars: private_IPv4_only.yml
   when: tor_v4ips == []
 
-- name: setup IP list (1/2)
+- name: Setup IP list (1/2)
   ansible.builtin.set_fact:
     ips:
       ipv4: "{{ item.0 }}"
@@ -13,6 +13,6 @@
     - "{{ tor_v6ips }}"
   register: tor_ipsinterm
 
-- name: setup IP list (2/2)
+- name: Setup IP list (2/2)
   ansible.builtin.set_fact:
     tor_ips: "{{ tor_ipsinterm.results | map(attribute='ansible_facts.ips') | list }}"
