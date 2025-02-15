@@ -2,38 +2,38 @@
 
 - name: Ensure lsb-release, apt-transport-https and gpg packages are installed
   become: true
-  apt:
+  ansible.builtin.apt:
     name: lsb-release,apt-transport-https,gpg
     update_cache: "{{ tor_apt_update_cache }}"
     cache_valid_time: 86400
   notify:
     - re-gather facts
 
-- meta: flush_handlers
+- ansible.builtin.meta: flush_handlers
 
 - name: Ensure torproject gpg key is installed (A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89)
   become: true
-  apt_key:
+  ansible.builtin.apt_key:
     url: https://deb.torproject.org/torproject.org/A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc
     id: A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89
     state: present
 
 - name: Ensure torproject.org repository is present (APT)
   become: true
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: 'deb https://deb.torproject.org/torproject.org {{ tor_distribution_release }} main'
     state: present
     update_cache: true
 
 - name: Override tor_alpha_version if nightly builds repo is enabled (APT)
-  set_fact:
+  ansible.builtin.set_fact:
     tor_alpha_version: nightly-main
     tor_alpha: true
   when: tor_nightly_builds
 
 - name: Ensure torproject.org alpha/nightly repo is present if enabled (APT)
   become: true
-  apt_repository:
+  ansible.builtin.apt_repository:
     repo: 'deb https://deb.torproject.org/torproject.org tor-{{ tor_alpha_version }}-{{ tor_distribution_release }} main'
     state: present
     update_cache: true
@@ -43,14 +43,14 @@
 # https://github.com/nusenu/ansible-relayor/issues/72
 - name: Ensure systemd generator folder exists (Debian/Ubuntu)
   become: true
-  file:
+  ansible.builtin.file:
     path: /etc/systemd/system-generators
     state: directory
     mode: "0755"
 
 - name: Ensure custom systemd generator is in place (Debian/Ubuntu only)
   become: true
-  copy:
+  ansible.builtin.copy:
     src: tor-generator
     dest: /etc/systemd/system-generators/tor-generator
     owner: root
