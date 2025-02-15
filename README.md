@@ -284,17 +284,9 @@ All variables mentioned here are optional.
     - only relevant if you want to use prometheus
     - this folder most exist on `tor_prometheus_host`
     - relayor places prometheus scrape_configs in this folder
-    - the prometheus global config section should be in this folder named 1_prometheus.yml
-    - we assemble all files in that folder in string sorting order into a single prometheus.yml output file since prometheus does not support conf.d style folders out of the box
+    - the prometheus global config must point to this folder (`scrape_config_files`)
+    - we generate one yml file per relay in this folder, for the filename see `tor_prometheus_scrape_file`
     - default: `/etc/prometheus/conf.d`
-
-* `tor_prometheus_config_file` filepath
-    - only relevant if you want to use prometheus
-    - this var defines the path of the global prometheus configuration file on `tor_prometheus_host`
-    - we backup the file in the same folder before generating a new one
-    - this is a security sensitive file as it contains credentials for tor's MetricsPort
-    - file owner: root, group: `tor_prometheus_group`, permissions: 0640
-    - default: `/etc/prometheus/prometheus.yml`
 
 * `tor_MetricsPort_offset` integer
     - defines the TCP MetricsPort used on the first tor instance running on a host

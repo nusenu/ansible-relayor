@@ -120,7 +120,6 @@ tor_metricsport_htpasswd_file_owner: "www-data"
 tor_metricsport_user: TorMetricsPortBehindNginx
 tor_prometheus_confd_folder: "/etc/prometheus/conf.d"
 tor_prometheus_scrape_file: "tor_{{ ansible_fqdn }}.yml"
-tor_prometheus_config_file: "/etc/prometheus/prometheus.yml"
 tor_gen_prometheus_alert_rules: false
 tor_prometheus_rules_file: "/etc/prometheus/rules/ansible-relayor.rules"
 tor_prometheus_alert_rules:
