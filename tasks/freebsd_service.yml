@@ -11,6 +11,7 @@
     line: tor_instances="${tor_instances} {{ item.0.ipv4 }}_{{ item.1.orport }}:{{ tor_ConfDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}.torrc:root:root:{{ tor_PidDir
       }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/pid:{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}"
     create: true
+    mode: "0644"
   with_nested:
     - "{{ tor_ips }}"
     - "{{ tor_ports }}"
@@ -23,6 +24,7 @@
     dest: /etc/rc.conf
     line: tor_enable="YES"
     create: true
+    mode: "0644"
 
 # this affects all instances
 - name: Ensure Tor instances are running and enabled (FreeBSD)
