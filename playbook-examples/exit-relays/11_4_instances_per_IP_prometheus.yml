@@ -3,8 +3,8 @@
 - hosts: relays
   vars:
     #tor_ContactInfo: relayor-example@example.com
-    tor_ExitRelay: True
-    tor_enableMetricsPort: True
+    tor_ExitRelay: true
+    tor_enableMetricsPort: true
     tor_prometheus_host: 127.0.0.1
     tor_ports:
         - { orport: 1, dirport: 0}

@@ -6,6 +6,6 @@
     tor_signingkeylifetime_days: 90
     tor_nickname: "{{ ansible_hostname }}"
     tor_maxPublicIPs: 2
-    tor_alpha: True
+    tor_alpha: true
   roles:
    - nusenu.relayor
