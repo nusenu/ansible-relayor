@@ -6,39 +6,39 @@
   when: tor_alpha
 
 - name: Ensure sequential IP IDs are avoided (FreeBSD)
-  become: yes
+  become: true
   sysctl:
     name: net.inet.ip.random_id
     value: 1
-    reload: no
-    sysctl_set: yes
+    reload: false
+    sysctl_set: true
 
 - name: Gather current kern.ipc.somaxconn setting (FreeBSD)
   command: "/sbin/sysctl -n kern.ipc.somaxconn"
-  become: no
+  become: false
   register: tor_currentsomaxconn
-  changed_when: False
+  changed_when: false
 
 - name: Ensure somaxconn setting is reasonable (FreeBSD)
-  become: yes
+  become: true
   sysctl:
     name: kern.ipc.somaxconn
     value: "{{ tor_freebsd_somaxconn }}"
-    reload: no
-    sysctl_set: yes
+    reload: false
+    sysctl_set: true
   when: tor_currentsomaxconn.stdout|int < tor_freebsd_somaxconn
 
 - name: Gather current kern.ipc.nmbclusters setting (FreeBSD)
-  become: no
+  become: false
   command: "/sbin/sysctl -n kern.ipc.nmbclusters"
   register: tor_currentnmbc
-  changed_when: False
+  changed_when: false
 
 - name: Ensure nmbclusters setting is reasonable (FreeBSD)
-  become: yes
+  become: true
   sysctl:
     name: kern.ipc.nmbclusters
     value: "{{ tor_freebsd_nmbclusters }}"
-    reload: no
-    sysctl_set: yes
+    reload: false
+    sysctl_set: true
   when: tor_currentnmbc.stdout|int < tor_freebsd_nmbclusters

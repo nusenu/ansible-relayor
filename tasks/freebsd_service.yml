@@ -6,14 +6,14 @@
 # username/groupname is set to root to be able to bind to <1024 ports
 # but privileges are dropped afterwards (torrc User parameter)
 - name: Ensure Tor multi-instance configuration is present (FreeBSD)
-  become: yes
+  become: true
   lineinfile:
     dest: /etc/rc.conf
     line: "tor_instances=\"${tor_instances} {{ item.0.ipv4 }}_{{ item.1.orport }}:\
         {{ tor_ConfDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}.torrc:root:root:\
         {{ tor_PidDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/pid:{{ tor_DataDir }}\
         /{{ item.0.ipv4 }}_{{ item.1.orport }}\""
-    create: yes
+    create: true
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
@@ -21,16 +21,16 @@
 # this task is a workaround, because 'service tor status'
 # fails if this line is not present (which in turn fails the ansible service module)
 - name: Ensure tor is enabled in /etc/rc.conf (FreeBSD)
-  become: yes
+  become: true
   lineinfile:
     dest: /etc/rc.conf
     line: "tor_enable=\"YES\""
-    create: yes
+    create: true
 
 # this affects all instances
 - name: Ensure Tor instances are running and enabled (FreeBSD)
-  become: yes
+  become: true
   service:
     name: tor
-    enabled: yes
+    enabled: true
     state: started

@@ -3,7 +3,7 @@
   vars_files:
     - vars/dry-run-vars.yml
   vars:
-    tor_ExitRelay: True
+    tor_ExitRelay: true
     tor_ExitRelaySetting_file: vars/exit-conf
   roles:
     - "{{ playbook_dir | regex_replace('test/integration/default$') }}"

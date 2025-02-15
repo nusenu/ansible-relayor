@@ -1,6 +1,6 @@
 ---
 tor_offline_masterkey_dir: ~/.tor/test/offlinemasterkeys/{{ inventory_hostname }}
-tor_apt_update_cache: no
+tor_apt_update_cache: false
 tor_ContactInfo: "ansible-relayor test-kitchen (you should never see this on a public relay) https://github.com/nusenu/ansible-relayor"
 tor_config:
   DisableNetwork: 1

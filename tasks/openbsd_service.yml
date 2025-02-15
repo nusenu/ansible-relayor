@@ -12,7 +12,7 @@
 # # OpenBSD does not like dots in rc filenames so
 # # we replace them with underscores.
 - name: Create links to the service files (OpenBSD)
-  become: yes
+  become: true
   file:
     src: /etc/rc.d/tor
     state: link
@@ -22,11 +22,11 @@
    - "{{ tor_ports }}"
 
 - name: Ensure Tor instances are enabled and started (OpenBSD)
-  become: yes
+  become: true
   service:
     name: "tor{{ item.0.ipv4|replace('.','_') }}_{{ item.1.orport }}"
     arguments: "-f {{ tor_ConfDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}.torrc"
-    enabled: yes
+    enabled: true
     state: started
   with_nested:
    - "{{ tor_ips }}"

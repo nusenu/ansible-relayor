@@ -16,11 +16,11 @@
         command -V /bin/bash && command -V "{{ tor_binary }}" && command -V openssl && command -V sort
         && command -V uniq && command -V wc && command -V cut && command -V xargs && command -V sed
   run_once: true
-  become: no
+  become: false
   delegate_to: 127.0.0.1
   tags:
     - always
-  changed_when: False
+  changed_when: false
 
 - name: Ensure tor_ContactInfo is set
   assert:
@@ -45,7 +45,7 @@
   command: "{{ tor_grep_blacklisted_dnsresolvers }}"
   register: tor_dns_check
   failed_when: tor_dns_check.rc == 0
-  changed_when: False
+  changed_when: false
   when: tor_ExitRelay
   tags:
    - always
@@ -88,7 +88,7 @@
 
 # we specifically opt for present over latest to improve performance
 - name: Ensure tor is installed
-  become: yes
+  become: true
   package:
     name: "{{ item }}"
     state: "{{ tor_package_state }}"
@@ -137,7 +137,7 @@
    - freebsd
 
 - name: Generate CIISS rsa-fingerprint.txt proof file
-  become: no
+  become: false
   shell: >
         set -o pipefail && for key in {{ tor_offline_masterkey_dir }}/*/keys/secret_id_key;
             do openssl rsa -in $key -outform DER -RSAPublicKey_out 2> /dev/null| openssl sha1 -r;
@@ -146,13 +146,13 @@
     executable: /bin/bash
   delegate_to: 127.0.0.1
   run_once: true
-  changed_when: False
+  changed_when: false
   when: tor_gen_ciiss_proof_files
   tags:
     - always
 
 - name: Generate CIISS ed25519-master-pubkey.txt proof file
-  become: no
+  become: false
   shell: >
         set -o pipefail && cut -d" " -f2 {{ tor_offline_masterkey_dir }}/*/fingerprint-ed25519|
         sort > {{ tor_ciiss_proof_folder }}/ed25519-master-pubkey.txt
@@ -160,7 +160,7 @@
     executable: /bin/bash
   delegate_to: 127.0.0.1
   run_once: true
-  changed_when: False
+  changed_when: false
   when: tor_gen_ciiss_proof_files
   tags:
     - always

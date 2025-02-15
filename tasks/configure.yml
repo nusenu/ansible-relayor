@@ -1,7 +1,7 @@
 ---
 
 - name: Ensure local DataDir folders exist (LOCAL)
-  become: no
+  become: false
   file:
     path: "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}"
     state: directory
@@ -14,7 +14,7 @@
    - createdir
 
 - name: Ensure all relay keys exist (LOCAL)
-  become: no
+  become: false
   command: >
           "{{ tor_binary }}" --list-fingerprint --DisableNetwork 1 --orport auto --PublishServerDescriptor 0 --ExitRelay 0
           --ignore-missing-torrc -f /dev/null --defaults-torrc /dev/null --Log "err stdout"
@@ -23,10 +23,10 @@
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
-  changed_when: False
+  changed_when: false
 
 - name: Generate new Ed25519 signing keys (LOCAL)
-  become: no
+  become: false
   command: >
         "{{ tor_binary }}" --keygen --SigningKeyLifetime {{ tor_signingkeylifetime_days }}\ days --ignore-missing-torrc -f /dev/null
         --defaults-torrc /dev/null --Log "err stdout"
@@ -37,10 +37,10 @@
    - "{{ tor_ports }}"
   tags:
    - renewkey
-  changed_when: False
+  changed_when: false
 
 - name: Detect duplicate relay keys across relays (LOCAL)
-  become: no
+  become: false
   shell: >
         set -o pipefail && openssl sha256 -r
         {{ tor_offline_masterkey_dir }}/*/keys/secret_id_key {{ tor_offline_masterkey_dir }}/*/keys/ed25519_master_id_secret_key |
@@ -50,7 +50,7 @@
   delegate_to: 127.0.0.1
   run_once: true
   register: tor_dupkeycount
-  changed_when: False
+  changed_when: false
 
 - name: Abort on duplicate relay keys
   fail:
@@ -59,7 +59,7 @@
   when: tor_dupkeycount.stdout|int(1) != 0
 
 - name: Detect if Ed25519 master keys are on the relay
-  become: yes
+  become: true
   stat:
     path: "{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/ed25519_master_id_secret_key"
   register: tor_masterkeyonline
@@ -75,7 +75,7 @@
 
 # not relying on the datadir/fingerprint file is more robust
 - name: Collect fingerprints for MyFamily (LOCAL)
-  become: no
+  become: false
   shell: >
         set -o pipefail && for key in {{ tor_offline_masterkey_dir }}/*/keys/secret_id_key;
             do openssl rsa -in $key -outform DER -RSAPublicKey_out 2> /dev/null| openssl sha1 -r;
@@ -87,15 +87,15 @@
   register: tor_family
   tags:
    - reconfigure
-  changed_when: False
+  changed_when: false
 
 - name: Ensure per-instance tor users exist
-  become: yes
+  become: true
   user:
     name: "_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
-    system: yes
+    system: true
     shell: /bin/false
-    create_home: yes
+    create_home: true
     home: "{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}"
   with_nested:
    - "{{ tor_ips }}"
@@ -106,7 +106,7 @@
 # - CentOS/Fedora/OpenBSD when tor_enableControlSocket is True
 # we never create it on Debian since the systemd service file creates it there (with different permissions)
 - name: Ensure PID/ControlSocket directory exists
-  become: yes
+  become: true
   file:
     path: "{{ tor_PidDir }}"
     state: directory
@@ -115,7 +115,7 @@
   when: ansible_system == 'FreeBSD' or (tor_enableControlSocket and (ansible_system == 'OpenBSD' or ansible_os_family == 'RedHat'))
 
 - name: Ensure PID/ControlSocket directory is owned by per-instance tor user
-  become: yes
+  become: true
   file:
     path: "{{ tor_PidDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}"
     state: directory
@@ -128,7 +128,7 @@
   when: ansible_system == 'FreeBSD' or (tor_enableControlSocket and (ansible_system == 'OpenBSD' or ansible_os_family == 'RedHat'))
 
 - name: Ensure per-instance config folders exist (Debian only)
-  become: yes
+  become: true
   file:
     path: "{{ tor_ConfDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}"
     state: directory
@@ -139,7 +139,7 @@
   when: ansible_pkg_mgr == 'apt'
 
 - name: Ensure DataDir exists
-  become: yes
+  become: true
   file:
     path: "{{ tor_DataDir }}"
     state: directory
@@ -147,44 +147,44 @@
     mode: 0755
 
 - name: Ensure "keys" subfolder exists
-  become: yes
+  become: true
   file:
     path: "{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/keys"
     state: directory
     owner: "_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
     group: "_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
     mode: u=rwX,g=,o=
-    recurse: yes
+    recurse: true
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
 
 - name: Ensure RSA key is in place (without overriding existing keys)
-  become: yes
+  become: true
   copy:
     src: "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}"
     dest: "{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}"
     owner: "_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
     mode: 0600
-    force: no
+    force: false
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
    - [ 'secret_id_key' ]
 
 - name: Fetch RSA key for comparison
-  become: yes
+  become: true
   fetch:
     src: "{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}"
     dest: "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}.untrustedremotekey"
-    flat: yes
+    flat: true
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
    - [ 'secret_id_key' ]
 
 - name: Compare local vs. remote RSA key (secret_id_key)
-  become: no
+  become: false
   shell: >
         set -o pipefail && openssl sha256 -r
         {{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-"{{ item.0.ipv4 }}_{{ item.1.orport }}"/keys/secret_id_key*
@@ -196,7 +196,7 @@
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
   register: tor_rsakey_match
-  changed_when: False
+  changed_when: false
 
 - name: Abort if local and remote RSA keys do not match
   assert:
@@ -209,7 +209,7 @@
 
 # this task is separated from the task named "Ensure RSA key is in place" because it is not run with 'force=no'
 - name: Transmit new Ed25519 signing keys
-  become: yes
+  become: true
   copy:
     src: "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}"
     dest: "{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}"
@@ -220,27 +220,27 @@
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
    - [ 'ed25519_signing_cert', 'ed25519_signing_secret_key' ]
-  changed_when: False
+  changed_when: false
   tags:
    - renewkey
 
 # This needs to be at the end to fix SELinux contexts recursively
 - name: Ensure per-instance DataDir have proper permissions
-  become: yes
+  become: true
   file:
     path: "{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}"
     state: directory
     owner: "_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
     group: "_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
     mode: u=rwX,g=,o=
-    recurse: yes
+    recurse: true
     setype: tor_var_lib_t
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
 
 - name: Ensure Tor config directory exists
-  become: yes
+  become: true
   file:
     path: "{{ tor_ConfDir }}"
     state: directory
@@ -249,7 +249,7 @@
     mode: 0755
 
 - name: Ensure tor-exit-notice.html is present (if we are an exit)
-  become: yes
+  become: true
   template:
     src: "{{ tor_exit_notice_file }}"
     dest: "{{ tor_ConfDir }}/tor-exit-notice.html"
@@ -261,7 +261,7 @@
     - Ensure Tor instances are reloaded if tor-exit-notice.html changed (OpenBSD)
 
 - name: Ensure torrc configuration file(s) are in place
-  become: yes
+  become: true
   template:
     src: torrc
     dest: "{{ (ansible_pkg_mgr != 'apt')| ternary(tor_ConfDir ~ '/' ~ item.0.ipv4 ~ '_' ~ item.1.orport\
@@ -284,7 +284,7 @@
    - reconfigure
 
 - name: Ensure prometheus per host scrape configs are in place
-  become: yes
+  become: true
   template:
     src: prometheus-scrape-configs
     dest: "{{ tor_prometheus_confd_folder}}/{{ tor_prometheus_scrape_file }}"
@@ -301,7 +301,7 @@
    - promconfig
 
 - name: Ensure prometheus alert rules are in place
-  become: yes
+  become: true
   template:
     src: prometheus-alert-rules
     dest: "{{ tor_prometheus_rules_file }}"
@@ -319,7 +319,7 @@
    - promconfig
 
 - name: Ensure nginx reverse proxy configuration for MetricsPort is in place
-  become: yes
+  become: true
   template:
     src: nginx-reverse-proxy-for-metricsport
     dest: "{{ tor_metricsport_nginx_config_file }}"
@@ -334,16 +334,16 @@
 
 # The htpasswd ansible module requires python passlib to be on the remote host
 - name: Ensure htpasswd Ansible dependencies are installed
-  become: yes
+  become: true
   package:
     name: "{{ tor_htpasswd_dependency }}"
     state: present
   when: tor_gen_metricsport_htpasswd and tor_enableMetricsPort
 
 - name: Ensure htpasswd file for MetricsPort protection is in place
-  become: yes
+  become: true
   htpasswd:
-    create: yes
+    create: true
     path: "{{ tor_metricsport_htpasswd_file }}"
     name: "{{ tor_metricsport_user }}"
     password: "{{ lookup('password', tor_prometheus_scrape_password_folder+inventory_hostname ) }}"

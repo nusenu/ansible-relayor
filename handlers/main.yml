@@ -1,44 +1,44 @@
 ---
 
 - name: stop-and-mask default tor instance
-  become: yes
+  become: true
   systemd:
     name: 'tor@default'
     state: 'stopped'
-    enabled: False
-    masked: True
+    enabled: false
+    masked: true
   when: ansible_pkg_mgr == 'apt'
 
 - name: restart apparmor
-  become: yes
+  become: true
   service: name=apparmor state=restarted
 
 - name: systemctl daemon-reload
-  become: yes
+  become: true
   systemd:
-    daemon_reload: True
+    daemon_reload: true
 
 - name: re-gather facts
   setup:
 
 - name: disable default tor instance FreeBSD
-  become: yes
+  become: true
   lineinfile:
     dest: /etc/rc.conf
     line: "tor_disable_default_instance=\"YES\""
-    create: yes
+    create: true
   when: ansible_system == 'FreeBSD'
 
 # TODO: this restarts all instances on a FreeBSD host even if just one torrc changed
 - name: Ensure Tor instances are restarted if its torrc changed (FreeBSD)
-  become: yes
+  become: true
   service:
     name: tor
     state: restarted
   when: ansible_system == 'FreeBSD'
 
 - name: Ensure Tor instances are restarted if its torrc changed (Linux)
-  become: yes
+  become: true
   service:
     name: "tor@{{ item.item.0.ipv4 }}_{{ item.item.1.orport }}.service"
     state: restarted
@@ -46,7 +46,7 @@
   when: item.changed and ansible_system == 'Linux'
 
 - name: Ensure Tor instances are restarted if its torrc changed (OpenBSD)
-  become: yes
+  become: true
   service:
     name: "tor{{ item.item.0.ipv4|replace('.','_') }}_{{ item.item.1.orport }}"
     state: restarted
@@ -56,14 +56,14 @@
     - reconfigure
 
 - name: Ensure Tor instances are reloaded if tor-exit-notice.html changed (FreeBSD)
-  become: yes
+  become: true
   service:
     name: tor
     state: reloaded
   when: ansible_system == 'FreeBSD'
 
 - name: Ensure Tor instances are reloaded if tor-exit-notice.html changed (Linux)
-  become: yes
+  become: true
   service:
     name: "tor@{{ item.item.0.ipv4 }}_{{ item.item.1.orport }}.service"
     state: reloaded
@@ -71,7 +71,7 @@
   when: ansible_system == 'Linux'
 
 - name: Ensure Tor instances are reloaded if tor-exit-notice.html changed (OpenBSD)
-  become: yes
+  become: true
   service:
     name: "tor{{ item.item.0.ipv4|replace('.','_') }}_{{ item.item.1.orport }}"
     state: reloaded
@@ -79,7 +79,7 @@
   when: ansible_system == 'OpenBSD'
 
 - name: assemble prometheus configuration
-  become: yes
+  become: true
   assemble:
     src: "{{ tor_prometheus_confd_folder }}"
     dest: "{{ tor_prometheus_config_file }}"
@@ -91,14 +91,14 @@
   delegate_to: "{{ tor_prometheus_host }}"
 
 - name: reload prometheus
-  become: yes
+  become: true
   service:
     name: prometheus
     state: reloaded
   delegate_to: "{{ tor_prometheus_host }}"
 
 - name: reload nginx
-  become: yes
+  become: true
   service:
     name: nginx
     state: reloaded

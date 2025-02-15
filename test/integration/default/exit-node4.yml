@@ -3,7 +3,7 @@
   vars_files:
     - vars/dry-run-vars.yml
   vars:
-    tor_ExitRelay: True
+    tor_ExitRelay: true
     tor_ports:
       - orport: 9000
         dirport: 9001

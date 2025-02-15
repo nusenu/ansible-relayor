@@ -12,7 +12,7 @@ tor_prom_labels: {}
 #   label1: "value1"
 #   label2: "value2"
 
-tor_gen_ciiss_proof_files: False
+tor_gen_ciiss_proof_files: false
 tor_ciiss_proof_folder: '~/.tor'
 
 # The tor_ports dictionary defines how many instances are created per
@@ -41,18 +41,18 @@ tor_maxPrivateIPs: 1
 # setting this to true will enable reduced exit policy
 # and allow custom exit policies via tor_ExitPolicy
 # Logic is implemented in templates/torrc
-tor_ExitRelay: False
+tor_ExitRelay: false
 
 # deploy default tor-exit-notice.html if we are an exit
-tor_ExitNoticePage: True
+tor_ExitNoticePage: true
 
 # automatically detect IPv6 addresses and enable IPv6 ORPort
-tor_IPv6: True
+tor_IPv6: true
 
 # enable IPv6 exiting
 # the following var only matters if
 # tor_ExitRelay and tor_IPv6 is True
-tor_IPv6Exit: True
+tor_IPv6Exit: true
 
 # on FreeBSD we increase the following kernel
 # settings if they are lower than that.
@@ -68,7 +68,7 @@ tor_PidDir: /var/run/tor-instances
 # Create a backup of the torrc file on the tor server whenever the file is changed.
 # You might want to disable this if you use other means of backups or version
 # control, for example etckeeper.
-tor_backup_torrc: yes
+tor_backup_torrc: true
 
 # specify tor's loglevel
 tor_LogLevel: notice
@@ -91,19 +91,19 @@ tor_available_public_ipv6s: "{{ ansible_all_ipv6_addresses| ansible.utils.ipv6('
 # we can not use more IPv6 IPs than we have IPv4 IPs so we truncate (but fewer is ok)
 tor_v6ips: "{{ tor_available_public_ipv6s[0:tor_ipv4_count|int] }}"
 
-tor_apt_update_cache: yes
+tor_apt_update_cache: true
 
 tor_RunAsDaemon: 1
 
-tor_enableControlSocket: False
+tor_enableControlSocket: false
 
-tor_alpha: False
-tor_nightly_builds: False
+tor_alpha: false
+tor_nightly_builds: false
 
 tor_alpha_version: experimental
 
 # MetricsPort variables
-tor_enableMetricsPort: False
+tor_enableMetricsPort: false
 tor_MetricsPort_offset: 33300
 
 # prometheus (tor MetricsPort) related vars
@@ -112,7 +112,7 @@ tor_blackbox_exporter_scheme: http
 tor_blackbox_exporter_password: "{{ lookup('password', '~/.tor/blackbox_exporter_password') }}"
 tor_prometheus_scrape_password_folder: "~/.tor/prometheus/scrape-passwords/"
 tor_prometheus_scrape_port: 443
-tor_gen_metricsport_htpasswd: True
+tor_gen_metricsport_htpasswd: true
 # the folder of the following file has to be present on the tor server already
 tor_metricsport_nginx_config_file: "/etc/nginx/promexporters/tor_metricsports_relayor.conf"
 tor_metricsport_htpasswd_file: "/etc/nginx/tor_metricsport_htpasswd"
@@ -121,7 +121,7 @@ tor_metricsport_user: TorMetricsPortBehindNginx
 tor_prometheus_confd_folder: "/etc/prometheus/conf.d"
 tor_prometheus_scrape_file: "tor_{{ ansible_fqdn }}.yml"
 tor_prometheus_config_file: "/etc/prometheus/prometheus.yml"
-tor_gen_prometheus_alert_rules: False
+tor_gen_prometheus_alert_rules: false
 tor_prometheus_rules_file: "/etc/prometheus/rules/ansible-relayor.rules"
 tor_prometheus_alert_rules:
   - alert: TorFlagRunningMissing

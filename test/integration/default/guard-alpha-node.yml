@@ -3,6 +3,6 @@
   vars_files:
     - vars/dry-run-vars.yml
   vars:
-    - tor_alpha: True
+    - tor_alpha: true
   roles:
     - "{{ playbook_dir | regex_replace('test/integration/default$') }}"

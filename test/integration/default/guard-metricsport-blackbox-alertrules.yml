@@ -3,9 +3,9 @@
   vars_files:
     - vars/dry-run-vars.yml
   vars:
-    - tor_enableMetricsPort: True
+    - tor_enableMetricsPort: true
     - tor_metricsport_nginx_config_file: /tmp/web-reverse-proxy-{{ inventory_hostname }}
-    - tor_gen_prometheus_alert_rules: True
+    - tor_gen_prometheus_alert_rules: true
     - tor_blackbox_exporter_host: 127.0.0.1:9115
     - tor_prometheus_host: 127.0.0.1
     - tor_prom_labels:

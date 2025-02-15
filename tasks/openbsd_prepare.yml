@@ -2,28 +2,28 @@
 
 - name: Gather current system-wide file descriptor limits (OpenBSD)
   command: "sysctl -n kern.maxfiles"
-  become: no
+  become: false
   register: tor_openbsd_maxfiles
-  changed_when: False
+  changed_when: false
 
 - name: Ensure system-wide runtime file descriptor limits are reasonable (OpenBSD)
-  become: yes
+  become: true
   command: "sysctl kern.maxfiles=20000"
   when: tor_openbsd_maxfiles.stdout|int < 20000
 
 - name: Ensure system-wide persistent file descriptor limits are reasonable (OpenBSD)
-  become: yes
+  become: true
   lineinfile:
     dest: /etc/sysctl.conf
     regexp: ^kern.maxfiles
     line: "kern.maxfiles=20000"
-    create: yes
+    create: true
   when: tor_openbsd_maxfiles.stdout|int < 20000
 
 # We rise openfiles limits for every tor instance separately.
 # An instance is identified by its rc.d file name.
 - name: Ensure Tor process file descriptor limits are reasonable (OpenBSD)
-  become: yes
+  become: true
   lineinfile:
     dest: /etc/login.conf
     line: "tor{{ item.0.ipv4| replace('.','_') }}_{{ item.1.orport }}::openfiles-max=13500::tc=daemon:"
