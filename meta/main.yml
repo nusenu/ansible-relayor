@@ -10,9 +10,6 @@ galaxy_info:
     - name: FreeBSD
       versions:
         - 14.2
-    - name: OpenBSD
-      versions:
-        - 7.4
     - name: Ubuntu
       versions:
         - noble

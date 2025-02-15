@@ -80,7 +80,6 @@ Supported Operating Systems
 ---------------------------
 
 - Debian 12
-- OpenBSD 7.4
 - FreeBSD 14.2
 - Ubuntu 24.04
 
@@ -465,7 +464,6 @@ There are OS specific tags:
 
 * debian (includes ubuntu)
 * freebsd
-* openbsd
 
 Task oriented tags:
 
@@ -475,12 +473,12 @@ Task oriented tags:
 * promconfig - regenerates prometheus related configs (scrape config, blackbox exporter, nginx)
 * reconfigure - regenerates config files (tor and promconfig) and reloads tor (requires previously configured tor instances)
 
-So if you have a big family and you are about to add an OpenBSD host you typically
+So if you have a big family and you are about to add an FreeBSD host you typically
 make two steps
 
 1. install the new server by running only against the new server (-l) and only the os specific tag (openbsd)
 
-    `ansible-playbook yourplaybook.yml -l newserver --tags openbsd`
+    `ansible-playbook yourplaybook.yml -l newserver --tags freebsd`
 
 2. then reconfigure all servers (MyFamily) by running the 'reconfigure' tag against all servers.
 
