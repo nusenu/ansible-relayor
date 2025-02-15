@@ -85,7 +85,7 @@
     dest: "{{ tor_prometheus_config_file }}"
     owner: root
     group: "{{ tor_prometheus_group }}"
-    mode: 0640
+    mode: "0640"
     backup: true
     validate: promtool check config %s
   delegate_to: "{{ tor_prometheus_host }}"

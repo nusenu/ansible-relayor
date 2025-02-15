@@ -5,7 +5,7 @@
   file:
     path: "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}"
     state: directory
-    mode: 0700
+    mode: "0700"
   delegate_to: 127.0.0.1
   with_nested:
    - "{{ tor_ips }}"
@@ -111,7 +111,7 @@
     path: "{{ tor_PidDir }}"
     state: directory
     owner: root
-    mode: 0755
+    mode: "0755"
   when: ansible_system == 'FreeBSD' or (tor_enableControlSocket and (ansible_system == 'OpenBSD' or ansible_os_family == 'RedHat'))
 
 - name: Ensure PID/ControlSocket directory is owned by per-instance tor user
@@ -121,7 +121,7 @@
     state: directory
     owner: "_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
     group: "_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
-    mode: 0750
+    mode: "0750"
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
@@ -132,7 +132,7 @@
   file:
     path: "{{ tor_ConfDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}"
     state: directory
-    mode: 0755
+    mode: "0755"
   with_nested:
    - "{{ tor_ips }}"
    - "{{ tor_ports }}"
@@ -144,7 +144,7 @@
     path: "{{ tor_DataDir }}"
     state: directory
     owner: root
-    mode: 0755
+    mode: "0755"
 
 - name: Ensure "keys" subfolder exists
   become: true
@@ -165,7 +165,7 @@
     src: "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}"
     dest: "{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}"
     owner: "_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
-    mode: 0600
+    mode: "0600"
     force: false
   with_nested:
    - "{{ tor_ips }}"
@@ -214,7 +214,7 @@
     src: "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}"
     dest: "{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}"
     owner: "_tor-{{ item.0.ipv4 }}_{{ item.1.orport }}"
-    mode: 0600
+    mode: "0600"
     setype: tor_var_lib_t
   with_nested:
    - "{{ tor_ips }}"
@@ -246,14 +246,14 @@
     state: directory
     owner: root
     group: "{{ tor_user }}"
-    mode: 0755
+    mode: "0755"
 
 - name: Ensure tor-exit-notice.html is present (if we are an exit)
   become: true
   template:
     src: "{{ tor_exit_notice_file }}"
     dest: "{{ tor_ConfDir }}/tor-exit-notice.html"
-    mode: 0444
+    mode: "0444"
   when: tor_ExitRelay and tor_ExitNoticePage
   notify:
     - Ensure Tor instances are reloaded if tor-exit-notice.html changed (FreeBSD)
@@ -267,7 +267,7 @@
     dest: "{{ (ansible_pkg_mgr != 'apt')| ternary(tor_ConfDir ~ '/' ~ item.0.ipv4 ~ '_' ~ item.1.orport\
          ~ '.torrc', tor_ConfDir ~ '/' ~ item.0.ipv4 ~ '_' ~ item.1.orport ~ '/torrc') }}"
     owner: root
-    mode: 0644
+    mode: "0644"
     backup: "{{ tor_backup_torrc }}"
     validate: "tor --verify-config -f %s"
   with_nested:
@@ -290,7 +290,7 @@
     dest: "{{ tor_prometheus_confd_folder}}/{{ tor_prometheus_scrape_file }}"
     owner: root
     group: "{{ tor_prometheus_group }}"
-    mode: 0640
+    mode: "0640"
   delegate_to: "{{ tor_prometheus_host }}"
   when: (tor_enableMetricsPort or tor_blackbox_exporter_host is defined) and tor_prometheus_host is defined
   notify:
@@ -307,7 +307,7 @@
     dest: "{{ tor_prometheus_rules_file }}"
     owner: root
     group: "{{ tor_prometheus_group }}"
-    mode: 0640
+    mode: "0640"
     validate: promtool check rules %s
   delegate_to: "{{ tor_prometheus_host }}"
   run_once: true
@@ -323,7 +323,7 @@
   template:
     src: nginx-reverse-proxy-for-metricsport
     dest: "{{ tor_metricsport_nginx_config_file }}"
-    mode: 0644
+    mode: "0644"
     owner: root
   when: tor_enableMetricsPort and tor_prometheus_host is defined
   notify:
@@ -347,7 +347,7 @@
     path: "{{ tor_metricsport_htpasswd_file }}"
     name: "{{ tor_metricsport_user }}"
     password: "{{ lookup('password', tor_prometheus_scrape_password_folder+inventory_hostname ) }}"
-    mode: 0640
+    mode: "0640"
     group: "{{ tor_metricsport_htpasswd_file_owner }}"
   when: tor_gen_metricsport_htpasswd and tor_enableMetricsPort
   tags:

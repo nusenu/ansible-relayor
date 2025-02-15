@@ -30,7 +30,7 @@
     path: /etc/systemd/system/tor@.service.d
     state: directory
     owner: root
-    mode: 0755
+    mode: "0755"
 
 # this is needed for a small service file modification (allow it to write to /var/lib/tor-instances)
 # without replacing the maintainer's file, for details see
@@ -41,7 +41,7 @@
     src: local.conf
     dest: /etc/systemd/system/tor@.service.d/local.conf
     owner: root
-    mode: 0644
+    mode: "0644"
   notify: systemctl daemon-reload
 
 - meta: flush_handlers

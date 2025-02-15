@@ -46,7 +46,7 @@
   file:
     path: /etc/systemd/system-generators
     state: directory
-    mode: 0755
+    mode: "0755"
 
 - name: Ensure custom systemd generator is in place (Debian/Ubuntu only)
   become: true
@@ -54,7 +54,7 @@
     src: tor-generator
     dest: /etc/systemd/system-generators/tor-generator
     owner: root
-    mode: 0755
+    mode: "0755"
 
 #- name: Ensure AppArmor allows access to necessary files (Ubuntu)
 #  become: yes
