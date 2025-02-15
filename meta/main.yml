@@ -4,18 +4,18 @@ galaxy_info:
   description: An Ansible role for Tor Relay Operators
   license: GPLv3
   platforms:
-  - name: Debian
-    versions:
-    - bookworm
-  - name: FreeBSD
-    versions:
-    - 14.2
-  - name: OpenBSD
-    versions:
-    - 7.4
-  - name: Ubuntu
-    versions:
-    - noble
+    - name: Debian
+      versions:
+        - bookworm
+    - name: FreeBSD
+      versions:
+        - 14.2
+    - name: OpenBSD
+      versions:
+        - 7.4
+    - name: Ubuntu
+      versions:
+        - noble
   galaxy_tags:
     - tor
     - ipv6
