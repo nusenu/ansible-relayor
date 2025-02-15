@@ -1,8 +1,6 @@
-mixed-freebsd-12-10.0.2.15_9000,exit
-mixed-freebsd-12-10.0.2.15_9100,
-mixed-debian-10-10.0.2.15_9000,exit
-mixed-debian-10-10.0.2.15_9100,
-mixed-ubuntu-1804-10.0.2.15_9000,exit
-mixed-ubuntu-1804-10.0.2.15_9100,
-mixed-openbsd-10.0.2.15_9000,exit
-mixed-openbsd-10.0.2.15_9100,
+mixed-freebsd-10.0.2.15_9000,exit
+mixed-freebsd-10.0.2.15_9100,
+mixed-debian-stable-10.0.2.15_9000,exit
+mixed-debian-stable-10.0.2.15_9100,
+mixed-ubuntu-lts-10.0.2.15_9000,exit
+mixed-ubuntu-lts-10.0.2.15_9100,
