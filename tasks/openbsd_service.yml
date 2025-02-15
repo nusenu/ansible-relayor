@@ -1,6 +1,4 @@
 ---
-
-
 # OpenBSD section (uses service module)
 # This is basically a copy from the Linux
 # section, but it requires different service
@@ -13,21 +11,21 @@
 # # we replace them with underscores.
 - name: Create links to the service files (OpenBSD)
   become: true
-  file:
+  ansible.builtin.file:
     src: /etc/rc.d/tor
     state: link
-    path: "/etc/rc.d/tor{{ item.0.ipv4| replace('.','_') }}_{{ item.1.orport }}"
+    path: /etc/rc.d/tor{{ item.0.ipv4| replace('.','_') }}_{{ item.1.orport }}
   with_nested:
-   - "{{ tor_ips }}"
-   - "{{ tor_ports }}"
+    - "{{ tor_ips }}"
+    - "{{ tor_ports }}"
 
 - name: Ensure Tor instances are enabled and started (OpenBSD)
   become: true
-  service:
-    name: "tor{{ item.0.ipv4|replace('.','_') }}_{{ item.1.orport }}"
-    arguments: "-f {{ tor_ConfDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}.torrc"
+  ansible.builtin.service:
+    name: tor{{ item.0.ipv4|replace('.','_') }}_{{ item.1.orport }}
+    arguments: -f {{ tor_ConfDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}.torrc
     enabled: true
     state: started
   with_nested:
-   - "{{ tor_ips }}"
-   - "{{ tor_ports }}"
+    - "{{ tor_ips }}"
+    - "{{ tor_ports }}"

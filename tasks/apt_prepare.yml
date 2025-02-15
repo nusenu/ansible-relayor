@@ -1,5 +1,4 @@
 ---
-
 - name: Ensure lsb-release, apt-transport-https and gpg packages are installed
   become: true
   ansible.builtin.apt:
@@ -21,7 +20,7 @@
 - name: Ensure torproject.org repository is present (APT)
   become: true
   ansible.builtin.apt_repository:
-    repo: 'deb https://deb.torproject.org/torproject.org {{ tor_distribution_release }} main'
+    repo: deb https://deb.torproject.org/torproject.org {{ tor_distribution_release }} main
     state: present
     update_cache: true
 
@@ -34,7 +33,7 @@
 - name: Ensure torproject.org alpha/nightly repo is present if enabled (APT)
   become: true
   ansible.builtin.apt_repository:
-    repo: 'deb https://deb.torproject.org/torproject.org tor-{{ tor_alpha_version }}-{{ tor_distribution_release }} main'
+    repo: deb https://deb.torproject.org/torproject.org tor-{{ tor_alpha_version }}-{{ tor_distribution_release }} main
     state: present
     update_cache: true
   when: tor_alpha

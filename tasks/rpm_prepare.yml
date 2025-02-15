@@ -1,24 +1,22 @@
 ---
-
 - name: Ensure EPEL repo is installed (yum)
   become: true
-  yum:
+  ansible.builtin.yum:
     name: epel-release
   when: ansible_pkg_mgr == 'yum'
 
 - name: Ensure SELinux dependencies are installed
   become: true
-  package:
+  ansible.builtin.package:
     name: libselinux-python,libsemanage-python
     state: present
   notify: re-gather facts
 
 # re-gathering facts after installing ansible SELinux dependencies (libselinux-python)
-- meta: flush_handlers
-
+- ansible.builtin.meta: flush_handlers
 - name: Ensure SELinux boolean (tor_can_network_relay) is set appropriately
   become: true
-  seboolean:
+  ansible.posix.seboolean:
     name: tor_can_network_relay
     state: true
     persistent: true
@@ -26,7 +24,7 @@
 
 - name: Ensure systemd drop-in folder is present (RPM)
   become: true
-  file:
+  ansible.builtin.file:
     path: /etc/systemd/system/tor@.service.d
     state: directory
     owner: root
@@ -37,11 +35,11 @@
 # http://www.freedesktop.org/software/systemd/man/systemd.unit.html#id-1.11.3
 - name: Ensure service file drop-in is present (RPM)
   become: true
-  copy:
+  ansible.builtin.copy:
     src: local.conf
     dest: /etc/systemd/system/tor@.service.d/local.conf
     owner: root
     mode: "0644"
   notify: systemctl daemon-reload
 
-- meta: flush_handlers
+- ansible.builtin.meta: flush_handlers

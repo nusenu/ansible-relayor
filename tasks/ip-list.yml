@@ -1,19 +1,18 @@
 ---
-
 - name: Use a single private IPv4 address if we have no public IPv4 address
-  include_vars: private_IPv4_only.yml
+  ansible.builtin.include_vars: private_IPv4_only.yml
   when: tor_v4ips == []
 
 - name: setup IP list (1/2)
-  set_fact:
+  ansible.builtin.set_fact:
     ips:
-        ipv4: "{{ item.0 }}"
-        ipv6: "{{ item.1 }}"
+      ipv4: "{{ item.0 }}"
+      ipv6: "{{ item.1 }}"
   with_together:
-        - "{{ tor_v4ips }}"
-        - "{{ tor_v6ips }}"
+    - "{{ tor_v4ips }}"
+    - "{{ tor_v6ips }}"
   register: tor_ipsinterm
 
 - name: setup IP list (2/2)
-  set_fact:
+  ansible.builtin.set_fact:
     tor_ips: "{{ tor_ipsinterm.results | map(attribute='ansible_facts.ips') | list }}"

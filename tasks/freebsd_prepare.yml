@@ -1,27 +1,26 @@
 ---
-
 - name: Choose tor alpha version package (FreeBSD)
-  set_fact:
+  ansible.builtin.set_fact:
     tor_packages: tor-devel
   when: tor_alpha
 
 - name: Ensure sequential IP IDs are avoided (FreeBSD)
   become: true
-  sysctl:
+  ansible.posix.sysctl:
     name: net.inet.ip.random_id
     value: 1
     reload: false
     sysctl_set: true
 
 - name: Gather current kern.ipc.somaxconn setting (FreeBSD)
-  command: "/sbin/sysctl -n kern.ipc.somaxconn"
+  ansible.builtin.command: /sbin/sysctl -n kern.ipc.somaxconn
   become: false
   register: tor_currentsomaxconn
   changed_when: false
 
 - name: Ensure somaxconn setting is reasonable (FreeBSD)
   become: true
-  sysctl:
+  ansible.posix.sysctl:
     name: kern.ipc.somaxconn
     value: "{{ tor_freebsd_somaxconn }}"
     reload: false
@@ -30,13 +29,13 @@
 
 - name: Gather current kern.ipc.nmbclusters setting (FreeBSD)
   become: false
-  command: "/sbin/sysctl -n kern.ipc.nmbclusters"
+  ansible.builtin.command: /sbin/sysctl -n kern.ipc.nmbclusters
   register: tor_currentnmbc
   changed_when: false
 
 - name: Ensure nmbclusters setting is reasonable (FreeBSD)
   become: true
-  sysctl:
+  ansible.posix.sysctl:
     name: kern.ipc.nmbclusters
     value: "{{ tor_freebsd_nmbclusters }}"
     reload: false

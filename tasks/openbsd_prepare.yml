@@ -1,22 +1,21 @@
 ---
-
 - name: Gather current system-wide file descriptor limits (OpenBSD)
-  command: "sysctl -n kern.maxfiles"
+  ansible.builtin.command: sysctl -n kern.maxfiles
   become: false
   register: tor_openbsd_maxfiles
   changed_when: false
 
 - name: Ensure system-wide runtime file descriptor limits are reasonable (OpenBSD)
   become: true
-  command: "sysctl kern.maxfiles=20000"
+  ansible.builtin.command: sysctl kern.maxfiles=20000
   when: tor_openbsd_maxfiles.stdout|int < 20000
 
 - name: Ensure system-wide persistent file descriptor limits are reasonable (OpenBSD)
   become: true
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/sysctl.conf
     regexp: ^kern.maxfiles
-    line: "kern.maxfiles=20000"
+    line: kern.maxfiles=20000
     create: true
   when: tor_openbsd_maxfiles.stdout|int < 20000
 
@@ -24,9 +23,9 @@
 # An instance is identified by its rc.d file name.
 - name: Ensure Tor process file descriptor limits are reasonable (OpenBSD)
   become: true
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/login.conf
     line: "tor{{ item.0.ipv4| replace('.','_') }}_{{ item.1.orport }}::openfiles-max=13500::tc=daemon:"
   with_nested:
-   - "{{ tor_ips }}"
-   - "{{ tor_ports }}"
+    - "{{ tor_ips }}"
+    - "{{ tor_ports }}"

@@ -1,5 +1,4 @@
 ---
-
 # tor_intances defines the number and configurations of instances
 # an instance is defined with the following fields:
 # inst_name:configfile:username:groupname:pidfile:data_dir
@@ -7,30 +6,28 @@
 # but privileges are dropped afterwards (torrc User parameter)
 - name: Ensure Tor multi-instance configuration is present (FreeBSD)
   become: true
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/rc.conf
-    line: "tor_instances=\"${tor_instances} {{ item.0.ipv4 }}_{{ item.1.orport }}:\
-        {{ tor_ConfDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}.torrc:root:root:\
-        {{ tor_PidDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/pid:{{ tor_DataDir }}\
-        /{{ item.0.ipv4 }}_{{ item.1.orport }}\""
+    line: tor_instances="${tor_instances} {{ item.0.ipv4 }}_{{ item.1.orport }}:{{ tor_ConfDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}.torrc:root:root:{{ tor_PidDir
+      }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/pid:{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}"
     create: true
   with_nested:
-   - "{{ tor_ips }}"
-   - "{{ tor_ports }}"
+    - "{{ tor_ips }}"
+    - "{{ tor_ports }}"
 
 # this task is a workaround, because 'service tor status'
 # fails if this line is not present (which in turn fails the ansible service module)
 - name: Ensure tor is enabled in /etc/rc.conf (FreeBSD)
   become: true
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/rc.conf
-    line: "tor_enable=\"YES\""
+    line: tor_enable="YES"
     create: true
 
 # this affects all instances
 - name: Ensure Tor instances are running and enabled (FreeBSD)
   become: true
-  service:
+  ansible.builtin.service:
     name: tor
     enabled: true
     state: started

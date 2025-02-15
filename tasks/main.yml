@@ -1,10 +1,9 @@
 ---
-
 - name: Check for min. ansible version requirement
-  assert:
+  ansible.builtin.assert:
     that:
-      - "ansible_version.full is version_compare('2.16.4', '>=')"
-    msg: "Your ansible version is too old, please upgrade to v2.16.4 or newer. Exiting."
+      - ansible_version.full is version_compare('2.16.4', '>=')
+    msg: Your ansible version is too old, please upgrade to v2.16.4 or newer. Exiting.
   run_once: true
   delegate_to: 127.0.0.1
   tags:
@@ -12,9 +11,9 @@
     - ansible-version-check
 
 - name: Check for local requirements
-  shell: >
-        command -V /bin/bash && command -V "{{ tor_binary }}" && command -V openssl && command -V sort
-        && command -V uniq && command -V wc && command -V cut && command -V xargs && command -V sed
+  ansible.builtin.shell: >
+    command -V /bin/bash && command -V "{{ tor_binary }}" && command -V openssl && command -V sort
+    && command -V uniq && command -V wc && command -V cut && command -V xargs && command -V sed
   run_once: true
   become: false
   delegate_to: 127.0.0.1
@@ -23,73 +22,73 @@
   changed_when: false
 
 - name: Ensure tor_ContactInfo is set
-  assert:
+  ansible.builtin.assert:
     that:
       - tor_ContactInfo is defined
-    msg: "tor_ContactInfo is not configured but mandatory, please set it."
+    msg: tor_ContactInfo is not configured but mandatory, please set it.
   tags:
     - always
 
 - name: Ensure we do not create more than 8 instances per IP
-  assert:
+  ansible.builtin.assert:
     that:
-      - "tor_ports | length > 0"
-      - "tor_ports | length < 9"
-    msg: "You can not run more than 8 instances per IP address, please update your tor_ports configuration."
+      - tor_ports | length > 0
+      - tor_ports | length < 9
+    msg: You can not run more than 8 instances per IP address, please update your tor_ports configuration.
   tags:
     - always
 
 - name: >
-        Abort if we use a centralized/common DNS resolver (Google, Quad9, CloudFlare, OpenDNS, Level3).
-        See https://torproject.org/relay-guide#DNSonExitRelays (Exits only)
-  command: "{{ tor_grep_blacklisted_dnsresolvers }}"
+    Abort if we use a centralized/common DNS resolver (Google, Quad9, CloudFlare, OpenDNS, Level3).
+    See https://torproject.org/relay-guide#DNSonExitRelays (Exits only)
+  ansible.builtin.command: "{{ tor_grep_blacklisted_dnsresolvers }}"
   register: tor_dns_check
   failed_when: tor_dns_check.rc == 0
   changed_when: false
   when: tor_ExitRelay
   tags:
-   - always
+    - always
 
 - name: Set OS specific variables
-  include_vars: "os_{{ ansible_os_family }}.yml"
+  ansible.builtin.include_vars: os_{{ ansible_os_family }}.yml
   tags:
-   - always
+    - always
 
-- import_tasks: ip-list.yml
+- ansible.builtin.import_tasks: ip-list.yml
   tags:
     - always
 
 - name: Preparation for Debian-based systems
-  include_tasks: apt_prepare.yml
+  ansible.builtin.include_tasks: apt_prepare.yml
   when: ansible_pkg_mgr == 'apt'
   tags:
     - debian
     - install
 
 - name: Preparation for RPM based systems
-  include_tasks: rpm_prepare.yml
+  ansible.builtin.include_tasks: rpm_prepare.yml
   when: ansible_os_family == 'RedHat'
   tags:
-   - centos
-   - fedora
-   - install
+    - centos
+    - fedora
+    - install
 
 - name: Preparation for OpenBSD systems
-  include_tasks: openbsd_prepare.yml
+  ansible.builtin.include_tasks: openbsd_prepare.yml
   when: ansible_system == 'OpenBSD'
   tags:
-   - openbsd
+    - openbsd
 
 - name: Preparation for FreeBSD based systems
-  include_tasks: freebsd_prepare.yml
+  ansible.builtin.include_tasks: freebsd_prepare.yml
   when: ansible_system == 'FreeBSD'
   tags:
-   - freebsd
+    - freebsd
 
 # we specifically opt for present over latest to improve performance
 - name: Ensure tor is installed
   become: true
-  package:
+  ansible.builtin.package:
     name: "{{ item }}"
     state: "{{ tor_package_state }}"
   with_items: "{{ tor_packages }}"
@@ -99,49 +98,48 @@
     - stop-and-mask default tor instance
     - disable default tor instance FreeBSD
   tags:
-   - openbsd
-   - freebsd
-   - debian
-   - centos
-   - fedora
-   - install
+    - openbsd
+    - freebsd
+    - debian
+    - centos
+    - fedora
+    - install
 
-- meta: flush_handlers
-
-- import_tasks: configure.yml
+- ansible.builtin.meta: flush_handlers
+- ansible.builtin.import_tasks: configure.yml
   tags:
-   - debian
-   - centos
-   - fedora
-   - openbsd
-   - freebsd
+    - debian
+    - centos
+    - fedora
+    - openbsd
+    - freebsd
 
 - name: Linux service configuration
-  include_tasks: linux_service.yml
+  ansible.builtin.include_tasks: linux_service.yml
   when: ansible_system == 'Linux'
   tags:
-   - debian
-   - centos
-   - fedora
+    - debian
+    - centos
+    - fedora
 
 - name: OpenBSD service configuration
-  include_tasks: openbsd_service.yml
+  ansible.builtin.include_tasks: openbsd_service.yml
   when: ansible_system == 'OpenBSD'
   tags:
-   - openbsd
+    - openbsd
 
 - name: FreeBSD service configuration
-  include_tasks: freebsd_service.yml
+  ansible.builtin.include_tasks: freebsd_service.yml
   when: ansible_system == 'FreeBSD'
   tags:
-   - freebsd
+    - freebsd
 
 - name: Generate CIISS rsa-fingerprint.txt proof file
   become: false
-  shell: >
-        set -o pipefail && for key in {{ tor_offline_masterkey_dir }}/*/keys/secret_id_key;
-            do openssl rsa -in $key -outform DER -RSAPublicKey_out 2> /dev/null| openssl sha1 -r;
-        done|cut -d" " -f1|sort > {{ tor_ciiss_proof_folder }}/rsa-fingerprint.txt
+  ansible.builtin.shell: >
+    set -o pipefail && for key in {{ tor_offline_masterkey_dir }}/*/keys/secret_id_key;
+        do openssl rsa -in $key -outform DER -RSAPublicKey_out 2> /dev/null| openssl sha1 -r;
+    done|cut -d" " -f1|sort > {{ tor_ciiss_proof_folder }}/rsa-fingerprint.txt
   args:
     executable: /bin/bash
   delegate_to: 127.0.0.1
@@ -153,9 +151,9 @@
 
 - name: Generate CIISS ed25519-master-pubkey.txt proof file
   become: false
-  shell: >
-        set -o pipefail && cut -d" " -f2 {{ tor_offline_masterkey_dir }}/*/fingerprint-ed25519|
-        sort > {{ tor_ciiss_proof_folder }}/ed25519-master-pubkey.txt
+  ansible.builtin.shell: >
+    set -o pipefail && cut -d" " -f2 {{ tor_offline_masterkey_dir }}/*/fingerprint-ed25519|
+    sort > {{ tor_ciiss_proof_folder }}/ed25519-master-pubkey.txt
   args:
     executable: /bin/bash
   delegate_to: 127.0.0.1

@@ -1,14 +1,13 @@
 ---
-
 # Linux/systemd section (uses service module)
 # ===========================================
 
 - name: Ensure Tor instances are enabled and started (Linux/systemd)
   become: true
-  service:
-    name: "tor@{{ item.0.ipv4 }}_{{ item.1.orport }}.service"
+  ansible.builtin.service:
+    name: tor@{{ item.0.ipv4 }}_{{ item.1.orport }}.service
     enabled: true
     state: started
   with_nested:
-   - "{{ tor_ips }}"
-   - "{{ tor_ports }}"
+    - "{{ tor_ips }}"
+    - "{{ tor_ports }}"
