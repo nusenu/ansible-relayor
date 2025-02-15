@@ -476,7 +476,7 @@ Task oriented tags:
 So if you have a big family and you are about to add an FreeBSD host you typically
 make two steps
 
-1. install the new server by running only against the new server (-l) and only the os specific tag (openbsd)
+1. install the new server by running only against the new server (-l) and only the os specific tag (freebsd)
 
     `ansible-playbook yourplaybook.yml -l newserver --tags freebsd`
 
