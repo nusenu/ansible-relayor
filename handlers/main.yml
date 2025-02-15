@@ -10,7 +10,9 @@
 
 - name: restart apparmor
   become: true
-  ansible.builtin.service: name=apparmor state=restarted
+  ansible.builtin.service:
+    name: apparmor
+    state: restarted
 
 - name: systemctl daemon-reload
   become: true
