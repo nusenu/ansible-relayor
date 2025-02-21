@@ -1,5 +1,6 @@
 ---
 galaxy_info:
+  role_name: relayor
   author: nusenu
   description: An Ansible role for Tor Relay Operators
   license: GPLv3

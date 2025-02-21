@@ -47,9 +47,9 @@ Main benefits for a tor relay operator
 Installation
 ------------
 
-This ansible role is available on galaxy https://galaxy.ansible.com/nusenu/relayor/
+This ansible role is available on galaxy https://galaxy.ansible.com/ui/standalone/roles/nusenu/relayor/
 
-```ansible-galaxy install nusenu.relayor```
+```ansible-galaxy role install nusenu.relayor```
 
 Requirements
 ------------
