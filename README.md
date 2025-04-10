@@ -38,6 +38,7 @@ Main benefits for a tor relay operator
 - easily choose between exit relay/non-exit relay mode using a single boolean
 - automatic deployment of a [tor exit notice html](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) page via tor's DirPort (on exits only)
 - automatic MyFamily management
+- automatic Happy Families key management (requires tor version 0.4.9.2-alpha or newer)
 - **prometheus integration** (when enabled)
   - nginx reverse proxy config autogeneration to protect tor's MetricsPort (behind basic auth / HTTPS)
   - prometheus scrape config autogeneration for MetricsPort
@@ -433,6 +434,23 @@ All variables mentioned here are optional.
     - if the tor binary is not named "tor" on your control machine, you have to change the default (for example on Whonix workstations)
     - default: tor
 
+* `tor_happy_family` boolean
+    - set to `true` to enable happy families
+    - this will generate a happy family key and distribute it to all managed relays
+    - enabling happy families will not disable the old MyFamily torrc option
+    - requires tor version >=0.4.9.2-alpha on the control node and the relay
+    - temporary opt-in: future relayor releases will enable this by default and remove this setting
+    - default: false
+
+* `tor_local_happy_family_folder` folderpath
+    - specify the folderpath on the control machine where family keys are stored
+    - ensure this folder is not accessible to unauthorized parties as it contains a private key file.
+    - default: ~/.tor
+
+* `tor_happy_family_basename` filename
+    - file basename of the .secret_family_key file
+    - default: happyfamily
+
 Prometheus Labels
 -----------------
 
@@ -486,7 +504,8 @@ This allows to recover from a complete server compromise without losing a relay'
 Every tor instance is run with a distinct system user. A per-instance user has only access to his own (temporary) keys, but not to those of other instances.
 We do not ultimately trust every tor relay we operate (we try to perform input validation when we use relay provided data on the ansible host or another relay).
 
-**Be aware that the ansible control machine stores ALL your relay keys (RSA and Ed25519) - apply security measures accordingly.**
+**Be aware that the ansible control machine stores ALL your relay keys (RSA and Ed25519) and when enabled happy family keys as well,
+apply security measures accordingly.**
 
 If you make use of the prometheus integration the ansible control machine will also store all your prometheus scrape credentials under `~/.tor/prometheus/`.
 Rotating these credentials is very easy though: You can simply remove that folder and run ansible-playbook again.

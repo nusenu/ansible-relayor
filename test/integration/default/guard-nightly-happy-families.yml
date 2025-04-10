@@ -1,0 +1,9 @@
+---
+- hosts: all
+  vars_files:
+    - vars/dry-run-vars.yml
+  vars:
+    - tor_nightly_builds: true
+    - tor_happy_family: true
+  roles:
+    - "{{ playbook_dir | regex_replace('test/integration/default$') }}"

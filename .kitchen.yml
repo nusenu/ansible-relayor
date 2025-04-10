@@ -45,16 +45,17 @@ suites:
     provisioner:
       playbook: "test/integration/default/guard-alpha-node.yml"
     excludes:
-      - freebsd-13
-      - freebsd-12
-      - openbsd7
+      - freebsd
   - name: t-guard-nightly
     provisioner:
       playbook: "test/integration/default/guard-nightly-node.yml"
     excludes:
-      - freebsd-13
-      - freebsd-12
-      - openbsd7
+      - freebsd
+  - name: t-guard-nightly-happy-families
+    provisioner:
+      playbook: "test/integration/default/guard-nightly-happy-families.yml"
+    excludes:
+      - freebsd
   - name: t-guard-metricsport-blackbox-exporter
     provisioner:
       playbook: "test/integration/default/guard-metricsport-blackbox.yml"
@@ -68,9 +69,7 @@ suites:
     provisioner:
       playbook: "test/integration/default/guard-nightly-metricsport-blackbox.yml"
     excludes:
-      - freebsd-13
-      - freebsd-12
-      - openbsd7
+      - freebsd
   - name: t-guard-blackbox-exporter
     provisioner:
       playbook: "test/integration/default/guard-blackbox-exporter.yml"

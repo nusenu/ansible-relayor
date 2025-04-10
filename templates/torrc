@@ -102,4 +102,7 @@ NoExec 1
 {% endfor %}
 
 MyFamily {{ tor_family.stdout }}
+{% if tor_happy_family %}
+FamilyId {{ lookup('ansible.builtin.file', tor_local_happy_family_folder~'/'~tor_happy_family_basename~'.public_family_id') }}
+{% endif %}
 # end of torrc

@@ -15,6 +15,10 @@ tor_prom_labels: {}
 tor_gen_ciiss_proof_files: false
 tor_ciiss_proof_folder: '~/.tor'
 
+tor_happy_family: false
+tor_local_happy_family_folder: '~/.tor'
+tor_happy_family_basename: happyfamily
+
 # The tor_ports dictionary defines how many instances are created per
 # available IP address and what ports are used.
 # min entries: 1
