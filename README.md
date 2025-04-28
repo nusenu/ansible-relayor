@@ -510,7 +510,8 @@ apply security measures accordingly.**
 If you make use of the prometheus integration the ansible control machine will also store all your prometheus scrape credentials under `~/.tor/prometheus/`.
 Rotating these credentials is very easy though: You can simply remove that folder and run ansible-playbook again.
 
-Every tor server host gets its own set of prometheus credentials, so a compromised host should not allow them to scrape all other hosts.
+Every tor server host gets its own set of prometheus credentials, so a compromised host should not allow an attacker to scrape all your other tor instances on other hosts.
+A local attacker can scrape all tor MetricsPorts (when enabled) on that host because tor's MetricsPort does not support authentication.
 
 Integration Testing
 -----------------------
