@@ -176,7 +176,7 @@ All variables mentioned here are optional.
     - the files are overwritten if they exist
     - the location of the output folder can be configured using the variable `tor_ciiss_proof_folder`
     - the filename is hardcoded to the one required by the specification and can not be configured
-    - default: False
+    - default: false
 
 * `tor_ciiss_proof_folder` folderpath
     - defines the output folder for generated proof files
@@ -197,19 +197,19 @@ All variables mentioned here are optional.
     - Set to true if you want to use Tor nightly builds repo from deb.torproject.org.
     - nightly builds follow the tor git main branch.
     - Only supported on Debian and Ubuntu (ignored on other platforms).
-    - default: False
+    - default: false
 
 * `tor_ExitRelay` boolean
     - You have to set this to true if you want to enable exiting for all or some tor instances on a server
     - If this var is not true this will be a non-exit relay
     - If you want to run a mixed server (exit and non-exit tor instances) use `tor_ExitRelaySetting_file` for per-instance configuration in additon to this var
-    - default: False
+    - default: false
 
 * `tor_ExitRelaySetting_file` filepath
     - this is a simple comma separated csv file stored on the ansible control machine defining the `ExitRelay` torrc setting for each tor instance (instead of server-wide)
     - first column: instance identifier (inventory_hostname-ip_orport)
     - second column: "exit" for exit tor instances, any other value (including empty) for non-exit tor instances
-    - this var is ignored if tor_ExitRelay is False
+    - this var is ignored if tor_ExitRelay is false
 
 * `tor_RelayBandwidthRate_file` filepath
     - this is a simple comma separated csv file stored on the ansible control machine defining the `RelayBandwidthRate` torrc setting for each tor instance (instead of server-wide)
@@ -260,7 +260,7 @@ All variables mentioned here are optional.
 
 * `tor_IPv6` boolean
     - autodetects if you have IPv6 IPs and enables an IPv6 ORPort accordingly
-    - you can opt-out by setting it to False
+    - you can opt-out by setting it to false
     - default: true
 
 * `tor_IPv6Exit` boolean
@@ -272,7 +272,7 @@ All variables mentioned here are optional.
     - if true enable tor's MetricsPort on the localhost IP address 127.0.0.1 and allow the same IP to access it (MetricsPortPolicy)
     - this is a relayor beta feature and will change in the future to use the safer [unix socket](https://gitlab.torproject.org/tpo/core/tor/-/issues/40192) option once that becomes available
     - enabling this setting automatically disables `OverloadStatistics` if it is not enabled explicitly (so tor will not publish/upload the data to directory authorities because we use MetricsPort locally)
-    - default: False
+    - default: false
 
 * `tor_prometheus_host` hostname
     - this variable is only relevant if `tor_enableMetricsPort` or `tor_blackbox_exporter_host` is set
@@ -411,7 +411,7 @@ All variables mentioned here are optional.
     - the path to the socket file(s) is /var/run/tor-instances/instance-id/control
     - this setting affects all instances on a given server
     - per instance configuration is not supported
-    - default: False
+    - default: false
 
 * `tor_freebsd_somaxconn` integer
     - configure kern.ipc.somaxconn on FreeBSD
