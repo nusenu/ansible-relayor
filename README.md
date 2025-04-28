@@ -380,7 +380,7 @@ All variables mentioned here are optional.
     - when this var is set to true, we create the htpasswd file that can be used by a webserver on the relay to protect tor's MetricsPort with HTTP basic auth
     - the file will be owned by root and readable by the webserver's group (www-data/www - depending on the OS)
     - we do NOT install the webserver, use another role for that.
-    - the password is [automatically generated](https://docs.ansible.com/ansible/2.9/plugins/lookup/password.html) and 20 characters long (each server gets a distinct password)
+    - the password is [automatically generated](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/password_lookup.html) and 20 characters long (each server gets a distinct password)
     - the path to the file on the relay is defined in `tor_metricsport_htpasswd_file`
     - the plaintext password is written to a file on the ansible control machine (see `tor_prometheus_scrape_password_folder`)
     - default: true
