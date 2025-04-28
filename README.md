@@ -228,7 +228,7 @@ All variables mentioned here are optional.
 
 * `tor_exit_notice_file` filepath
     - path to a HTML file on the control machine that you would like to display (via the DirPort) instead of the default [tor-exit-notice.html](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) provided by the Tor Project
-    - only relevant if we are an exit relay and if tor_ExitNoticePage is true
+    - only relevant if we are an exit relay and if `tor_ExitNoticePage` is true
 
 * `tor_AbuseEmailAddress` email-address
     - if set this email address is used on the tor exit notice [html page](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) published on the DirPort
