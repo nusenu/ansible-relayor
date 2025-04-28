@@ -146,6 +146,11 @@ All variables mentioned here are optional.
         - instance 1: ORPort 9000, DirPort 9001
         - instance 2: ORPort 9100, DirPort 9101
 
+* `tor_maxPublicIPs` integer
+    - Limits the amount of public IPs we will use to generate instances on a single host.
+    - Indirectly limits the amount of instances we generate per host.
+    - default: 1
+
 * `tor_offline_masterkey_dir` folderpath
     - default: ~/.tor/offlinemasterkeys
     - Defines the location where on the ansible control machine we store relay keys (Ed25519 and RSA)
@@ -252,11 +257,6 @@ All variables mentioned here are optional.
     - this can be combined with the `tor_ExitPolicy` setting and will override it (this is more specific)
     - only tor instances that you want to have a specific exit policy for are required to be listed in the file (others can be omitted)
     - default: not set
-
-* `tor_maxPublicIPs` integer
-    - Limits the amount of public IPs we will use to generate instances on a single host.
-    - Indirectly limits the amount of instances we generate per host.
-    - default: 1
 
 * `tor_IPv6` boolean
     - autodetects if you have IPv6 IPs and enables an IPv6 ORPort accordingly
