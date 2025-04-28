@@ -532,7 +532,7 @@ gem install test-kitchen kitchen-ansiblepush kitchen-vagrant
 
 List available test instances with `kitchen list`.
 
-Then you can run all tests or just select specific instances, for example: `kitchen test t-guard-debian-10`.
+Then you can run all tests or just select specific instances, for example: `kitchen test t-guard-debian-stable`.
 
 Note that to run tests, you also need Vagrant and VirtualBox.
 
