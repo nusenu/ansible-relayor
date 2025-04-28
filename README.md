@@ -274,7 +274,7 @@ All variables mentioned here are optional.
     - default: false
 
 * `tor_prometheus_host` hostname
-    - this variable is only relevant if `tor_enableMetricsPort` or `tor_blackbox_exporter_host` is set
+    - this variable is only relevant if `tor_enableMetricsPort` is `true` or `tor_blackbox_exporter_host` is set
     - if you want to enable relayor's prometheus integration you have to set this variable to your prometheus host
     - it defines on which host ansible should generate the prometheus scrape configuration to scrape tor's MetricsPort
     - this host must be available in ansible's inventory file
@@ -282,16 +282,16 @@ All variables mentioned here are optional.
 
 * `tor_prometheus_confd_folder` folderpath
     - only relevant if you want to use prometheus
-    - this folder most exist on `tor_prometheus_host`
+    - this folder must exist on `tor_prometheus_host`
     - relayor places prometheus scrape_configs in this folder
     - the prometheus global config must point to this folder (`scrape_config_files`)
-    - we generate one yml file per relay in this folder, for the filename see `tor_prometheus_scrape_file`
+    - we generate one yml file per server in this folder, for the filename see `tor_prometheus_scrape_file`
     - default: `/etc/prometheus/conf.d`
 
 * `tor_MetricsPort_offset` integer
     - defines the TCP MetricsPort used on the first tor instance running on a host
     - additional tor instances will use an incremented port number 33301, 33302, ...
-    - so if you run N instances on a host, the next N-1 ports after this port have to be unused on 127.0.0.1 so tor can use them for MetricsPort
+    - so if you run N instances on a host, the next N-1 ports after this port have to be unused on 127.0.0.1 so tor can use them as MetricsPorts
     - default: 33300
 
 * `tor_prometheus_scrape_file` filename
