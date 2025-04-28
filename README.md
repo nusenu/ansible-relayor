@@ -156,7 +156,7 @@ All variables mentioned here are optional.
 * `tor_nickname` string
     - defines the nickname tor instances will use
     - all tor instances on a host will get the same nickname
-    - to use the server's hostname as the nickname set it to {{ ansible_hostname }}
+    - to use the server's hostname as the nickname set it to `{{ ansible_hostname }}`
     - non-alphanum chars are automatically removed and nicknames longer than 19 characters are truncated to meet tor's nickname requirements
     - tor_nicknamefile overrules this setting
     - default: none
