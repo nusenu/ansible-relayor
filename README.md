@@ -60,7 +60,7 @@ Control Machine Requirements
 - python-netaddr package must be installed (ansible-utils version must be >= v4.0.0 if using netaddr >= v1.0.0. See [#245](https://github.com/nusenu/ansible-relayor/issues/245))
 - required commands: sort, uniq, wc, cut, sed, xargs
 - openssl >= 1.0.0
-- ansible >= 2.16.4
+- ansible >= 2.16.14
 - bash under /bin/bash
 
 Managed Node Requirements

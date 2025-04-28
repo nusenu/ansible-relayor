@@ -2,8 +2,8 @@
 - name: Check for min. ansible version requirement
   ansible.builtin.assert:
     that:
-      - ansible_version.full is version_compare('2.16.4', '>=')
-    msg: Your ansible version is too old, please upgrade to v2.16.4 or newer. Exiting.
+      - ansible_version.full is version_compare('2.16.14', '>=')
+    msg: Your ansible version is too old, please upgrade to v2.16.14 or newer. Exiting.
   run_once: true
   delegate_to: 127.0.0.1
   tags:
