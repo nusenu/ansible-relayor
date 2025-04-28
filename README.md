@@ -241,7 +241,7 @@ All variables mentioned here are optional.
     - specify your custom exit policy
     - only relevant if `tor_ExitRelay` is true
     - see defaults/main.yml for an example on how to set it
-    - default: reduced exit policy (https://trac.torproject.org/projects/tor/wiki/doc/ReducedExitPolicy)
+    - default: reduced exit policy (https://gitlab.torproject.org/legacy/trac/-/wikis/doc/ReducedExitPolicy)
 
 * `tor_ExitPolicy_file` filepath
     - this is a simple semicolon separated csv file stored on the ansible control machine defining the `ExitPolicy` torrc setting for each tor instance (instead of server-wide)
