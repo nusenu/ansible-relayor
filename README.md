@@ -425,12 +425,12 @@ All variables mentioned here are optional.
 
 * `tor_package_state` string
     - specify what package state the tor package should have
-    - possible values: present, latest (not supported on BSDs)
+    - possible values: present, latest (not supported on FreeBSD)
     - Note: The repository metadata is not updated, so setting this to latest does not give you any guarantees if it actually is the latest version.
     - default: present
 
 * `tor_binary` string
-    - name of the tor binary on the control machine used to generate the offline keys
+    - name of the tor binary on the control machine used to generate the offline and family keys
     - if the tor binary is not named "tor" on your control machine, you have to change the default (for example on Whonix workstations)
     - default: tor
 
@@ -439,12 +439,12 @@ All variables mentioned here are optional.
     - this will generate a happy family key and distribute it to all managed relays
     - enabling happy families will not disable the old MyFamily torrc option
     - requires tor version >=0.4.9.2-alpha on the control node and the relay
-    - temporary opt-in: future relayor releases will enable this by default and remove this setting
+    - **NOTE**: future relayor releases will enable happy families by default and ignore this setting when the happy families feature reaches a tor stable release
     - default: false
 
 * `tor_local_happy_family_folder` folderpath
     - specify the folderpath on the control machine where family keys are stored
-    - ensure this folder is not accessible to unauthorized parties as it contains a private key file.
+    - ensure this folder is not accessible to unauthorized parties as it contains the happy family private key file.
     - default: ~/.tor
 
 * `tor_happy_family_basename` filename
