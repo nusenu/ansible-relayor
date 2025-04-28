@@ -392,9 +392,10 @@ All variables mentioned here are optional.
 
 * `tor_prometheus_scrape_password_folder` folderpath
     - only relevant if `tor_enableMetricsPort` is true
-    - ansible will automatically generate one unique and random 20 character password per host (not per tor instance) to protect the MetricsPort via nginx (http auth)
+    - ansible will automatically generate one unique and random 20 character password per host (not per tor instance) to protect the MetricsPort via nginx (HTTP basic auth)
     - this variable defines the folder where ansible will store the passwords in plaintext (password lookup)
     - the filenames within that folder match the hostname (inventory_hostname) and can not be configured
+    - the passwords can easily be rotated by removing all files in this folder and rerunning ansible-playbook again
     - the variable must contain a trailing `/`
     - default: `~/.tor/prometheus/scrape-passwords/`
 
@@ -403,11 +404,11 @@ All variables mentioned here are optional.
     - default: 443
 
 * `tor_enableControlSocket` boolean
-    - if true create a ControlSocket file for every tor instance (i.e. to be used for nyx)
+    - if `true` create a ControlSocket file for every tor instance (i.e. to be used for nyx)
     - access control relies on filesystem permissions
     - to give a user access to a specific tor instance's controlsocket file you
     - have to add the user to the primary group of the tor instance
-    - the path to the socket file(s) is /var/run/tor-instances/instance-id/control
+    - the path to the socket file(s) is /var/run/tor-instances/$instance-id/control
     - this setting affects all instances on a given server
     - per instance configuration is not supported
     - default: false
