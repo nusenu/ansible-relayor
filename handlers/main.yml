@@ -92,3 +92,8 @@
   ansible.builtin.service:
     name: nginx
     state: reloaded
+
+- name: apt-get update
+  become: true
+  ansible.builtin.apt:
+    update_cache: true

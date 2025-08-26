@@ -79,7 +79,7 @@ Prometheus Server Requirements (only when using prometheus features of this role
 Supported Operating Systems
 ---------------------------
 
-- Debian 12
+- Debian 12 and 13
 - FreeBSD 14.2
 - Ubuntu 24.04
 

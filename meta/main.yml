@@ -7,6 +7,7 @@ galaxy_info:
   platforms:
     - name: Debian
       versions:
+        - trixie
         - bookworm
     - name: FreeBSD
       versions:

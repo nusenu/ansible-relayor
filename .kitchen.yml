@@ -7,6 +7,9 @@ driver:
 platforms:
   - name: debian-stable
     driver:
+      box: bento/debian-13
+  - name: debian-oldstable
+    driver:
       box: bento/debian-12
   - name: ubuntu-lts
     driver:
