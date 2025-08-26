@@ -3,7 +3,7 @@
   vars_files:
     - vars/dry-run-vars.yml
   vars:
-    - tor_maxPublicIPs: 2
-    - tor_ExitRelay: true
+    tor_maxPublicIPs: 2
+    tor_ExitRelay: true
   roles:
     - "{{ playbook_dir | regex_replace('test/integration/default$') }}"
