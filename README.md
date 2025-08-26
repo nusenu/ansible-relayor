@@ -80,7 +80,7 @@ Supported Operating Systems
 ---------------------------
 
 - Debian 12 and 13
-- FreeBSD 14.2
+- FreeBSD 14.3
 - Ubuntu 24.04
 
 Supported Tor Releases
