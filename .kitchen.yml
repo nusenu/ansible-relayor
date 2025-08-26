@@ -44,11 +44,6 @@ suites:
   - name: t-exit4
     provisioner:
       playbook: "test/integration/default/exit-node4.yml"
-  - name: t-guard-alpha
-    provisioner:
-      playbook: "test/integration/default/guard-alpha-node.yml"
-    excludes:
-      - freebsd
   - name: t-guard-nightly
     provisioner:
       playbook: "test/integration/default/guard-nightly-node.yml"
