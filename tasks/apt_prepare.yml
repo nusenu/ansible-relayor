@@ -10,15 +10,24 @@
 
 - ansible.builtin.meta: flush_handlers
 
+- name: Ensure torproject.org signing key is present (APT)
+  become: true
+  ansible.builtin.copy:
+    src: deb.torproject.org-keyring.gpg
+    dest: /usr/share/keyrings/deb.torproject.org-keyring.gpg
+    force: false
+    owner: root
+    mode: "0755"
+
 - name: Ensure torproject.org repository is present (APT)
   become: true
   ansible.builtin.deb822_repository:
-    name: deb.torproject.org-stable
+    name: deb-torproject-org-stable
     types: deb
     uris: https://deb.torproject.org/torproject.org
     suites: "{{ tor_distribution_release }}"
     components: main
-    signed_by: https://deb.torproject.org/torproject.org/A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc
+    signed_by: /usr/share/keyrings/deb.torproject.org-keyring.gpg
   notify:
     - apt-get update
 
@@ -31,12 +40,12 @@
 - name: Ensure torproject.org alpha/nightly repo is present if enabled (APT)
   become: true
   ansible.builtin.deb822_repository:
-    name: deb.torproject.org-unstable
+    name: deb-torproject-org-unstable
     types: deb
     uris: https://deb.torproject.org/torproject.org
     suites: "tor-{{ tor_alpha_version }}-{{ tor_distribution_release }}"
     components: main
-    signed_by: https://deb.torproject.org/torproject.org/A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc
+    signed_by: /usr/share/keyrings/deb.torproject.org-keyring.gpg
   when: tor_alpha
   notify:
     - apt-get update
