@@ -36,8 +36,7 @@ Main benefits for a tor relay operator
 - easily restore a relay setup (the ansible host becomes a backup location for all keys out of the box)
 - easily choose between exit relay/non-exit relay mode using a single boolean
 - automatic deployment of a [tor exit notice html](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) page via tor's DirPort (on exits only)
-- automatic MyFamily management
-- automatic Happy Families key management (requires tor version 0.4.9.2-alpha or newer)
+- automatic Happy Family management
 - **prometheus integration** (when enabled)
   - nginx reverse proxy config autogeneration to protect tor's MetricsPort (behind basic auth / HTTPS)
   - prometheus scrape config autogeneration for MetricsPort
@@ -56,7 +55,7 @@ Requirements
 Control Machine Requirements
 
 - do **not** run this role with `become: yes`
-- tor >= 0.4.8
+- tor version >= 0.4.9
 - python-netaddr package must be installed (ansible-utils version must be >= v4.0.0 if using netaddr >= v1.0.0. See [#245](https://github.com/nusenu/ansible-relayor/issues/245))
 - required commands: sort, uniq, wc, cut, sed, xargs
 - openssl >= 1.0.0
@@ -434,14 +433,6 @@ All variables mentioned here are optional.
     - if the tor binary is not named "tor" on your control machine, you have to change the default (for example on Whonix workstations)
     - default: tor
 
-* `tor_happy_family` boolean
-    - set to `true` to enable happy families
-    - this will generate a happy family key and distribute it to all managed relays
-    - enabling happy families will not disable the old MyFamily torrc option
-    - requires tor version >=0.4.9.2-alpha on the control node and the relay
-    - **NOTE**: future relayor releases will enable happy families by default and ignore this setting when the happy families feature reaches a tor stable release
-    - default: false
-
 * `tor_local_happy_family_folder` folderpath
     - specify the folderpath on the control machine where family keys are stored
     - ensure this folder is not accessible to unauthorized parties as it contains the happy family private key file.
@@ -482,17 +473,6 @@ Task oriented tags:
 * createdir - creates (empty) directories on the ansible host only, useful for migration
 * promconfig - regenerates prometheus related configs (scrape config, blackbox exporter, nginx)
 * reconfigure - regenerates config files (tor and promconfig) and reloads tor (requires previously configured tor instances)
-
-So if you have a big family and you are about to add an FreeBSD host you typically
-make two steps
-
-1. install the new server by running only against the new server (-l) and only the os specific tag (freebsd)
-
-    `ansible-playbook yourplaybook.yml -l newserver --tags freebsd`
-
-2. then reconfigure all servers (MyFamily) by running the 'reconfigure' tag against all servers.
-
-    `ansible-playbook yourplaybook.yml --tags reconfigure`
 
 Security Considerations
 ------------------------

@@ -18,7 +18,6 @@
     path: "{{ tor_local_happy_family_folder }}/{{ tor_happy_family_basename }}.secret_family_key"
   delegate_to: 127.0.0.1
   run_once: true
-  when: tor_happy_family
   register: tor_happy_family_stat
 
 - name: Ensure happy family key exists (LOCAL)
@@ -27,7 +26,7 @@
     "{{ tor_binary }}" --quiet --keygen-family "{{ tor_local_happy_family_folder }}/{{ tor_happy_family_basename }}"
   delegate_to: 127.0.0.1
   run_once: true
-  when: tor_happy_family and not tor_happy_family_stat.stat.exists
+  when: not tor_happy_family_stat.stat.exists
 
 - name: Check FamilyId presence (LOCAL)
   become: false
@@ -35,7 +34,6 @@
     path: "{{ tor_local_happy_family_folder }}/{{ tor_happy_family_basename }}.public_family_id"
   delegate_to: 127.0.0.1
   run_once: true
-  when: tor_happy_family
   register: tor_happy_family_publicid_stat
 
 - name: Ensure FamilyId public id file exists (LOCAL)
@@ -46,7 +44,6 @@
     msg: public_family_id file is missing, aborting!
   run_once: true
   delegate_to: 127.0.0.1
-  when: tor_happy_family
 
 - name: Ensure all relay keys exist (LOCAL)
   become: false
@@ -204,7 +201,6 @@
   with_nested:
     - "{{ tor_ips }}"
     - "{{ tor_ports }}"
-  when: tor_happy_family
 
 - name: Ensure RSA key is in place (without overriding existing keys)
   become: true
