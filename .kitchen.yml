@@ -49,6 +49,9 @@ suites:
       playbook: "test/integration/default/guard-nightly-node.yml"
     excludes:
       - freebsd
+  - name: t-guard-happy-families
+    provisioner:
+      playbook: "test/integration/default/guard-happy-families.yml"
   - name: t-guard-nightly-happy-families
     provisioner:
       playbook: "test/integration/default/guard-nightly-happy-families.yml"
