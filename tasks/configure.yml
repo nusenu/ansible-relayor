@@ -326,6 +326,19 @@
   tags:
     - reconfigure
 
+- name: Set fact tor_instances
+  ansible.builtin.set_fact:
+    tor_instances: >-
+      {%- set output = {} -%}
+      {%- for ips in tor_ips -%}
+      {%- for port in tor_ports -%}
+      {%- set instance_id_unqualified = ips.ipv4~'_'~port.orport -%}
+      {%- set instance_id_qualified = inventory_hostname~'-'~instance_id_unqualified -%}
+      {%- set _ = output.update({instance_id_qualified: { 'ipv4': ips.ipv4, 'ipv6': ips.ipv6, 'port': port, 'instance_id_unqualified': instance_id_unqualified}}) -%}
+      {%- endfor -%}
+      {%- endfor -%}
+      {{ output }}
+
 - name: Ensure prometheus per host scrape configs are in place
   become: true
   ansible.builtin.template:
