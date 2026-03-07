@@ -439,7 +439,9 @@ All variables mentioned here are optional.
     - default: ~/.tor
 
 * `tor_happy_family_basename` filename
-    - file basename of the .secret_family_key file
+    - file basename of the .secret_family_key and .public_family_id files
+    - the file is generated on the control machine in the folder specified in var `tor_local_happy_family_folder` and then copied to every tor instance
+    - by removing the file on the control machine (manually) you can rotate the happy family key
     - default: happyfamily
 
 Prometheus Labels
