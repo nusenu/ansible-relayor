@@ -23,7 +23,7 @@
 - name: Ensure happy family key exists (LOCAL)
   become: false
   ansible.builtin.command: >
-    "{{ tor_binary }}" --quiet --keygen-family "{{ tor_local_happy_family_folder }}/{{ tor_happy_family_basename }}"
+    "{{ tor_binary }}" --quiet --ignore-missing-torrc -f /dev/null --keygen-family "{{ tor_local_happy_family_folder }}/{{ tor_happy_family_basename }}"
   delegate_to: 127.0.0.1
   run_once: true
   when: not tor_happy_family_stat.stat.exists
