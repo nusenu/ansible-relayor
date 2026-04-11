@@ -18,6 +18,9 @@
   with_nested:
     - "{{ tor_ips }}"
     - "{{ tor_ports }}"
+  loop_control:
+    index_var: idx
+    break_when: idx+1 == tor_instance_limit
 
 - name: Ensure Tor instances are enabled and started (OpenBSD)
   become: true
@@ -29,3 +32,6 @@
   with_nested:
     - "{{ tor_ips }}"
     - "{{ tor_ports }}"
+  loop_control:
+    index_var: idx
+    break_when: idx+1 == tor_instance_limit

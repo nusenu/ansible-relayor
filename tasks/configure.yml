@@ -9,6 +9,9 @@
   with_nested:
     - "{{ tor_ips }}"
     - "{{ tor_ports }}"
+  loop_control:
+    index_var: idx
+    break_when: idx+1 == tor_instance_limit
   tags:
     - createdir
 
@@ -55,6 +58,9 @@
   with_nested:
     - "{{ tor_ips }}"
     - "{{ tor_ports }}"
+  loop_control:
+    index_var: idx
+    break_when: idx+1 == tor_instance_limit
   changed_when: false
 
 - name: Generate new Ed25519 signing keys (LOCAL)
@@ -67,6 +73,9 @@
   with_nested:
     - "{{ tor_ips }}"
     - "{{ tor_ports }}"
+  loop_control:
+    index_var: idx
+    break_when: idx+1 == tor_instance_limit
   tags:
     - renewkey
   changed_when: false
@@ -98,6 +107,9 @@
   with_nested:
     - "{{ tor_ips }}"
     - "{{ tor_ports }}"
+  loop_control:
+    index_var: idx
+    break_when: idx+1 == tor_instance_limit
 
 - name: Abort if Ed25519 master keys are on the relay
   ansible.builtin.fail:
@@ -132,6 +144,9 @@
   with_nested:
     - "{{ tor_ips }}"
     - "{{ tor_ports }}"
+  loop_control:
+    index_var: idx
+    break_when: idx+1 == tor_instance_limit
 
 # We only need to create this folder (used for ControlSocket and on FreeBSD for the pidfile) on:
 # - FreeBSD (regardless of tor_enableControlSocket)
@@ -157,6 +172,9 @@
   with_nested:
     - "{{ tor_ips }}"
     - "{{ tor_ports }}"
+  loop_control:
+    index_var: idx
+    break_when: idx+1 == tor_instance_limit
   when: ansible_system == 'FreeBSD' or (tor_enableControlSocket and (ansible_system == 'OpenBSD' or ansible_os_family == 'RedHat'))
 
 - name: Ensure per-instance config folders exist (Debian only)
@@ -168,6 +186,9 @@
   with_nested:
     - "{{ tor_ips }}"
     - "{{ tor_ports }}"
+  loop_control:
+    index_var: idx
+    break_when: idx+1 == tor_instance_limit
   when: ansible_pkg_mgr == 'apt'
 
 - name: Ensure DataDir exists
@@ -190,6 +211,9 @@
   with_nested:
     - "{{ tor_ips }}"
     - "{{ tor_ports }}"
+  loop_control:
+    index_var: idx
+    break_when: idx+1 == tor_instance_limit
 
 - name: Ensure happy family key is in place
   become: true
@@ -201,6 +225,9 @@
   with_nested:
     - "{{ tor_ips }}"
     - "{{ tor_ports }}"
+  loop_control:
+    index_var: idx
+    break_when: idx+1 == tor_instance_limit
 
 - name: Ensure RSA key is in place (without overriding existing keys)
   become: true
@@ -214,6 +241,9 @@
     - "{{ tor_ips }}"
     - "{{ tor_ports }}"
     - [secret_id_key]
+  loop_control:
+    index_var: idx
+    break_when: idx+1 == tor_instance_limit
 
 - name: Fetch RSA key for comparison
   become: true
@@ -225,6 +255,9 @@
     - "{{ tor_ips }}"
     - "{{ tor_ports }}"
     - [secret_id_key]
+  loop_control:
+    index_var: idx
+    break_when: idx+1 == tor_instance_limit
 
 - name: Compare local vs. remote RSA key (secret_id_key)
   become: false
@@ -238,6 +271,9 @@
   with_nested:
     - "{{ tor_ips }}"
     - "{{ tor_ports }}"
+  loop_control:
+    index_var: idx
+    break_when: idx+1 == tor_instance_limit
   register: tor_rsakey_match
   changed_when: false
 
@@ -263,6 +299,9 @@
     - "{{ tor_ips }}"
     - "{{ tor_ports }}"
     - [ed25519_signing_cert, ed25519_signing_secret_key]
+  loop_control:
+    index_var: idx
+    break_when: idx+1 == tor_instance_limit * 2
   changed_when: false
   tags:
     - renewkey
@@ -281,6 +320,9 @@
   with_nested:
     - "{{ tor_ips }}"
     - "{{ tor_ports }}"
+  loop_control:
+    index_var: idx
+    break_when: idx+1 == tor_instance_limit
 
 - name: Ensure Tor config directory exists
   become: true
@@ -319,6 +361,7 @@
   register: tor_instances_tmp
   loop_control:
     index_var: loop_idx
+    break_when: loop_idx+1 == tor_instance_limit
   notify:
     - Ensure Tor instances are restarted if its torrc changed (FreeBSD)
     - Ensure Tor instances are restarted if its torrc changed (Linux)

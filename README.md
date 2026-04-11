@@ -150,6 +150,10 @@ All variables mentioned here are optional.
     - Indirectly limits the amount of instances we generate per host.
     - default: 1
 
+* `tor_instance_limit` integer
+    - This var allows you to set an upper limit on how many tor instances are deployed on a server.
+    - default: 2
+
 * `tor_offline_masterkey_dir` folderpath
     - default: ~/.tor/offlinemasterkeys
     - Defines the location where on the ansible control machine we store relay keys (Ed25519 and RSA)
