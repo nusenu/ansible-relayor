@@ -1,7 +1,11 @@
 {% if tor_enableMetricsPort %}
+scrape_configs:
 {% set c = namespace(i=0) %}
 {% for ip in tor_ips %}
 {% for port in tor_ports %}
+{% if c.i == tor_instance_limit %}
+{% break %}
+{% endif %}
   - job_name: 'tor-{{ansible_fqdn}}-{{c.i}}'
     metrics_path: '/{{ lookup('password', '~/.tor/prometheus/metrics_path/' + inventory_hostname + ' length=10 chars=ascii_lowercase') }}/{{c.i}}'
     scheme: 'https'
@@ -44,8 +48,12 @@
       module: [tcp_connect]
     static_configs:
       - targets:
+{% set d = namespace(i=0) %}
 {% for ip in tor_ips %}
 {% for port in tor_ports %}
+{% if d.i == tor_instance_limit %}
+{% break %}
+{% endif %}
         - {{ ip.ipv4 }}:{{ port.orport }}
 {% if port.dirport != 0 %}
         - {{ ip.ipv4 }}:{{ port.dirport }}
@@ -56,6 +64,7 @@
         - "[{{ ip.ipv6 }}]:{{ port.dirport }}"
 {% endif %}
 {% endif %}
+{% set d.i = d.i + 1 %}
 {% endfor %}
 {% endfor %}
     relabel_configs:

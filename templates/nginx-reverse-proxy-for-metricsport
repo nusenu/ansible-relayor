@@ -4,6 +4,9 @@ location /{{ lookup('password', '~/.tor/prometheus/metrics_path/' + inventory_ho
 {% set c = namespace(i=0) %}
 {% for ip in tor_ips %}
 {% for port in tor_ports %}
+{% if c.i == tor_instance_limit %}
+{% break %}
+{% endif %}
 location /{{ lookup('password', '~/.tor/prometheus/metrics_path/' + inventory_hostname + ' length=10 chars=ascii_lowercase') }}/{{c.i}} {
 	proxy_pass http://127.0.0.1:{{tor_MetricsPort_offset + c.i}}/metrics;
 }
