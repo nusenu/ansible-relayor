@@ -3,7 +3,6 @@
   vars_files:
     - vars/dry-run-vars.yml
   vars:
-    tor_maxPublicIPs: 2
     tor_instance_limit: 8
     tor_enableMetricsPort: true
     tor_metricsport_nginx_config_file: /tmp/web-reverse-proxy-{{ inventory_hostname }}

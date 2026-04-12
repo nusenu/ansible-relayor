@@ -12,7 +12,7 @@ no further manual configuration is required.
 
 This role only manages tor instances as per the current settings and variables.
 If you change the configuration after a complete playbook run, to reduce the number of tor instances, for example by
-reducing the value of `tor_maxPublicIPs`, this role will not remove the previously configured tor instances
+reducing the value of `tor_instance_limit`, this role will not remove the previously configured tor instances
 from your server. Tor instances on a server are identified by their IPv4 and ORPort combination.
 Changing the ORPort (using the `tor_ports` variable) after initial rollout, effectively means creating new
 tor instances (not changing them), this is the reason why changing the `tor_ports` variable should be avoided after the initial rollout.
@@ -144,11 +144,6 @@ All variables mentioned here are optional.
     - default:
         - instance 1: ORPort 9000, DirPort 9001
         - instance 2: ORPort 9100, DirPort 9101
-
-* `tor_maxPublicIPs` integer
-    - Limits the amount of public IPs we will use to generate instances on a single host.
-    - Indirectly limits the amount of instances we generate per host.
-    - default: 1
 
 * `tor_instance_limit` integer
     - This var allows you to set an upper limit on how many tor instances are deployed on a server.
