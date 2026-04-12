@@ -2,15 +2,12 @@
 driver:
   name: vagrant
   customize:
-    memory: 512
+    memory: 768
 
 platforms:
   - name: debian-stable
     driver:
       box: bento/debian-13
-  - name: debian-oldstable
-    driver:
-      box: bento/debian-12
   - name: ubuntu-lts
     driver:
       box: bento/ubuntu-24.04
