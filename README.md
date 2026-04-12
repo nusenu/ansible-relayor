@@ -61,6 +61,11 @@ Control Machine Requirements
 - openssl >= 1.0.0
 - ansible 2.18.x
 - bash under /bin/bash
+- Jinja2 loopcontrol extension must be enabled, in ansible.cfg:
+
+```
+jinja2_extensions = jinja2.ext.do,jinja2.ext.i18n,jinja2.ext.loopcontrols
+```
 
 Managed Node Requirements
 
