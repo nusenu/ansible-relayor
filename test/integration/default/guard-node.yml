@@ -2,5 +2,7 @@
 - hosts: all
   vars_files:
     - vars/dry-run-vars.yml
+  vars:
+    tor_gen_ciiss_proof_files: True
   roles:
     - "{{ playbook_dir | regex_replace('test/integration/default$') }}"
