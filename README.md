@@ -147,6 +147,8 @@ All variables mentioned here are optional.
 
 * `tor_instance_limit` integer
     - This var allows you to set an upper limit on how many tor instances are deployed on a server.
+    - The number of actually deployed tor instances also depends on the amount of ORPorts in `tor_ports` and the amount of public IPv4 addresses on the server.
+    - If `tor_instance_limit` is larger than `tor_ports` * public IPv4 addresses, the actual deployed instance count remains below the limit.
     - default: 2
 
 * `tor_offline_masterkey_dir` folderpath
