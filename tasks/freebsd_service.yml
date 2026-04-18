@@ -8,13 +8,11 @@
   become: true
   ansible.builtin.lineinfile:
     dest: /etc/rc.conf
-    line: tor_instances="${tor_instances} {{ item.0.ipv4 }}_{{ item.1.orport }}:{{ tor_ConfDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}.torrc:root:root:{{ tor_PidDir
-      }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/pid:{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}"
+    line: tor_instances="${tor_instances} {{ item.ipv4 }}_{{ item.orport }}:{{ tor_ConfDir }}/{{ item.ipv4 }}_{{ item.orport }}.torrc:root:root:{{ tor_PidDir
+      }}/{{ item.ipv4 }}_{{ item.orport }}/pid:{{ tor_DataDir }}/{{ item.ipv4 }}_{{ item.orport }}"
     create: true
     mode: "0644"
-  with_nested:
-    - "{{ tor_ips }}"
-    - "{{ tor_ports }}"
+  loop: "{{ tor_instances }}"
 
 # this task is a workaround, because 'service tor status'
 # fails if this line is not present (which in turn fails the ansible service module)

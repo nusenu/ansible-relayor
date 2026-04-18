@@ -42,7 +42,7 @@
 - name: Ensure Tor instances are restarted if its torrc changed (Linux)
   become: true
   ansible.builtin.service:
-    name: tor@{{ item.item.0.ipv4 }}_{{ item.item.1.orport }}.service
+    name: tor@{{ item.item.ipv4 }}_{{ item.item.orport }}.service
     state: restarted
   with_items: "{{ tor_instances_tmp.results }}"
   when: item.changed and ansible_system == 'Linux'
@@ -50,7 +50,7 @@
 - name: Ensure Tor instances are restarted if its torrc changed (OpenBSD)
   become: true
   ansible.builtin.service:
-    name: tor{{ item.item.0.ipv4|replace('.','_') }}_{{ item.item.1.orport }}
+    name: tor{{ item.item.ipv4|replace('.','_') }}_{{ item.item.orport }}
     state: restarted
   with_items: "{{ tor_instances_tmp.results }}"
   when: item.changed and ansible_system == 'OpenBSD'
@@ -67,7 +67,7 @@
 - name: Ensure Tor instances are reloaded if tor-exit-notice.html changed (Linux)
   become: true
   ansible.builtin.service:
-    name: tor@{{ item.item.0.ipv4 }}_{{ item.item.1.orport }}.service
+    name: tor@{{ item.item.ipv4 }}_{{ item.item.orport }}.service
     state: reloaded
   with_items: "{{ tor_instances_tmp.results }}"
   when: ansible_system == 'Linux'
@@ -75,7 +75,7 @@
 - name: Ensure Tor instances are reloaded if tor-exit-notice.html changed (OpenBSD)
   become: true
   ansible.builtin.service:
-    name: tor{{ item.item.0.ipv4|replace('.','_') }}_{{ item.item.1.orport }}
+    name: tor{{ item.item.ipv4|replace('.','_') }}_{{ item.item.orport }}
     state: reloaded
   with_items: "{{ tor_instances_tmp.results }}"
   when: ansible_system == 'OpenBSD'

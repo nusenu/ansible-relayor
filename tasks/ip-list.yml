@@ -16,3 +16,15 @@
 - name: Setup IP list (2/2)
   ansible.builtin.set_fact:
     tor_ips: "{{ tor_ipsinterm.results | map(attribute='ansible_facts.ips') | list }}"
+
+- name: Setup tor instance list (1/2)
+  ansible.builtin.set_fact:
+    tor_instances_interm: "{{ tor_ips | product(tor_ports) | map('combine') | sort(attribute='ipv4') }}"
+
+- name: Setup tor instance list (2/2)
+  ansible.builtin.set_fact:
+    tor_instances: "{{tor_instances_interm[0:tor_instance_limit] }}"
+
+- name: Display actual tor instance count
+  debug:
+    msg: "relayor will manage {{tor_instances_interm[0:tor_instance_limit]|length }} tor instances on this server."

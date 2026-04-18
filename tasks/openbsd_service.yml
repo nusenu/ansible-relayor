@@ -14,18 +14,14 @@
   ansible.builtin.file:
     src: /etc/rc.d/tor
     state: link
-    path: /etc/rc.d/tor{{ item.0.ipv4| replace('.','_') }}_{{ item.1.orport }}
-  with_nested:
-    - "{{ tor_ips }}"
-    - "{{ tor_ports }}"
+    path: /etc/rc.d/tor{{ item.ipv4| replace('.','_') }}_{{ item.orport }}
+  loop: "{{ tor_instances }}"
 
 - name: Ensure Tor instances are enabled and started (OpenBSD)
   become: true
   ansible.builtin.service:
-    name: tor{{ item.0.ipv4|replace('.','_') }}_{{ item.1.orport }}
-    arguments: -f {{ tor_ConfDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}.torrc
+    name: tor{{ item.ipv4|replace('.','_') }}_{{ item.orport }}
+    arguments: -f {{ tor_ConfDir }}/{{ item.ipv4 }}_{{ item.orport }}.torrc
     enabled: true
     state: started
-  with_nested:
-    - "{{ tor_ips }}"
-    - "{{ tor_ports }}"
+  loop: "{{ tor_instances }}"

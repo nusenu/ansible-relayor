@@ -5,9 +5,7 @@
 - name: Ensure Tor instances are enabled and started (Linux/systemd)
   become: true
   ansible.builtin.service:
-    name: tor@{{ item.0.ipv4 }}_{{ item.1.orport }}.service
+    name: tor@{{ item.ipv4 }}_{{ item.orport }}.service
     enabled: true
     state: started
-  with_nested:
-    - "{{ tor_ips }}"
-    - "{{ tor_ports }}"
+  loop: "{{ tor_instances }}"

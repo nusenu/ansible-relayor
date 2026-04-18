@@ -28,12 +28,9 @@ tor_ports:
   - orport: 9100
     dirport: 9101
 
-
-# Limit the amount of used IP addresses
-# by default to 1, this limits the amount
-# of generated Tor instances to 2 per host.
-# Specifying tor_ips overwrites this limitation.
-tor_maxPublicIPs: 1
+# Limit the amount of tor instances
+# to 2 per server by default
+tor_instance_limit: 2
 
 # We only use a single private IP by default since
 # we can not reliably tell whether we are NATed
@@ -87,7 +84,7 @@ tor_signingkeylifetime_days: 30
 tor_distribution_release: "{{ ansible_lsb.codename }}"
 
 tor_available_public_ipv4s: "{{ ansible_all_ipv4_addresses |  ansible.utils.ipv4('address') | ansible.utils.ipaddr('public') }}"
-tor_v4ips: "{{ tor_available_public_ipv4s[0:tor_maxPublicIPs] }}"
+tor_v4ips: "{{ tor_available_public_ipv4s }}"
 tor_ipv4_count: "{{ tor_v4ips | length | int }}"
 
 tor_available_public_ipv6s: "{{ ansible_all_ipv6_addresses| ansible.utils.ipv6('address') | ansible.utils.ipaddr('public') }}"

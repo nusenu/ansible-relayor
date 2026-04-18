@@ -4,28 +4,28 @@
 OfflineMasterKey 1
 RunAsDaemon {{ tor_RunAsDaemon }}
 Log {{ tor_LogLevel }} syslog
-OutboundBindAddress {{ item.0.ipv4 }}
+OutboundBindAddress {{ item.ipv4 }}
 SocksPort 0
-User _tor-{{ item.0.ipv4 }}_{{ item.1.orport }}
-DataDirectory {{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}
-ORPort {{ item.0.ipv4 }}:{{ item.1.orport }}
-{% if item.0.ipv6 != "" and item.0.ipv6 != "False" and tor_IPv6 == True %}
-ORPort [{{item.0.ipv6}}]:{{item.1.orport}}
-OutboundBindAddress [{{item.0.ipv6}}]
+User _tor-{{ item.ipv4 }}_{{ item.orport }}
+DataDirectory {{ tor_DataDir }}/{{ item.ipv4 }}_{{ item.orport }}
+ORPort {{ item.ipv4 }}:{{ item.orport }}
+{% if item.ipv6 != "" and item.ipv6 != "False" and tor_IPv6 == True %}
+ORPort [{{item.ipv6}}]:{{item.orport}}
+OutboundBindAddress [{{item.ipv6}}]
 {% endif %}
 
-{% if item.1.dirport != 0 %}
-DirPort {{ item.0.ipv4 }}:{{ item.1.dirport }}
+{% if item.dirport != 0 %}
+DirPort {{ item.ipv4 }}:{{ item.dirport }}
 {% endif %}
 {% if tor_Address is defined %}
 Address {{ tor_Address }}
-{% elif tor_maxPublicIPs > 1 and tor_available_public_ipv4s|length > 1 %}
-Address {{ item.0.ipv4 }}
+{% elif tor_available_public_ipv4s|length > 1 %}
+Address {{ item.ipv4 }}
 {% endif %}
 
-SyslogIdentityTag {{ item.0.ipv4 }}_{{ item.1.orport }}
+SyslogIdentityTag {{ item.ipv4 }}_{{ item.orport }}
 {% if ansible_os_family == 'FreeBSD' %}
-PidFile {{ tor_PidDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/pid
+PidFile {{ tor_PidDir }}/{{ item.ipv4 }}_{{ item.orport }}/pid
 {% endif %}
 
 {% if tor_enableMetricsPort %}
@@ -37,14 +37,14 @@ OverloadStatistics 0
 {% endif %}
 
 {% if tor_enableControlSocket %}
-ControlSocket {{ tor_PidDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/control GroupWritable RelaxDirModeCheck
+ControlSocket {{ tor_PidDir }}/{{ item.ipv4 }}_{{ item.orport }}/control GroupWritable RelaxDirModeCheck
 {% elif tor_enableControlSocket == False and ansible_pkg_mgr == 'apt' %}
 ControlSocket 0
 CookieAuthentication 0
 {% endif %}
 
 {% if tor_nicknamefile is defined %}
-Nickname {{ lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orport~' file='~tor_nicknamefile~' delimiter=,') |regex_replace('[^a-zA-Z0-9]', '') |truncate(19, True, '')}}
+Nickname {{ lookup('csvfile', inventory_hostname~'-'~item.ipv4~'_'~item.orport~' file='~tor_nicknamefile~' delimiter=,') |regex_replace('[^a-zA-Z0-9]', '') |truncate(19, True, '')}}
 {% elif tor_nickname is defined %}
 Nickname {{ tor_nickname |regex_replace('[^a-zA-Z0-9]', '') |truncate(19, True, '') }}
 {% endif %}
@@ -52,21 +52,21 @@ Nickname {{ tor_nickname |regex_replace('[^a-zA-Z0-9]', '') |truncate(19, True, 
 ContactInfo {{ tor_ContactInfo }}
 {% endif %}
 
-{% if ((tor_ExitRelay == True and tor_ExitRelaySetting_file is not defined) or (tor_ExitRelay == True and tor_ExitRelaySetting_file is defined and (lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orport~' file='~tor_ExitRelaySetting_file~' delimiter=,') == "exit"))) %}
+{% if ((tor_ExitRelay == True and tor_ExitRelaySetting_file is not defined) or (tor_ExitRelay == True and tor_ExitRelaySetting_file is defined and (lookup('csvfile', inventory_hostname~'-'~item.ipv4~'_'~item.orport~' file='~tor_ExitRelaySetting_file~' delimiter=,') == "exit"))) %}
 # we are an exit relay!
 ExitRelay 1
-{% if item.0.ipv6 != "" and item.0.ipv6 != "False" and tor_IPv6 == True and tor_IPv6Exit == True %}
+{% if item.ipv6 != "" and item.ipv6 != "False" and tor_IPv6 == True and tor_IPv6Exit == True %}
 IPv6Exit 1
-{% if item.1.dirport != 0 %}
-DirPort [{{ item.0.ipv6 }}]:{{ item.1.dirport }} NoAdvertise
+{% if item.dirport != 0 %}
+DirPort [{{ item.ipv6 }}]:{{ item.dirport }} NoAdvertise
 {% endif %}
 {% endif %}
 {% if tor_ExitNoticePage == True and tor_config.DirPortFrontPage is not defined %}
 DirPortFrontPage {{ tor_ConfDir }}/tor-exit-notice.html
 {% endif %}
 
-{% if tor_ExitPolicy_file is defined and (lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orport~' file='~tor_ExitPolicy_file~' delimiter=;') != [])  %}
-ExitPolicy {{ lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orport~' file='~tor_ExitPolicy_file~' delimiter=;') }}
+{% if tor_ExitPolicy_file is defined and (lookup('csvfile', inventory_hostname~'-'~item.ipv4~'_'~item.orport~' file='~tor_ExitPolicy_file~' delimiter=;') != [])  %}
+ExitPolicy {{ lookup('csvfile', inventory_hostname~'-'~item.ipv4~'_'~item.orport~' file='~tor_ExitPolicy_file~' delimiter=;') }}
 {% else %}
 {% for entry in tor_ExitPolicy %}
 ExitPolicy {{entry}}
@@ -77,13 +77,13 @@ ExitRelay 0
 ExitPolicy reject *:*
 {% endif %}
 
-{% if tor_RelayBandwidthRate_file is defined and (lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orport~' file='~tor_RelayBandwidthRate_file~' delimiter=,') != "") %}
-RelayBandwidthRate {{ lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orport~' file='~tor_RelayBandwidthRate_file~' delimiter=,') }}
+{% if tor_RelayBandwidthRate_file is defined and (lookup('csvfile', inventory_hostname~'-'~item.ipv4~'_'~item.orport~' file='~tor_RelayBandwidthRate_file~' delimiter=,') != "") %}
+RelayBandwidthRate {{ lookup('csvfile', inventory_hostname~'-'~item.ipv4~'_'~item.orport~' file='~tor_RelayBandwidthRate_file~' delimiter=,') }}
 {% elif tor_RelayBandwidthRate is defined %}
 RelayBandwidthRate {{ tor_RelayBandwidthRate }}
 {% endif %}
-{% if tor_RelayBandwidthBurst_file is defined and (lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orport~' file='~tor_RelayBandwidthBurst_file~' delimiter=,') != "") %}
-RelayBandwidthBurst {{ lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orport~' file='~tor_RelayBandwidthBurst_file~' delimiter=,') }}
+{% if tor_RelayBandwidthBurst_file is defined and (lookup('csvfile', inventory_hostname~'-'~item.ipv4~'_'~item.orport~' file='~tor_RelayBandwidthBurst_file~' delimiter=,') != "") %}
+RelayBandwidthBurst {{ lookup('csvfile', inventory_hostname~'-'~item.ipv4~'_'~item.orport~' file='~tor_RelayBandwidthBurst_file~' delimiter=,') }}
 {% elif tor_RelayBandwidthBurst is defined %}
 RelayBandwidthBurst {{ tor_RelayBandwidthBurst }}
 {% endif %}

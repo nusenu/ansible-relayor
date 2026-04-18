@@ -2,13 +2,11 @@
 - name: Ensure local DataDir folders exist (LOCAL)
   become: false
   ansible.builtin.file:
-    path: "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}"
+    path: "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.ipv4 }}_{{ item.orport }}"
     state: directory
     mode: "0700"
   delegate_to: 127.0.0.1
-  with_nested:
-    - "{{ tor_ips }}"
-    - "{{ tor_ports }}"
+  loop: "{{ tor_instances }}"
   tags:
     - createdir
 
@@ -50,11 +48,9 @@
   ansible.builtin.command: >
     "{{ tor_binary }}" --list-fingerprint --DisableNetwork 1 --orport auto --PublishServerDescriptor 0 --ExitRelay 0
     --ignore-missing-torrc -f /dev/null --defaults-torrc /dev/null --Log "err stdout"
-    --datadirectory "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}"
+    --datadirectory "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.ipv4 }}_{{ item.orport }}"
   delegate_to: 127.0.0.1
-  with_nested:
-    - "{{ tor_ips }}"
-    - "{{ tor_ports }}"
+  loop: "{{ tor_instances }}"
   changed_when: false
 
 - name: Generate new Ed25519 signing keys (LOCAL)
@@ -62,11 +58,9 @@
   ansible.builtin.command: >
     "{{ tor_binary }}" --keygen --SigningKeyLifetime {{ tor_signingkeylifetime_days }}\ days --ignore-missing-torrc -f /dev/null
     --defaults-torrc /dev/null --Log "err stdout"
-    --datadirectory "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}"
+    --datadirectory "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.ipv4 }}_{{ item.orport }}"
   delegate_to: 127.0.0.1
-  with_nested:
-    - "{{ tor_ips }}"
-    - "{{ tor_ports }}"
+  loop: "{{ tor_instances }}"
   tags:
     - renewkey
   changed_when: false
@@ -93,11 +87,9 @@
 - name: Detect if Ed25519 master keys are on the relay
   become: true
   ansible.builtin.stat:
-    path: "{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/ed25519_master_id_secret_key"
+    path: "{{ tor_DataDir }}/{{ item.ipv4 }}_{{ item.orport }}/keys/ed25519_master_id_secret_key"
   register: tor_masterkeyonline
-  with_nested:
-    - "{{ tor_ips }}"
-    - "{{ tor_ports }}"
+  loop: "{{ tor_instances }}"
 
 - name: Abort if Ed25519 master keys are on the relay
   ansible.builtin.fail:
@@ -124,14 +116,12 @@
 - name: Ensure per-instance tor users exist
   become: true
   ansible.builtin.user:
-    name: _tor-{{ item.0.ipv4 }}_{{ item.1.orport }}
+    name: _tor-{{ item.ipv4 }}_{{ item.orport }}
     system: true
     shell: /bin/false
     create_home: true
-    home: "{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}"
-  with_nested:
-    - "{{ tor_ips }}"
-    - "{{ tor_ports }}"
+    home: "{{ tor_DataDir }}/{{ item.ipv4 }}_{{ item.orport }}"
+  loop: "{{ tor_instances }}"
 
 # We only need to create this folder (used for ControlSocket and on FreeBSD for the pidfile) on:
 # - FreeBSD (regardless of tor_enableControlSocket)
@@ -149,25 +139,21 @@
 - name: Ensure PID/ControlSocket directory is owned by per-instance tor user
   become: true
   ansible.builtin.file:
-    path: "{{ tor_PidDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}"
+    path: "{{ tor_PidDir }}/{{ item.ipv4 }}_{{ item.orport }}"
     state: directory
-    owner: _tor-{{ item.0.ipv4 }}_{{ item.1.orport }}
-    group: _tor-{{ item.0.ipv4 }}_{{ item.1.orport }}
+    owner: _tor-{{ item.ipv4 }}_{{ item.orport }}
+    group: _tor-{{ item.ipv4 }}_{{ item.orport }}
     mode: "0750"
-  with_nested:
-    - "{{ tor_ips }}"
-    - "{{ tor_ports }}"
+  loop: "{{ tor_instances }}"
   when: ansible_system == 'FreeBSD' or (tor_enableControlSocket and (ansible_system == 'OpenBSD' or ansible_os_family == 'RedHat'))
 
 - name: Ensure per-instance config folders exist (Debian only)
   become: true
   ansible.builtin.file:
-    path: "{{ tor_ConfDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}"
+    path: "{{ tor_ConfDir }}/{{ item.ipv4 }}_{{ item.orport }}"
     state: directory
     mode: "0755"
-  with_nested:
-    - "{{ tor_ips }}"
-    - "{{ tor_ports }}"
+  loop: "{{ tor_instances }}"
   when: ansible_pkg_mgr == 'apt'
 
 - name: Ensure DataDir exists
@@ -181,63 +167,55 @@
 - name: Ensure "keys" subfolder exists
   become: true
   ansible.builtin.file:
-    path: "{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/keys"
+    path: "{{ tor_DataDir }}/{{ item.ipv4 }}_{{ item.orport }}/keys"
     state: directory
-    owner: _tor-{{ item.0.ipv4 }}_{{ item.1.orport }}
-    group: _tor-{{ item.0.ipv4 }}_{{ item.1.orport }}
+    owner: _tor-{{ item.ipv4 }}_{{ item.orport }}
+    group: _tor-{{ item.ipv4 }}_{{ item.orport }}
     mode: u=rwX,g=,o=
     recurse: true
-  with_nested:
-    - "{{ tor_ips }}"
-    - "{{ tor_ports }}"
+  loop: "{{ tor_instances }}"
 
 - name: Ensure happy family key is in place
   become: true
   ansible.builtin.copy:
     src: "{{ tor_local_happy_family_folder }}/{{ tor_happy_family_basename }}.secret_family_key"
-    dest: "{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ tor_happy_family_basename }}.secret_family_key"
-    owner: _tor-{{ item.0.ipv4 }}_{{ item.1.orport }}
+    dest: "{{ tor_DataDir }}/{{ item.ipv4 }}_{{ item.orport }}/keys/{{ tor_happy_family_basename }}.secret_family_key"
+    owner: _tor-{{ item.ipv4 }}_{{ item.orport }}
     mode: "0600"
-  with_nested:
-    - "{{ tor_ips }}"
-    - "{{ tor_ports }}"
+  loop: "{{ tor_instances }}"
 
 - name: Ensure RSA key is in place (without overriding existing keys)
   become: true
   ansible.builtin.copy:
-    src: "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}"
-    dest: "{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}"
-    owner: _tor-{{ item.0.ipv4 }}_{{ item.1.orport }}
+    src: "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.0.orport }}/keys/{{ item[1] }}"
+    dest: "{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.0.orport }}/keys/{{ item[1] }}"
+    owner: _tor-{{ item.0.ipv4 }}_{{ item.0.orport }}
     mode: "0600"
     force: false
   with_nested:
-    - "{{ tor_ips }}"
-    - "{{ tor_ports }}"
+    - "{{ tor_instances }}"
     - [secret_id_key]
 
 - name: Fetch RSA key for comparison
   become: true
   ansible.builtin.fetch:
-    src: "{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}"
-    dest: "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}.untrustedremotekey"
+    src: "{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.0.orport }}/keys/{{ item[1] }}"
+    dest: "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.0.orport }}/keys/{{ item[1] }}.untrustedremotekey"
     flat: true
   with_nested:
-    - "{{ tor_ips }}"
-    - "{{ tor_ports }}"
+    - "{{ tor_instances }}"
     - [secret_id_key]
 
 - name: Compare local vs. remote RSA key (secret_id_key)
   become: false
   ansible.builtin.shell: >
     set -o pipefail && openssl sha256 -r
-    {{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-"{{ item.0.ipv4 }}_{{ item.1.orport }}"/keys/secret_id_key*
+    {{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-"{{ item.ipv4 }}_{{ item.orport }}"/keys/secret_id_key*
     | cut -d' ' -f1|uniq -d|wc -l
   args:
     executable: /bin/bash
   delegate_to: 127.0.0.1
-  with_nested:
-    - "{{ tor_ips }}"
-    - "{{ tor_ports }}"
+  loop: "{{ tor_instances }}"
   register: tor_rsakey_match
   changed_when: false
 
@@ -247,21 +225,20 @@
       - item.stdout|int == 1
     msg: >
       "Key mismatch detected! Solution: http://bit.ly/2j6wc70 Affected instance:
-      {{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.item.0.ipv4 }}_{{ item.item.1.orport }}/keys"
+      {{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.item.ipv4 }}_{{ item.item.orport }}/keys"
   with_items: "{{ tor_rsakey_match.results }}"
 
 # this task is separated from the task named "Ensure RSA key is in place" because it is not run with 'force=no'
 - name: Transmit new Ed25519 signing keys
   become: true
   ansible.builtin.copy:
-    src: "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}"
-    dest: "{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}/keys/{{ item[2] }}"
-    owner: _tor-{{ item.0.ipv4 }}_{{ item.1.orport }}
+    src: "{{ tor_offline_masterkey_dir }}/{{ inventory_hostname }}-{{ item.0.ipv4 }}_{{ item.0.orport }}/keys/{{ item[1] }}"
+    dest: "{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.0.orport }}/keys/{{ item[1] }}"
+    owner: _tor-{{ item.0.ipv4 }}_{{ item.0.orport }}
     mode: "0600"
     setype: tor_var_lib_t
   with_nested:
-    - "{{ tor_ips }}"
-    - "{{ tor_ports }}"
+    - "{{ tor_instances }}"
     - [ed25519_signing_cert, ed25519_signing_secret_key]
   changed_when: false
   tags:
@@ -271,16 +248,14 @@
 - name: Ensure per-instance DataDir have proper permissions
   become: true
   ansible.builtin.file:
-    path: "{{ tor_DataDir }}/{{ item.0.ipv4 }}_{{ item.1.orport }}"
+    path: "{{ tor_DataDir }}/{{ item.ipv4 }}_{{ item.orport }}"
     state: directory
-    owner: _tor-{{ item.0.ipv4 }}_{{ item.1.orport }}
-    group: _tor-{{ item.0.ipv4 }}_{{ item.1.orport }}
+    owner: _tor-{{ item.ipv4 }}_{{ item.orport }}
+    group: _tor-{{ item.ipv4 }}_{{ item.orport }}
     mode: u=rwX,g=,o=
     recurse: true
     setype: tor_var_lib_t
-  with_nested:
-    - "{{ tor_ips }}"
-    - "{{ tor_ports }}"
+  loop: "{{ tor_instances }}"
 
 - name: Ensure Tor config directory exists
   become: true
@@ -307,15 +282,13 @@
   become: true
   ansible.builtin.template:
     src: torrc
-    dest: "{{ (ansible_pkg_mgr != 'apt')| ternary(tor_ConfDir ~ '/' ~ item.0.ipv4 ~ '_' ~ item.1.orport~ '.torrc', tor_ConfDir ~ '/' ~ item.0.ipv4 ~ '_' ~ item.1.orport
+    dest: "{{ (ansible_pkg_mgr != 'apt')| ternary(tor_ConfDir ~ '/' ~ item.ipv4 ~ '_' ~ item.orport~ '.torrc', tor_ConfDir ~ '/' ~ item.ipv4 ~ '_' ~ item.orport
       ~ '/torrc') }}"
     owner: root
     mode: "0644"
     backup: "{{ tor_backup_torrc }}"
     validate: tor --verify-config -f %s
-  with_nested:
-    - "{{ tor_ips }}"
-    - "{{ tor_ports }}"
+  loop: "{{ tor_instances }}"
   register: tor_instances_tmp
   loop_control:
     index_var: loop_idx

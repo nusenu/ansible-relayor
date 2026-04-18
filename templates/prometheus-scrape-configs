@@ -1,7 +1,6 @@
 {% if tor_enableMetricsPort %}
 {% set c = namespace(i=0) %}
-{% for ip in tor_ips %}
-{% for port in tor_ports %}
+{% for item in tor_instances %}
   - job_name: 'tor-{{ansible_fqdn}}-{{c.i}}'
     metrics_path: '/{{ lookup('password', '~/.tor/prometheus/metrics_path/' + inventory_hostname + ' length=10 chars=ascii_lowercase') }}/{{c.i}}'
     scheme: 'https'
@@ -13,13 +12,13 @@
         - "{{ansible_fqdn}}:{{ tor_prometheus_scrape_port }}"
         labels:
           service: "torrelay"
-          id: "{{ ip.ipv4 }}_{{ port.orport }}"
+          id: "{{ item.ipv4 }}_{{ item.orport }}"
 {% if tor_nicknamefile is defined %}
-          tor_nickname: "{{ lookup('csvfile', inventory_hostname~'-'~ip.ipv4~'_'~port.orport~' file='~tor_nicknamefile~' delimiter=,') |regex_replace('[^a-zA-Z0-9]', '') |truncate(19, True, '')}}"
+          tor_nickname: "{{ lookup('csvfile', inventory_hostname~'-'~item.ipv4~'_'~item.orport~' file='~tor_nicknamefile~' delimiter=,') |regex_replace('[^a-zA-Z0-9]', '') |truncate(19, True, '')}}"
 {% elif tor_nickname is defined %}
           tor_nickname: "{{ tor_nickname |regex_replace('[^a-zA-Z0-9]', '') |truncate(19, True, '') }}"
 {% endif %}
-{% if ((tor_ExitRelay == True and tor_ExitRelaySetting_file is not defined) or (tor_ExitRelay == True and tor_ExitRelaySetting_file is defined and (lookup('csvfile', inventory_hostname~'-'~item.0.ipv4~'_'~item.1.orport~' file='~tor_ExitRelaySetting_file~' delimiter=,') == "exit"))) %}
+{% if ((tor_ExitRelay == True and tor_ExitRelaySetting_file is not defined) or (tor_ExitRelay == True and tor_ExitRelaySetting_file is defined and (lookup('csvfile', inventory_hostname~'-'~item.ipv4~'_'~item.orport~' file='~tor_ExitRelaySetting_file~' delimiter=,') == "exit"))) %}
           relaytype: "exit"
 {% else %}
           relaytype: "nonexit"
@@ -28,7 +27,6 @@
           {{ label }}: "{{ value }}"
 {% endfor %}
 {% set c.i = c.i + 1 %}
-{% endfor %}
 {% endfor %}
 {% endif %}
 {% if tor_blackbox_exporter_host is defined %}
@@ -44,19 +42,17 @@
       module: [tcp_connect]
     static_configs:
       - targets:
-{% for ip in tor_ips %}
-{% for port in tor_ports %}
-        - {{ ip.ipv4 }}:{{ port.orport }}
-{% if port.dirport != 0 %}
-        - {{ ip.ipv4 }}:{{ port.dirport }}
+{% for item in tor_instances %}
+        - {{ item.ipv4 }}:{{ item.orport }}
+{% if item.dirport != 0 %}
+        - {{ item.ipv4 }}:{{ item.dirport }}
 {% endif %}
-{% if ip.ipv6 != '' and tor_IPv6 %}
-        - "[{{ ip.ipv6 }}]:{{ port.orport }}"
-{% if port.dirport != 0 %}
-        - "[{{ ip.ipv6 }}]:{{ port.dirport }}"
+{% if item.ipv6 != '' and tor_IPv6 %}
+        - "[{{ item.ipv6 }}]:{{ item.orport }}"
+{% if item.dirport != 0 %}
+        - "[{{ item.ipv6 }}]:{{ item.dirport }}"
 {% endif %}
 {% endif %}
-{% endfor %}
 {% endfor %}
     relabel_configs:
       - source_labels: [__address__]

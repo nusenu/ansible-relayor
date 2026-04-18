@@ -25,7 +25,5 @@
   become: true
   ansible.builtin.lineinfile:
     dest: /etc/login.conf
-    line: "tor{{ item.0.ipv4| replace('.','_') }}_{{ item.1.orport }}::openfiles-max=13500::tc=daemon:"
-  with_nested:
-    - "{{ tor_ips }}"
-    - "{{ tor_ports }}"
+    line: "tor{{ item.ipv4| replace('.','_') }}_{{ item.orport }}::openfiles-max=13500::tc=daemon:"
+  loop: "{{ tor_instances }}"

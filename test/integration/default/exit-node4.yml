@@ -4,6 +4,7 @@
     - vars/dry-run-vars.yml
   vars:
     tor_ExitRelay: true
+    tor_instance_limit: 4
     tor_ports:
       - orport: 9000
         dirport: 9001
