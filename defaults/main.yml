@@ -21,7 +21,7 @@ tor_happy_family_basename: happyfamily
 # The tor_ports dictionary defines how many instances are created per
 # available IP address and what ports are used.
 # min entries: 1
-# max entries: 2
+# max entries: 8
 tor_ports:
   - orport: 9000
     dirport: 9001
