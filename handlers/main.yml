@@ -39,6 +39,14 @@
     state: restarted
   when: ansible_system == 'FreeBSD'
 
+- name: Restart Tor instance due to CPU affinity change
+  become: true
+  ansible.builtin.service:
+    name: tor@{{ item.item.ipv4 }}_{{ item.item.orport }}.service
+    state: restarted
+  loop: "{{ tor_affinity_task.results }}"
+  when: item.changed
+
 - name: Ensure Tor instances are restarted if its torrc changed (Linux)
   become: true
   ansible.builtin.service:

@@ -164,6 +164,32 @@
     owner: root
     mode: "0755"
 
+- name: Ensure tor systemd service drop-in folder is present
+  become: true
+  ansible.builtin.file:
+    path: "/etc/systemd/system/tor@{{ item.ipv4 }}_{{ item.orport }}.service.d"
+    state: directory
+    owner: root
+    mode: "0755"
+  loop: "{{ tor_instances }}"
+  when: ansible_system == 'Linux'
+
+- name: Ensure CPU affinity systemd drop-in service file is present
+  become: true
+  ansible.builtin.template:
+    src: cpu-affinity-service-drop-in
+    dest: "/etc/systemd/system/tor@{{ item.ipv4 }}_{{ item.orport }}.service.d/relayor-cpu-affinity.conf"
+    mode: "0644"
+    owner: root
+  loop: "{{ tor_instances }}"
+  loop_control:
+    index_var: idx
+  register: tor_affinity_task
+  when: ansible_system == 'Linux'
+  notify:
+    - systemctl daemon-reload
+    - Restart Tor instance due to CPU affinity change
+
 - name: Ensure "keys" subfolder exists
   become: true
   ansible.builtin.file:

@@ -1,0 +1,5 @@
+# Do NOT change this file manually - it is managed by ansible-relayor
+{% if tor_cpu_affinity %}
+[Service]
+CPUAffinity={{idx}}
+{% endif %}

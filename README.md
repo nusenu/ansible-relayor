@@ -37,6 +37,7 @@ Main benefits for a tor relay operator
 - easily choose between exit relay/non-exit relay mode using a single boolean
 - automatic deployment of a [tor exit notice html](https://gitweb.torproject.org/tor.git/plain/contrib/operator-tools/tor-exit-notice.html) page via tor's DirPort (on exits only)
 - automatic Happy Family management
+- tor instance CPU pinning (on Linux only)
 - **prometheus integration** (when enabled)
   - nginx reverse proxy config autogeneration to protect tor's MetricsPort (behind basic auth / HTTPS)
   - prometheus scrape config autogeneration for MetricsPort
@@ -150,6 +151,15 @@ All variables mentioned here are optional.
     - The number of actually deployed tor instances also depends on the amount of ORPorts in `tor_ports` and the amount of public IPv4 addresses on the server.
     - If `tor_instance_limit` is larger than `tor_ports` * public IPv4 addresses, the actual deployed instance count remains below the limit.
     - default: 2
+
+* `tor_cpu_affinity` boolean
+    - This var allows you to enable CPU affinity on Debian/Ubuntu, it is ignored on BSD.
+    - Requirement to use this feature: The server must have at least as many CPU cores/threads as it runs tor instances.
+    - When enabled and if enough CPU threads are available each tor instance is bound to a distinct CPU core/thread.
+    - When enabled and not enough CPU threads are available relayor aborts and you have to add more CPU cores, disable `tor_cpu_affinity` or reduce `tor_instance_limit`.
+    - When false, we ensure CPU affinity is disabled in the config file relayor manages: `/etc/systemd/system/tor@.../relayor-cpu-affinity.conf`
+    - Every CPU affinity change triggers a systemd daemon-reload and tor restart.
+    - default: false (might change in future relayor releases)
 
 * `tor_offline_masterkey_dir` folderpath
     - default: ~/.tor/offlinemasterkeys

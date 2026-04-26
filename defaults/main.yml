@@ -32,6 +32,8 @@ tor_ports:
 # to 2 per server by default
 tor_instance_limit: 2
 
+tor_cpu_affinity: false
+
 # We only use a single private IP by default since
 # we can not reliably tell whether we are NATed
 # to more than a single public IP address
