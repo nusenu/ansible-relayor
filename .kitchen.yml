@@ -85,11 +85,12 @@ suites:
       - ["private_network", {ip: "192.169.0.3"}]
     provisioner:
       playbook: "test/integration/default/2publicIPs-guard4-metricsport.yml"
-  - name: t-guard-2publicIPs
+  - name: t-guard-3publicIPs
     driver:
       network:
+      - ["private_network", {ip: "192.169.0.1"}]
+      - ["private_network", {ip: "192.169.0.10"}]
       - ["private_network", {ip: "192.169.0.2"}]
-      - ["private_network", {ip: "192.169.0.3"}]
     provisioner:
       playbook: "test/integration/default/2publicIPs-guard-node.yml"
   - name: t-exit-2publicIPs

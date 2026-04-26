@@ -7,6 +7,7 @@
   ansible.builtin.set_fact:
     ips:
       ipv4: "{{ item.0 }}"
+      ipv4_int: "{{ item.0 | ipaddr('int') }}"
       ipv6: "{{ item.1 }}"
   with_together:
     - "{{ tor_v4ips }}"
@@ -19,7 +20,7 @@
 
 - name: Setup tor instance list (1/2)
   ansible.builtin.set_fact:
-    tor_instances_interm: "{{ tor_ips | product(tor_ports) | map('combine') | sort(attribute='ipv4') }}"
+    tor_instances_interm: "{{ tor_ips | product(tor_ports) | map('combine') | sort(attribute='ipv4_int') }}"
 
 - name: Setup tor instance list (2/2)
   ansible.builtin.set_fact:
@@ -28,6 +29,10 @@
 - name: Display actual tor instance count
   debug:
     msg: "relayor will manage {{tor_instances|length }} tor instances on this server."
+
+- name: Display used IPv4 addresses
+  debug:
+    msg: "relayor will make use of the following IPv4 addresses in shown order: {{ tor_instances | map(attribute='ipv4')|unique }}"
 
 - name: Ensure we have enough logical cores for CPU affinity
   ansible.builtin.assert:
