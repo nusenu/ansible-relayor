@@ -26,13 +26,10 @@
   ansible.builtin.set_fact:
     tor_instances: "{{tor_instances_interm[0:tor_instance_limit] }}"
 
-- name: Display actual tor instance count
+- name: Display actual tor instance count and used IPv4 addresses
   debug:
-    msg: "relayor will manage {{tor_instances|length }} tor instances on this server."
-
-- name: Display used IPv4 addresses
-  debug:
-    msg: "relayor will make use of the following IPv4 addresses in shown order: {{ tor_instances | map(attribute='ipv4')|unique }}"
+    msg: "relayor will manage {{tor_instances|length }} tor instances on this server using
+          the following IPv4 addresses in shown order: {{ tor_instances | map(attribute='ipv4')|unique }}"
 
 - name: Ensure we have enough logical cores for CPU affinity
   ansible.builtin.assert:
