@@ -29,10 +29,10 @@
   debug:
     msg: "relayor will manage {{tor_instances|length }} tor instances on this server."
 
-- name: Ensure we have enough CPU cores/threads for CPU affinity on Linux
+- name: Ensure we have enough logical cores for CPU affinity
   ansible.builtin.assert:
     that:
-      - tor_instances|length <= ansible_processor_cores
+      - tor_instances|length <= ansible_processor_vcpus
     msg: "You can not use tor_cpu_affinity on this system, because it requires at least {{tor_instances|length }} CPU cores/threads
-          and you only have {{ansible_processor_cores}}. You have to disable tor_cpu_affinity or reduce the number of tor instances."
+          and you only have {{ansible_processor_vcpus}}. You have to disable tor_cpu_affinity or reduce the number of tor instances (tor_instance_limit)."
   when: tor_cpu_affinity and ansible_system == 'Linux'
