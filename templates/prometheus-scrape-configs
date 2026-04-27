@@ -1,4 +1,5 @@
 {% if tor_enableMetricsPort %}
+scrape_configs:
 {% set c = namespace(i=0) %}
 {% for item in tor_instances %}
   - job_name: 'tor-{{ansible_fqdn}}-{{c.i}}'
