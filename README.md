@@ -154,9 +154,9 @@ All variables mentioned here are optional.
 
 * `tor_cpu_affinity` boolean
     - This var allows you to enable CPU affinity on Debian/Ubuntu, it is ignored on BSD.
-    - Requirement to use this feature: The server must have at least as many CPU cores/threads as it runs tor instances.
-    - When enabled and if enough CPU threads are available each tor instance is bound to a distinct CPU core/thread.
-    - When enabled and not enough CPU threads are available relayor aborts and you have to add more CPU cores, disable `tor_cpu_affinity` or reduce `tor_instance_limit`.
+    - Requirement to use this feature: The server must have at least as many logical CPU cores as it runs tor instances.
+    - When enabled and enough logical CPU cores are available each tor instance is bound to a distinct logical CPU core.
+    - When enabled and not enough logical CPU cores are available relayor aborts and you have to add more logical CPU cores, disable `tor_cpu_affinity` or reduce `tor_instance_limit`.
     - When false, we ensure CPU affinity is disabled in the config file relayor manages: `/etc/systemd/system/tor@.../relayor-cpu-affinity.conf`
     - Every CPU affinity change triggers a systemd daemon-reload and tor restart.
     - default: false (might change in future relayor releases)
